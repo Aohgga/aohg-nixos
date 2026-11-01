@@ -1,0 +1,12 @@
+keys:
+  - &admin_age age1upy7s2qnaj9pq59vtngeqknwxr78wqfu4nndfqvx0nskevn5ty8syxzw4k
+  - &mech_ssh age1tpjug4v5wkex76uuejhzc8ymmak2lp7skl842vr34uwhh8cvgfrq2g74gu
+  - &legion_ssh age1tszl6j9qu5fj8thxmwjard8s60vwpkkktkx2sx74kvlm5u7rxfxqqghn6d
+
+creation_rules:
+  - path_regex: secrets/.*\.yaml$
+    key_groups:
+      - age:
+          - *admin_age
+          - *mech_ssh
+          - *legion_ssh

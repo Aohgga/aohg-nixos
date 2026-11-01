@@ -1,0 +1,18 @@
+cat > .gitignore << 'EOF'
+# Nix 构建产物
+result
+result-*
+
+# 编辑器 / 系统临时文件
+*.swp
+*~
+.DS_Store
+
+# 明文机密源（sops 加密前的工作副本，即使目录当前不存在也保留规则）
+mihomo/
+*.plain.yaml
+
+# sops 主私钥（绝不应出现在仓库内）
+keys.txt
+sops-age-key*
+EOF
