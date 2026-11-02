@@ -28,13 +28,6 @@
         neededForBoot = true;
       };
 
-    fileSystems."/persist-home" = {
-        device = "/dev/disk/by-uuid/a7d1b984-7af8-49f4-aefb-aa5f53a6c59b";
-        fsType = "btrfs";
-        options = [ "subvol=home-persist" ];
-        neededForBoot = true;
-      };
-
     fileSystems."/boot" =
       { device = "/dev/disk/by-uuid/12CE-A600";
         fsType = "vfat";
