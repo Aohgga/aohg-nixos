@@ -4,16 +4,6 @@
     imports = [ inputs.nix-flatpak.nixosModules.nix-flatpak ];
     services.flatpak = {
       enable = true;
-      remotes = lib.mkOptionDefault [
-        {
-          name = "flathub";
-          location = "https://dl.flathub.org/repo/flathub.flatpakrepo";
-        }
-        {
-          name = "flatpark";
-          location = "https://dl.flatpark.org/flatpark.flatpakrepo";
-        }
-      ];
       uninstallUnmanaged = false;
       update.onActivation = false;
       overrides.global = {
