@@ -33,6 +33,7 @@ in
       fm.nixos.theme
       fm.nixos.overlays
       fm.nixos.agenix
+      fm.nixos.MechImpermanence
     ];
     home-manager.users.aohg = {
       imports = [
