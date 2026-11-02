@@ -11,8 +11,8 @@
       useUserPackages = true;
     };
   };
-  flake.modules.nixos.sops = {
-    imports = [ inputs.sops-nix.nixosModules.sops ];
-    sops.age.keyFile = "/home/aohg/.config/sops/age/keys.txt";
+  flake.modules.nixos.agenix = { pkgs, ... }: {
+    imports = [ inputs.agenix.nixosModules.default ];
+    environment.systemPackages = [ inputs.agenix.packages.${pkgs.stdenv.hostPlatform.system}.default ];
   };
 }

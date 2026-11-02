@@ -1,14 +1,11 @@
 {
   flake.modules.nixos.proxy = { config, ... }: {
-    sops.secrets.mihomoConfig = {
-      format = "yaml";
-      sopsFile = ../../secrets/mihomo.yaml;
-      key = "";
-      restartUnits = [ "mihomo.service" ];
+    age.secrets.mihomoConfig = {
+      file = ../../secrets/mihomo/config.yaml.age;
     };
     services.mihomo = {
       enable = true;
-      configFile = config.sops.secrets.mihomoConfig.path;
+      configFile = config.age.secrets.mihomoConfig.path;
       tunMode = true;
     };
   };

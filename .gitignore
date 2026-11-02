@@ -1,4 +1,3 @@
-cat > .gitignore << 'EOF'
 # Nix 构建产物
 result
 result-*
@@ -8,11 +7,17 @@ result-*
 *~
 .DS_Store
 
-# 明文机密源（sops 加密前的工作副本，即使目录当前不存在也保留规则）
-mihomo/
+# 明文机密源（sops 加密前的工作副本，防手滑）
 *.plain.yaml
 
-# sops 主私钥（绝不应出现在仓库内）
+# 根目录下的明文 mihomo 目录（只匹配根目录，不影响 secrets/mihomo/）
+/mihomo/
+
+# 加密私钥（绝不应出现在仓库内）
 keys.txt
 sops-age-key*
-EOF
+age-key*.txt
+
+# 保险：显式声明 secrets/ 下的 .age 密文必须被提交
+!secrets/
+!secrets/**/*.age

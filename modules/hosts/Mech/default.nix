@@ -32,7 +32,7 @@ in
       fm.nixos.input-method
       fm.nixos.theme
       fm.nixos.overlays
-      fm.nixos.sops
+      fm.nixos.agenix
     ];
     home-manager.users.aohg = {
       imports = [

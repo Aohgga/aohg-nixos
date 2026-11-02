@@ -31,7 +31,7 @@ in
       fm.nixos.overlays
       fm.nixos.steam
       fm.nixos.jellyfin
-      fm.nixos.sops
+      fm.nixos.agenix
       fm.nixos.appimage
     ];
     home-manager.users.aohg = {
