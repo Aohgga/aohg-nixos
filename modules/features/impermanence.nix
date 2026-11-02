@@ -61,5 +61,32 @@
         "/var/spool"
       ];
     };
+    environment.persistence."/persist-home" = {
+      hideMounts = true;
+      users.aohg = {
+        directories = [
+          # ── 文档 ──
+          "Documents" "Downloads" "Pictures" "Videos" "Music" "Desktop"
+          "Games"
+          "AppImages"
+          "Quickemu"
+          "VirtualBox VMs"
+          # ── 项目 ──
+          "Projects"
+          # ── 安全 / 身份 ──
+          ".ssh" ".gnupg"
+          # ── 配置（按需增删）──
+          ".config"
+          ".local/share"
+          ".local/state"
+          ".android"
+          # ── Flatpak 用户数据 ──
+          ".var/app"
+        ];
+        files = [
+          ".bashrc" ".zshrc" ".profile" ".bash_history" ".gitconfig"
+        ];
+      };
+    };
   };
 }
