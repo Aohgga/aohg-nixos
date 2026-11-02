@@ -1,7 +1,7 @@
 let
-  admin  = "age1upy7s2qnaj9pq59vtngeqknwxr78wqfu4nndfqvx0nskevn5ty8syxzw4k";
-  mech   = "age1tpjug4v5wkex76uuejhzc8ymmak2lp7skl842vr34uwhh8cvgfrq2g74gu";
-  legion = "age1tszl6j9qu5fj8thxmwjard8s60vwpkkktkx2sx74kvlm5u7rxfxqqghn6d";
+  admin  = "age1m832py3uqrcuzcrwgs3ctjkxl9u929jqdpv09yq3lktah3u365sq8pzkcm";
+  mech   = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIHUQenEdndCrtNfiGyy7XUH6qxpFPr0jxgn7+9/KOiBY root@Mech";
+  legion = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAICVTbaOdXj3Xwzo6uu7T0mGakjudr6vjlyZxZyKod7dd root@Legion";
 in
 {
   # 用户密码哈希
