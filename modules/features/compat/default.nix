@@ -1,13 +1,13 @@
 { inputs, ... }:
 {
-  flake.modules.nixos.compat = { pkgs, ... }: {
+  flake.modules.nixos.flatpak = { lib, ... }: {
     imports = [ inputs.nix-flatpak.nixosModules.nix-flatpak ];
     services.flatpak = {
       enable = true;
-      remotes = [
+      remotes = lib.mkOptionDefault [
         {
           name = "flathub";
-          location = "https://mirror.sjtu.edu.cn/flathub";
+          location = "https://dl.flathub.org/repo/flathub.flatpakrepo";
         }
         {
           name = "flatpark";
@@ -26,6 +26,8 @@
         Environment.GTK_THEME = "adw-gtk3";
       };
     };
+  };
+  flake.modules.nixos.appimage = { pkgs, ... }: {
     programs.appimage = {
       enable = true;
       binfmt = true;

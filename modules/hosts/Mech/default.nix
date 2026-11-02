@@ -22,7 +22,8 @@ in
       fm.nixos.bluetooth
       fm.nixos.MechGraphics
       fm.nixos.tuning
-      fm.nixos.compat
+      fm.nixos.appimage
+      fm.nixos.flatpak
       fm.nixos.proxy
       fm.nixos.virtualisation
       fm.nixos.umbriel

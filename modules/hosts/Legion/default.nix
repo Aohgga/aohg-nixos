@@ -32,6 +32,7 @@ in
       fm.nixos.steam
       fm.nixos.jellyfin
       fm.nixos.sops
+      fm.nixos.appimage
     ];
     home-manager.users.aohg = {
       imports = [
