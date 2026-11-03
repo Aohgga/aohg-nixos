@@ -99,6 +99,9 @@ in
     # 3. 系统级持久化（root 盘的 /persistent）
     # ────────────────────────────────────────────
 
+    # 注意：/etc/machine-id、/etc/adjtime 不做 `files` 持久化。
+    # impermanence 的 persist-files 在 /etc 已有同名文件时会让 activation 失败，
+    # 而这两项都可以在启动时重新生成（machine-id 每次 boot 会变）。
     environment.persistence."/persistent" = {
       hideMounts = true;
       directories = [
@@ -125,10 +128,6 @@ in
 
         # agenix 的主机密钥（age.identityPaths 依赖）
         "/etc/ssh"
-      ];
-      files = [
-        "/etc/machine-id"
-        "/etc/adjtime"
       ];
     };
 
