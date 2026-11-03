@@ -18,7 +18,15 @@
       # inputs.deepseek-harness.packages.…：后者会用 DSH 自己 pin 的
       # nixpkgs 再构建一遍，和下面的 bundles 分属两套 nixpkgs。
       package = pkgs.dsh.dsh;
-      profiles.web.bundles = [ pkgs.dsh.bundles.web-app ];
+
+      profiles.web = {
+        bundles = [ pkgs.dsh.bundles.web-app ];
+        # 允许运行时用 `dsh plugin` 或插件市场安装，Nix 不再覆盖 profile
+        mode = "mutable";
+      };
+
+      # 官方桌面端（Electron），两台主机共享
+      desktop.enable = true;
     };
 
     services.dsh = {
