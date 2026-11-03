@@ -5,10 +5,6 @@
       firewall = {
         enable = true;
 
-        # 被拒的连接回 RST/ICMP，而不是静默丢弃：客户端会立刻回落
-        # 到 IPv4（jellyfin 只监听 IPv4），不会卡在超时。
-        rejectPackets = true;
-
         # 只在家里这个网段开放服务端口（ssh / jellyfin / localsend），
         # 公共 Wi-Fi 上等同于全部关闭；loopback 仍由防火墙默认放行。
         # 注意：家里路由器换了网段（目前 192.168.2.0/24）要同步改这里。
