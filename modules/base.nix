@@ -54,6 +54,7 @@ in
       fm.homeManager.apps
       fm.homeManager.wallpaper
       fm.homeManager.dsh
+      fm.homeManager.umbriel
     ];
   };
 }

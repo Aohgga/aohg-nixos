@@ -19,6 +19,7 @@ in
     home-manager.users.aohg = {
       imports = [
         fm.homeManager.base
+        fm.homeManager.MechUmbriel
       ];
       home.stateVersion = "26.11";
     };

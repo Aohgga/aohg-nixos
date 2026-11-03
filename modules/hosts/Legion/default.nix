@@ -18,6 +18,7 @@ in
     home-manager.users.aohg = {
       imports = [
         fm.homeManager.base
+        fm.homeManager.LegionUmbriel
         fm.homeManager.LegionApps
         fm.homeManager.zen-browser
       ];
