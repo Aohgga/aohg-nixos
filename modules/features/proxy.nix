@@ -6,7 +6,7 @@
     services.mihomo = {
       enable = true;
       configFile = config.age.secrets.mihomoConfig.path;
-      tunMode = true;
+      tunMode = false;
     };
   };
 }

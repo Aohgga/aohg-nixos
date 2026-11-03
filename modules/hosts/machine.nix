@@ -1,14 +1,11 @@
 { inputs, self, ... }:
-
+let
+  inherit (inputs.nixpkgs) lib;
+in
 {
-  flake.nixosConfigurations = {
-    Mech = inputs.nixpkgs.lib.nixosSystem {
+  flake.nixosConfigurations = lib.genAttrs [ "Mech" "Legion" ] (host:
+    lib.nixosSystem {
       system = "x86_64-linux";
-      modules = [ self.modules.nixos.MechConfiguration ];
-    };
-    Legion = inputs.nixpkgs.lib.nixosSystem {
-      system = "x86_64-linux";
-      modules = [ self.modules.nixos.LegionConfiguration ];
-    };
-  };
+      modules = [ self.modules.nixos.${host} ];
+    });
 }

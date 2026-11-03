@@ -16,7 +16,7 @@ in
     fileSystems."/persistent" = {
       device = rootDevice;
       fsType = "btrfs";
-      options = [ "subvol=persistent" ];
+      options = [ "subvol=persistent" "compress=zstd:3" "noatime" ];
       neededForBoot = true;
     };
 
@@ -24,7 +24,7 @@ in
     fileSystems."/persist-home" = {
       device = homeDevice;
       fsType = "btrfs";
-      options = [ "subvol=home-persist" ];
+      options = [ "subvol=home-persist" "compress=zstd:3" "noatime" ];
       neededForBoot = true;
     };
 
@@ -102,19 +102,33 @@ in
     environment.persistence."/persistent" = {
       hideMounts = true;
       directories = [
-        "/etc"
+        # NixOS 自身的状态
         "/var/lib/nixos"
         "/var/lib/systemd"
+        "/var/log"
+
+        # 网络 / 蓝牙
         "/var/lib/NetworkManager"
+        "/etc/NetworkManager/system-connections"
         "/var/lib/bluetooth"
-        "/var/lib/private/mihomo"
-        "/var/lib/flatpak"
+
+        # 登录管理器与桌面服务
         "/var/lib/plasmalogin"
         "/var/lib/noctalia-greeter"
-        "/var/log"
-        "/var/spool"
-        "/var/lib/dsh"
+        "/var/lib/AccountsService"
+        "/var/lib/upower"
+        "/var/lib/colord"
 
+        # 应用状态
+        "/var/lib/flatpak"
+        "/var/lib/private/mihomo"
+
+        # agenix 的主机密钥（age.identityPaths 依赖）
+        "/etc/ssh"
+      ];
+      files = [
+        "/etc/machine-id"
+        "/etc/adjtime"
       ];
     };
 
@@ -139,11 +153,13 @@ in
           "Quickemu"
           "VirtualBox VMs"
           "Projects"
-          ".ssh"
-          ".gnupg"
+          { directory = ".ssh"; mode = "0700"; }
+          { directory = ".gnupg"; mode = "0700"; }
           ".config"
           ".local/share"
           ".local/state"
+          ".local/bin"
+          ".pki"
           ".android"
           ".var/app"
           ".dsh"

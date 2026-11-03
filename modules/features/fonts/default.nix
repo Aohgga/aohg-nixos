@@ -1,6 +1,6 @@
 {
-  flake.modules.nixos.fonts = { pkgs, lib, ... }: {
-    fonts = lib.mkForce {
+  flake.modules.nixos.fonts = { pkgs, ... }: {
+    fonts = {
       enableDefaultPackages = false;
       packages = with pkgs; [
         noto-fonts
@@ -20,8 +20,6 @@
         };
         hinting = {
           enable = false;
-          style = "full";
-          autohint = false;
         };
         subpixel = {
           rgba = "rgb";

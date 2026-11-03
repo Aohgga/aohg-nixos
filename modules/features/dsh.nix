@@ -2,26 +2,32 @@
 {
   flake.modules.nixos.dsh = {
     imports = [ inputs.deepseek-harness.nixosModules.default ];
-  };
-  flake.modules.homeManager.dsh = {
-    # 显式引入 overlay，确保 home 侧 pkgs 能看到 dsh（即使 NixOS 已全局设置，加上也无害）
     nixpkgs.overlays = [ inputs.deepseek-harness.overlays.default ];
+
+    # dsh WebUI 是用户级 systemd 服务，默认只在该用户有会话时运行。
+    # 开启 linger 后开机即启动，注销或切换用户也不会把 3080 带走。
+    users.users.aohg.linger = true;
+  };
+
+  flake.modules.homeManager.dsh = { config, pkgs, ... }: {
+    imports = [ inputs.deepseek-harness.homeModules.default ];
 
     programs.dsh = {
       enable = true;
-      # 可选：指定使用的包
-      # package = inputs.deepseek-harness.packages.${pkgs.system}.dsh;
-
-      # 在此声明 bundles、presets 等用户级配置
-      # bundles = [ ... ];
+      # 用本系统 pkgs 里的 dsh（overlay 已注入），而不是
+      # inputs.deepseek-harness.packages.…：后者会用 DSH 自己 pin 的
+      # nixpkgs 再构建一遍，和下面的 bundles 分属两套 nixpkgs。
+      package = pkgs.dsh.dsh;
+      profiles.web.bundles = [ pkgs.dsh.bundles.web-app ];
     };
 
-    # 启用 WebUI 为 systemd 用户服务
     services.dsh = {
       enable = true;
-      # 默认监听 127.0.0.1:3080，仅本机可访问[reference:6][reference:7]
-      # listenAddress = "127.0.0.1";   # 如需局域网访问可改为 "0.0.0.0"
-      # port = 3080;                   # 端口可自定义
+      listenAddress = "127.0.0.1";
+      port = 3080;
+      # 默认已是 "nix-web"，显式跟随 profiles 的 materializedName，
+      # 以后重命名 profile 时服务不会悄悄退回上游 web preset。
+      profile = config.programs.dsh.profiles.web.materializedName;
     };
   };
 }
