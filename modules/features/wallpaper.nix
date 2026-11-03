@@ -38,20 +38,26 @@ in
       '')
     ];
 
-    # 文件出现或变化时，把它同步到 greeter 可读的位置
+    # 文件变化时同步到 greeter 可读的位置。
+    # 不设 PathExists：文件一直存在会被反复触发，容易撞上 systemd 的
+    # start limit（上次 failed 就是这个原因）；首次同步由 service 开机执行。
     systemd.paths.plasmalogin-wallpaper = {
       wantedBy = [ "multi-user.target" ];
+      unitConfig.StartLimitIntervalSec = 0;
       pathConfig = {
-        PathExists = userWallpaper;
         PathChanged = userWallpaper;
         Unit = "plasmalogin-wallpaper.service";
       };
     };
 
     systemd.services.plasmalogin-wallpaper = {
+      wantedBy = [ "multi-user.target" ];
+      unitConfig.StartLimitIntervalSec = 0;
       serviceConfig.Type = "oneshot";
       script = ''
-        ${pkgs.coreutils}/bin/install -Dm644 ${userWallpaper} ${greeterWallpaper}
+        if [ -r ${userWallpaper} ]; then
+          ${pkgs.coreutils}/bin/install -Dm644 ${userWallpaper} ${greeterWallpaper}
+        fi
       '';
     };
   };
