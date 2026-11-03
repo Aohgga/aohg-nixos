@@ -6,6 +6,7 @@
         experimental-features = [ "nix-command" "flakes" ];
         auto-optimise-store = true;
         trusted-users = [ "root" "aohg" ];
+        use-xdg-base-directories = true;
         # 让 flake 里声明的 cachix 真正生效（flake nixConfig 默认会被忽略）
         substituters = [
           "https://denial.cachix.org"
