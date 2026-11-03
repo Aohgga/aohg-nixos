@@ -33,6 +33,8 @@ in
         "Pictures".source = config.lib.file.mkOutOfStoreSymlink "/data/Pictures";
         "Videos".source = config.lib.file.mkOutOfStoreSymlink "/data/Videos";
         "Games".source = config.lib.file.mkOutOfStoreSymlink "/data/Games";
+        "Music".source = config.lib.file.mkOutOfStoreSymlink "/data/Music";
+        ".local/share/backgrounds".source = config.lib.file.mkOutOfStoreSymlink "/data/wallpapers";
 
         ".config/yazi".source = config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/.config/aohg-dotfiles/yazi";
         ".config/mako".source = config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/.config/aohg-dotfiles/mako_1";

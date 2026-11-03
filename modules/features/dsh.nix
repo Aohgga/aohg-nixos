@@ -33,6 +33,20 @@
       # 否则视频、输入设备、NetworkManager 等会和以前不一致。
       SupplementaryGroups = config.users.users.aohg.extraGroups;
     };
+
+    # 系统服务不继承登录会话的 PATH，默认只有 coreutils/findutils/systemd，
+    # 导致 dsh 里执行 `nix`/`git`/`rsync` 之类会 not found。
+    # 这里显式给出和 /etc/set-environment 一致的登录 PATH。
+    systemd.services.dsh-web.environment.PATH = lib.mkForce (
+      lib.concatStringsSep ":" [
+        "/run/wrappers/bin"
+        "/home/aohg/.nix-profile/bin"
+        "/home/aohg/.local/state/nix/profile/bin"
+        "/etc/profiles/per-user/aohg/bin"
+        "/nix/var/nix/profiles/default/bin"
+        "/run/current-system/sw/bin"
+      ]
+    );
   };
 
   flake.modules.homeManager.dsh = { pkgs, ... }: {

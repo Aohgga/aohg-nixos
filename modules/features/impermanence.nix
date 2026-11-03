@@ -3,6 +3,8 @@ let
   # ── 设备 UUID（与 hardware-configuration.nix 一致）──
   rootDevice = "/dev/disk/by-uuid/cbada62e-5ebd-4b9d-8a3f-a71a6a75ed98";
   homeDevice = "/dev/disk/by-uuid/a7d1b984-7af8-49f4-aefb-aa5f53a6c59b";
+  # 两台机器共用的持久化条目
+  common = import ../../lib/persistence.nix;
 in
 {
   flake.modules.nixos.MechImpermanence = { utils, ... }: {
@@ -104,30 +106,10 @@ in
     # 而这两项都可以在启动时重新生成（machine-id 每次 boot 会变）。
     environment.persistence."/persistent" = {
       hideMounts = true;
-      directories = [
-        # NixOS 自身的状态
-        "/var/lib/nixos"
-        "/var/lib/systemd"
-        "/var/log"
-
-        # 网络 / 蓝牙
-        "/var/lib/NetworkManager"
-        "/etc/NetworkManager/system-connections"
-        "/var/lib/bluetooth"
-
-        # 登录管理器与桌面服务
-        "/var/lib/plasmalogin"
-        "/var/lib/noctalia-greeter"
-        "/var/lib/AccountsService"
-        "/var/lib/upower"
-        "/var/lib/colord"
-
-        # 应用状态
+      # 公共系统目录 + Mech 独有
+      directories = common.systemDirs ++ [
         "/var/lib/flatpak"
-        "/var/lib/private/mihomo"
-
-        # agenix 的主机密钥（age.identityPaths 依赖）
-        "/etc/ssh"
+        "/var/lib/noctalia-greeter"
       ];
     };
 
@@ -140,109 +122,18 @@ in
     environment.persistence."/persist-home" = {
       hideMounts = true;
       users.aohg = {
-        directories = [
-          "Documents"
-          "Downloads"
+        # 公共用户目录 + Mech 独有
+        directories = common.userDirs ++ [
           "Pictures"
           "Videos"
           "Music"
-          "Desktop"
           "Games"
           "AppImages"
-          "VMs"
-          "Projects"
-          { directory = ".ssh"; mode = "0700"; }
-          { directory = ".gnupg"; mode = "0700"; }
-          ".local/bin"
-          ".pki"
-          ".android"
-          ".var/app"
-          ".dsh"
-          ".cache/appimage-run"
-          ".cache/fontconfig"
-          ".cache/fish"
-          ".cache/noctalia"
-
-          ".config/age"
-          ".config/aohg-nixos"
-          ".config/autostart"
-          ".config/btop"
-          ".config/dconf"
-          ".config/@deepseek-ai"
-          ".config/DSH Desktop"
-          ".config/ELYTerminal"
-          ".config/fcitx5"
-          ".config/gtk-3.0"
-          ".config/gtk-4.0"
-          ".config/ibus"
-          ".config/lact"
-          ".config/Ladybird"
-          ".config/libaccounts-glib"
-          ".config/menus"
-          ".config/mpv-handler/cookies"
-          ".config/nvim"
-          ".config/net.imput.helium"
-          ".config/qBittorrent"
-          ".config/swayimg"
-          ".config/umbriel"
-          ".config/VirtualBox"
-          ".config/xsettingsd"
           ".config/yazi"
-          ".config/zed"
-
-          ".local/share/applications"
-          ".local/share/com.epicgames.eglv2"
-          ".local/share/fonts"
-          ".local/share/fish"
           ".local/share/backgrounds"
-          ".local/share/umu"
-          ".local/share/zed"
-          ".local/share/nvim"
-          ".local/share/fcitx5"
-          ".local/share/qBittorrent"
-          ".local/share/app.getlux.com.sakuracat.app"
-          ".local/share/ElyOffice"
-          ".local/share/Ladybird"
-          ".local/share/gpu-screen-recorder"
-          ".local/share/keyrings"
-          ".local/share/pki"
-          ".local/share/kwalletd"
-          ".local/share/plasmalogin"
           ".local/share/flatpak"
-          ".local/share/go-musicfox"
-          ".local/share/nautilus"
-          ".local/share/color-schemes"
-          ".local/share/themes"
-          ".local/share/dolphin"
-          ".local/share/ark"
-          ".local/share/Trash"
-
-          ".local/state/noctalia"
-          ".local/state/wireplumber"
-          ".local/state/mpv"
-          ".local/state/nvim"
-          ".local/state/go-musicfox"
         ];
-        files = [
-          ".bash_history"
-          ".gitconfig"
-
-          ".config/arkrc"
-          ".config/darklyrc"
-          ".config/dolphinrc"
-          ".config/kcminputrc"
-          ".config/kdeglobals"
-          ".config/kglobalshortcutsrc"
-          ".config/kiorc"
-          ".config/kservicemenurc"
-          ".config/kwalletrc"
-          ".config/kxkbrc"
-          ".config/mimeapps.list"
-          ".config/trashrc"
-
-          ".local/share/recently-used.xbel"
-          ".local/share/user-places.xbel"
-        ];
+        files = common.userFiles;
       };
     };
   };
