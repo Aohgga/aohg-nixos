@@ -1,20 +1,8 @@
 {
   description = "Aohg's NixOS configuration (Dendritic, multi-host)";
 
-  nixConfig = {
-    extra-substituters = [
-      "https://denial.cachix.org"
-      "https://noctalia.cachix.org"
-      "https://umbriel.cachix.org"
-      "https://deepseek-harness-nix.cachix.org"
-    ];
-    extra-trusted-public-keys = [
-      "denial.cachix.org-1:wd8YTnvPmugFrtdMJWtR1XdVknR3/g2nmBJkT+vAruo="
-      "noctalia.cachix.org-1:pCOR47nnMEo5thcxNDtzWpOxNFQsBRglJzxWPp3dkU4="
-      "umbriel.cachix.org-1:JfNq/2yg2S6D6z4Z2dVSZrZlDPQTKtexB6GAVLD98nw="
-      "deepseek-harness-nix.cachix.org-1:5NrkwLN9veNMhiINtU5ZeV4isXFhFsOwn6Ms7J1M+TA="
-    ];
-  };
+  # 缓存配置统一放在 modules/features/nix.nix 的 nix.settings 里，
+  # 避免 flake nixConfig 每次换用户（aohg/root）都触发信任询问。
 
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
