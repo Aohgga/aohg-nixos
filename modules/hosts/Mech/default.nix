@@ -11,6 +11,7 @@ in
       fm.nixos.MechGraphics
       fm.nixos.MechFilesystem
       fm.nixos.MechImpermanence
+      fm.nixos.MechWallpaper
       fm.nixos.virtualisation
       fm.nixos.flatpak
       fm.nixos.dsh
