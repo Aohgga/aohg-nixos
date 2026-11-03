@@ -113,6 +113,8 @@ in
         "/var/lib/noctalia-greeter"
         "/var/log"
         "/var/spool"
+        "/var/lib/dsh"
+
       ];
     };
 
@@ -144,6 +146,7 @@ in
           ".local/state"
           ".android"
           ".var/app"
+          ".dsh"
         ];
         files = [
           ".bash_history"

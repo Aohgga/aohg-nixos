@@ -6,11 +6,13 @@
       "https://denial.cachix.org"
       "https://noctalia.cachix.org"
       "https://umbriel.cachix.org"
+      "https://deepseek-harness-nix.cachix.org"
     ];
     extra-trusted-public-keys = [
       "denial.cachix.org-1:wd8YTnvPmugFrtdMJWtR1XdVknR3/g2nmBJkT+vAruo="
       "noctalia.cachix.org-1:pCOR47nnMEo5thcxNDtzWpOxNFQsBRglJzxWPp3dkU4="
       "umbriel.cachix.org-1:JfNq/2yg2S6D6z4Z2dVSZrZlDPQTKtexB6GAVLD98nw="
+      "deepseek-harness-nix.cachix.org-1:5NrkwLN9veNMhiINtU5ZeV4isXFhFsOwn6Ms7J1M+TA="
     ];
   };
 
@@ -42,6 +44,7 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     impermanence.url = "github:nix-community/impermanence";
+    deepseek-harness.url = "github:moraxyc/deepseek-harness.nix";
   };
 
   outputs = inputs:

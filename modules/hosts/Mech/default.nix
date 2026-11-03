@@ -34,6 +34,7 @@ in
       fm.nixos.overlays
       fm.nixos.agenix
       fm.nixos.MechImpermanence
+      fm.nixos.dsh
     ];
     home-manager.users.aohg = {
       imports = [
@@ -48,6 +49,7 @@ in
         fm.homeManager.musicfox
         fm.homeManager.file-manager
         fm.homeManager.apps
+        fm.homeManager.dsh
       ];
       home.stateVersion = "26.11";
     };
