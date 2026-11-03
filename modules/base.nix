@@ -22,6 +22,8 @@ in
       fm.nixos.overlays
       fm.nixos.agenix
       fm.nixos.appimage
+      fm.nixos.wallpaper
+      fm.nixos.dsh
     ];
   };
 
@@ -50,6 +52,8 @@ in
       fm.homeManager.musicfox
       fm.homeManager.file-manager
       fm.homeManager.apps
+      fm.homeManager.wallpaper
+      fm.homeManager.dsh
     ];
   };
 }

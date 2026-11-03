@@ -11,17 +11,14 @@ in
       fm.nixos.MechGraphics
       fm.nixos.MechFilesystem
       fm.nixos.MechImpermanence
-      fm.nixos.MechWallpaper
       fm.nixos.virtualisation
       fm.nixos.flatpak
-      fm.nixos.dsh
     ];
     system.stateVersion = "26.11";
     networking.hostName = "Mech";
     home-manager.users.aohg = {
       imports = [
         fm.homeManager.base
-        fm.homeManager.dsh
       ];
       home.stateVersion = "26.11";
     };

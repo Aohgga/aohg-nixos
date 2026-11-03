@@ -1,15 +1,16 @@
 { ... }:
 let
   user = "aohg";
-  # 用户可写的固定位置：noctalia 的 wallpaper_changed hook 把图拷到这里
+  # noctalia 的 wallpaper_changed hook 写到这里（用户可写）
   userWallpaper = "/home/${user}/.local/share/plasmalogin/wallpaper.png";
-  # greeter 可读的位置
+  # plasmalogin 读取这里（greeter 用户可读）
   greeterWallpaper = "/var/lib/plasmalogin/wallpaper.png";
 in
 {
-  flake.modules.nixos.MechWallpaper = { pkgs, ... }: {
+  # 两台主机共用：plasmalogin 壁纸 + noctalia 换壁纸 hook
+  flake.modules.nixos.wallpaper = { pkgs, ... }: {
     # plasmalogin 的壁纸配置在 plasmalogin.conf；/etc 每次启动重建，
-    # 所以这里只写固定路径，换壁纸时不需要再改配置。
+    # 所以这里声明式写入固定路径，换壁纸时不需要再改配置。
     environment.etc."plasmalogin.conf".text = ''
       [Greeter]
       WallpaperPluginId=org.kde.image
@@ -18,7 +19,7 @@ in
       Image=file://${greeterWallpaper}
     '';
 
-    # 由 noctalia 的 hooks.wallpaper_changed 调用（设置里填这个路径）：
+    # 由 noctalia 的 hooks.wallpaper_changed 调用：
     # /run/current-system/sw/bin/noctalia-wallpaper-hook
     environment.systemPackages = [
       (pkgs.writeShellScriptBin "noctalia-wallpaper-hook" ''
@@ -37,16 +38,11 @@ in
       '')
     ];
 
-    # 启动时兜底同步一次
-    systemd.tmpfiles.rules = [
-      "d /var/lib/plasmalogin 0750 plasmalogin plasmalogin -"
-      "C+ ${greeterWallpaper} 0644 plasmalogin plasmalogin - ${userWallpaper}"
-    ];
-
-    # 换壁纸后立刻同步到 greeter 的目录，不需要重启或重建
+    # 文件出现或变化时，把它同步到 greeter 可读的位置
     systemd.paths.plasmalogin-wallpaper = {
       wantedBy = [ "multi-user.target" ];
       pathConfig = {
+        PathExists = userWallpaper;
         PathChanged = userWallpaper;
         Unit = "plasmalogin-wallpaper.service";
       };
@@ -58,5 +54,13 @@ in
         ${pkgs.coreutils}/bin/install -Dm644 ${userWallpaper} ${greeterWallpaper}
       '';
     };
+  };
+
+  # 两台主机共用：noctalia 的换壁纸 hook
+  flake.modules.homeManager.wallpaper = {
+    xdg.configFile."noctalia/config.toml".text = ''
+      [hooks]
+      wallpaper_changed = ["/run/current-system/sw/bin/noctalia-wallpaper-hook"]
+    '';
   };
 }
