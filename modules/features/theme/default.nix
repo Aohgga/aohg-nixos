@@ -74,10 +74,15 @@
       ];
     };
   flake.modules.nixos.theme = { pkgs, ... }: {
-    environment.systemPackages = with pkgs.kdePackages; [
+    # greeter 用户读不到 ~/.local/share/icons 里的光标主题，
+    # 必须装到系统级 /run/current-system/sw/share/icons 才能在登录界面显示光标。
+    environment.systemPackages = with pkgs; [
+      bibata-cursors
+    ] ++ (with kdePackages; [
+      breeze
       kconfig
       kwidgetsaddons
-    ];
+    ]);
     # 保留：部分 KDE 应用依赖 /share 下的翻译/服务文件才能正常显示中文
     environment.pathsToLink = [ "/share" ];
   };
