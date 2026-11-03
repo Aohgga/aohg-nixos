@@ -57,6 +57,31 @@ in
     };
 
     # ────────────────────────────────────────────────────────────
+    # machine-id 持久化
+    # tmpfs 根每次开机都会生成新 machine-id，导致 journald 每个 boot
+    # 建一个新目录（/var/log/journal/<id>），日志也串不起来。
+    # 在 initrd 里、switch-root 之前把持久化副本 bind 到新根的
+    # /etc/machine-id，这样 stage-2 的 systemd/journald 一启动看到
+    # 的就是稳定 ID；也避免 impermanence persist-files 和
+    # systemd-machine-id-setup 抢文件的 activation 冲突。
+    # ────────────────────────────────────────────────────────────
+    boot.initrd.systemd.mounts = [
+      {
+        where = "/sysroot/etc/machine-id";
+        what = "/sysroot/persistent/etc/machine-id";
+        type = "none";
+        options = "bind";
+        wantedBy = [ "initrd.target" ];
+        before = [ "initrd-nixos-activation.service" ];
+        unitConfig = {
+          DefaultDependencies = false;
+          Requires = [ "sysroot.mount" "sysroot-persistent.mount" ];
+          After = [ "sysroot.mount" "sysroot-persistent.mount" ];
+        };
+      }
+    ];
+
+    # ────────────────────────────────────────────────────────────
     # 系统级持久化（root 状态）
     # ────────────────────────────────────────────────────────────
     environment.persistence."/persistent" = {
