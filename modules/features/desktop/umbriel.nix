@@ -20,4 +20,9 @@
     services.gvfs.enable = true;
     programs.dconf.enable = true;
   };
+
+  flake.modules.homeManager.umbriel = {
+    imports = [ inputs.umbriel.homeModules.default ];
+    programs.umbriel.enable = true;
+  };
 }
