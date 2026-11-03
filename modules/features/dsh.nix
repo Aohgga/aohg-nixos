@@ -1,15 +1,41 @@
 { inputs, ... }:
 {
-  flake.modules.nixos.dsh = {
+  flake.modules.nixos.dsh = { config, lib, ... }: {
     imports = [ inputs.deepseek-harness.nixosModules.default ];
     nixpkgs.overlays = [ inputs.deepseek-harness.overlays.default ];
 
-    # dsh WebUI 是用户级 systemd 服务，默认只在该用户有会话时运行。
-    # 开启 linger 后开机即启动，注销或切换用户也不会把 3080 带走。
-    users.users.aohg.linger = true;
+    # dsh WebUI 作为系统级服务运行：开机由系统 systemd 直接拉起，
+    # 不依赖用户会话、linger，也不依赖 home-manager 往 tmpfs 的
+    # ~/.config/systemd/user 里写 unit（那会导致开机后几十秒空窗）。
+    services.dsh = {
+      enable = true;
+      user = "aohg";
+      group = "users";
+      dataDir = "/home/aohg/.dsh";
+      homeDirectory = "/home/aohg/.dsh";
+      workspace = "/home/aohg/.dsh/workspace";
+      listenAddress = "127.0.0.1";
+      port = 3080;
+      # 复用 home-manager 组合好的包（bundles / mutable 都在里面），
+      # profile 名也跟随 programs.dsh 的 materializedName。
+      package = config.home-manager.users.aohg.services.dsh.package;
+      profile = config.home-manager.users.aohg.programs.dsh.profiles.web.materializedName;
+    };
+
+    # 上游系统服务默认 ProtectHome=true、ProtectSystem=strict、NoNewPrivileges=true，
+    # 但 DSH_HOME 在 /home 下，而且 dsh 会执行任意用户工具，
+    # 这里放宽回原来用户服务的权限模型（保留 PrivateTmp / Restart 等）。
+    systemd.services.dsh-web.serviceConfig = {
+      ProtectHome = lib.mkForce false;
+      ProtectSystem = lib.mkForce false;
+      NoNewPrivileges = lib.mkForce false;
+      # 系统服务默认只有主组；补上用户原有的附加组，
+      # 否则视频、输入设备、NetworkManager 等会和以前不一致。
+      SupplementaryGroups = config.users.users.aohg.extraGroups;
+    };
   };
 
-  flake.modules.homeManager.dsh = { config, pkgs, ... }: {
+  flake.modules.homeManager.dsh = { pkgs, ... }: {
     imports = [ inputs.deepseek-harness.homeModules.default ];
 
     programs.dsh = {
@@ -24,15 +50,6 @@
         # 允许运行时用 `dsh plugin` 或插件市场安装，Nix 不再覆盖 profile
         mode = "mutable";
       };
-    };
-
-    services.dsh = {
-      enable = true;
-      listenAddress = "127.0.0.1";
-      port = 3080;
-      # 默认已是 "nix-web"，显式跟随 profiles 的 materializedName，
-      # 以后重命名 profile 时服务不会悄悄退回上游 web preset。
-      profile = config.programs.dsh.profiles.web.materializedName;
     };
   };
 }
