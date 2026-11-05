@@ -2,9 +2,8 @@
 let
   # plasmalogin 读取这里（greeter 用户可读）
   greeterWallpaper = "/var/lib/plasmalogin/wallpaper.png";
-  user = "aohg";
   # noctalia 的 wallpaper_changed hook 写到这里（用户可写）
-  userWallpaper = "/home/${user}/.local/share/plasmalogin/wallpaper.png";
+  userWallpaper = "/home/aohg/.local/share/plasmalogin/wallpaper.png";
 in
 {
   # 两台主机共用：plasmalogin 壁纸 + noctalia 换壁纸 hook

@@ -13,76 +13,72 @@
     ]);
   };
 
-  flake.modules.homeManager.theme = { config, pkgs, ... }:
-    let
-      # KDE/Qt 的字体串格式：family,size,...,style，重复写容易出错，集中定义
-      monoFont = "Maple Mono NL NF CN,10,-1,5,400,0,0,0,0,0,0,0,0,0,0,1,,0,0";
-      smallFont = "苹方-简,8,-1,5,400,0,0,0,0,0,0,0,0,0,0,1,常规体,0,0";
-      uiFont = "苹方-简,10,-1,5,400,0,0,0,0,0,0,0,0,0,0,1,常规体,0,0";
-    in {
-      gtk = {
-        enable = true;
-        theme = {
-          name = "adw-gtk3";
-          package = pkgs.adw-gtk3;
-        };
-        iconTheme = {
-          name = "Papirus";
-          package = pkgs.papirus-icon-theme;
-        };
-        cursorTheme = {
-          name = "Bibata-Modern-Ice";
-          package = pkgs.bibata-cursors;
-          size = 20;
-        };
-        font = {
-          name = "苹方-简";
-          size = 10;
-        };
-        gtk2.enable = false;
+  # 这里就是最终写进 kdeglobals / gtk 配置的内容，不再用 let 改写字体串，
+  # 方便直接对照生成结果。
+  flake.modules.homeManager.theme = { config, pkgs, ... }: {
+    gtk = {
+      enable = true;
+      theme = {
+        name = "adw-gtk3";
+        package = pkgs.adw-gtk3;
       };
-      qt = {
-        enable = true;
-        style = {
-          package = pkgs.darkly;
-        };
-        platformTheme = {
-          name = "kde";
-        };
-        kde.settings.kdeglobals = {
-          General = {
-            fixed = monoFont;
-            font = uiFont;
-            menuFont = uiFont;
-            smallestReadableFont = smallFont;
-            toolBarFont = uiFont;
-            XftAntialias = "true";
-            XftHintStyle = "hintnone";
-            XftSubPixel = "rgb";
-          };
-          Icons = {
-            Theme = "breeze-dark";
-          };
-          KDE = {
-            widgetStyle = "Darkly";
-          };
-          WM = {
-            activeFont = uiFont;
-          };
-        };
+      iconTheme = {
+        name = "Papirus";
+        package = pkgs.papirus-icon-theme;
       };
-      dconf.settings = {
-        "org/gnome/desktop/wm/preferences" = {
-          button-layout = "close,maximize,minimize,appmenu:";
-        };
+      cursorTheme = {
+        name = "Bibata-Modern-Ice";
+        package = pkgs.bibata-cursors;
+        size = 20;
       };
-      home.packages = with pkgs; [
-        xrdb
-      ];
-      xdg.dataFile = {
-        "icons/${config.gtk.cursorTheme.name}".source = "${config.gtk.cursorTheme.package}/share/icons/${config.gtk.cursorTheme.name}";
-        "icons/${config.gtk.iconTheme.name}".source = "${config.gtk.iconTheme.package}/share/icons/${config.gtk.iconTheme.name}";
-        "themes/${config.gtk.theme.name}".source = "${config.gtk.theme.package}/share/themes/${config.gtk.theme.name}";
+      font = {
+        name = "苹方-简";
+        size = 10;
+      };
+      gtk2.enable = false;
+    };
+    qt = {
+      enable = true;
+      style = {
+        package = pkgs.darkly;
+      };
+      platformTheme = {
+        name = "kde";
+      };
+      kde.settings.kdeglobals = {
+        General = {
+          fixed = "Maple Mono NL NF CN,10,-1,5,400,0,0,0,0,0,0,0,0,0,0,1,,0,0";
+          font = "苹方-简,10,-1,5,400,0,0,0,0,0,0,0,0,0,0,1,常规体,0,0";
+          menuFont = "苹方-简,10,-1,5,400,0,0,0,0,0,0,0,0,0,0,1,常规体,0,0";
+          smallestReadableFont = "苹方-简,8,-1,5,400,0,0,0,0,0,0,0,0,0,0,1,常规体,0,0";
+          toolBarFont = "苹方-简,10,-1,5,400,0,0,0,0,0,0,0,0,0,0,1,常规体,0,0";
+          XftAntialias = "true";
+          XftHintStyle = "hintnone";
+          XftSubPixel = "rgb";
+        };
+        Icons = {
+          Theme = "breeze-dark";
+        };
+        KDE = {
+          widgetStyle = "Darkly";
+        };
+        WM = {
+          activeFont = "苹方-简,10,-1,5,400,0,0,0,0,0,0,0,0,0,0,1,常规体,0,0";
+        };
       };
     };
+    dconf.settings = {
+      "org/gnome/desktop/wm/preferences" = {
+        button-layout = "close,maximize,minimize,appmenu:";
+      };
+    };
+    home.packages = with pkgs; [
+      xrdb
+    ];
+    xdg.dataFile = {
+      "icons/${config.gtk.cursorTheme.name}".source = "${config.gtk.cursorTheme.package}/share/icons/${config.gtk.cursorTheme.name}";
+      "icons/${config.gtk.iconTheme.name}".source = "${config.gtk.iconTheme.package}/share/icons/${config.gtk.iconTheme.name}";
+      "themes/${config.gtk.theme.name}".source = "${config.gtk.theme.package}/share/themes/${config.gtk.theme.name}";
+    };
+  };
 }

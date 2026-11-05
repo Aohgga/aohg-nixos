@@ -8,7 +8,6 @@
     boot.initrd.kernelModules = [ ];
     boot.kernelModules = [ "kvm-intel" ];
     boot.extraModulePackages = [ ];
-    boot.blacklistedKernelModules = [ "nouveau" "ideapad_laptop" ];
 
     fileSystems."/" =
       { device = "/dev/disk/by-uuid/b35e382a-92d8-4a14-85f9-8e354d79ecf0";

@@ -1,8 +1,4 @@
 { inputs, ... }:
-let
-  # Legion 的 nvme0n1p2（当前根分区，XFS），见 hosts/Legion/hardware-configuration.nix
-  rootDevice = "/dev/disk/by-uuid/b35e382a-92d8-4a14-85f9-8e354d79ecf0";
-in
 {
   # ────────────────────────────────────────────────────────────────────────
   # tmpfs 根 + tmpfs /home，系统状态和用户状态都持久化在同一个分区
@@ -29,9 +25,9 @@ in
         options = [ "mode=0755" "size=25%" ];
       };
 
-      # 原来的根分区 = 持久化分区
+      # 原来的根分区（nvme0n1p2，XFS）= 持久化分区
       "/persistent" = {
-        device = rootDevice;
+        device = "/dev/disk/by-uuid/b35e382a-92d8-4a14-85f9-8e354d79ecf0";
         fsType = "xfs";
         neededForBoot = true;
         options = [

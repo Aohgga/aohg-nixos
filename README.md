@@ -53,6 +53,16 @@ modules/
 - 密文放在 `secrets/` 根下，不建子目录：`secrets/<name>.age`，其中 `<name>` 同时是
   `age.secrets."<name>"` 和解密后的 `/run/agenix/<name>`。
 
+## 少用 let
+
+`let` 只在两种情况下用：
+
+1. 同一个值被多处引用，且重复写容易不一致（如 agenix 的接收者公钥、`fm` 别名）；
+2. 需要真正的中间计算（如 `machine.nix` 的 `hostNames`）。
+
+纯别名会遮蔽最终生成的内容：例如 `theme.nix` 里不要再把字体串包成
+`uiFont`/`monoFont`，直接写进 `kdeglobals`，配置文件即可与生成结果一一对应。
+
 ## 排序总则
 
 排序分三种，不要混用：

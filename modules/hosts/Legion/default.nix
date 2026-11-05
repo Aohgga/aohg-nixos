@@ -6,6 +6,7 @@
       self.modules.nixos.base
 
       # 本机硬件与存储
+      self.modules.nixos.LegionBoot
       self.modules.nixos.LegionGraphics
       self.modules.nixos.LegionHardware
       self.modules.nixos.LegionImpermanence
