@@ -1,27 +1,20 @@
-{ config, ... }:
-let
-  fm = config.flake.modules;
-in
+{ self, ... }:
 {
   flake.modules.nixos.Mech = {
     imports = [
-      fm.nixos.base
-      fm.nixos.desktop
-      fm.nixos.MechHardware
-      fm.nixos.MechGraphics
-      fm.nixos.MechFilesystem
-      fm.nixos.MechImpermanence
-      fm.nixos.virtualisation
-      fm.nixos.flatpak
+      self.modules.nixos.base
+      self.modules.nixos.desktop
+      self.modules.nixos.MechHardware
+      self.modules.nixos.MechGraphics
+      self.modules.nixos.MechFilesystem
+      self.modules.nixos.MechImpermanence
+      self.modules.nixos.virtualisation
+      self.modules.nixos.flatpak
     ];
     system.stateVersion = "26.11";
     networking.hostName = "Mech";
     home-manager.users.aohg = {
-      imports = [
-        fm.homeManager.base
-        fm.homeManager.MechUmbriel
-      ];
-      home.stateVersion = "26.11";
+      imports = [ self.modules.homeManager.Mech ];
     };
   };
 }

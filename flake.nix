@@ -39,6 +39,16 @@
   };
 
   outputs = inputs:
-    inputs.flake-parts.lib.mkFlake { inherit inputs; }
-    (inputs.import-tree ./modules);
+    inputs.flake-parts.lib.mkFlake { inherit inputs; } {
+      # modules/ 下每个 .nix 文件都是 flake-parts 模块，
+      # 自动收集 flake.modules.<class>.<name>，不需要手工 import。
+      imports = [ (inputs.import-tree ./modules) ];
+
+      # 只有这一种系统，perSystem 的输出（formatter 等）也只生成它。
+      systems = [ "x86_64-linux" ];
+
+      perSystem = { pkgs, ... }: {
+        formatter = pkgs.nixfmt;
+      };
+    };
 }
