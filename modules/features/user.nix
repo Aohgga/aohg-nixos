@@ -3,16 +3,16 @@
     age.secrets.aohg-password = {
       file = ../../secrets/passwords/aohg-password.age;
     };
+    services.userborn.enable = true;
     users = {
       mutableUsers = false;
       users.aohg = {
-        isNormalUser = true;
-        extraGroups = [ "wheel" "networkmanager" "input" "video" ];
         autoSubUidGidRange = true;
-        useDefaultShell = true;
+        extraGroups = [ "input" "networkmanager" "video" "wheel" ];
         hashedPasswordFile = config.age.secrets.aohg-password.path;
+        isNormalUser = true;
+        useDefaultShell = true;
       };
     };
-    services.userborn.enable = true;
   };
 }

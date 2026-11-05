@@ -4,17 +4,17 @@
     imports = [
       self.modules.nixos.base
       self.modules.nixos.desktop
-      self.modules.nixos.MechHardware
-      self.modules.nixos.MechGraphics
+      self.modules.nixos.flatpak
       self.modules.nixos.MechFilesystem
+      self.modules.nixos.MechGraphics
+      self.modules.nixos.MechHardware
       self.modules.nixos.MechImpermanence
       self.modules.nixos.virtualisation
-      self.modules.nixos.flatpak
     ];
-    system.stateVersion = "26.11";
-    networking.hostName = "Mech";
     home-manager.users.aohg = {
       imports = [ self.modules.homeManager.Mech ];
     };
+    networking.hostName = "Mech";
+    system.stateVersion = "26.11";
   };
 }

@@ -1,9 +1,9 @@
 {
   flake.modules.homeManager.file-manager = { pkgs, ... }: {
     home.packages = with pkgs.kdePackages; [
+      ark
       dolphin
       dolphin-plugins
-      ark
       kio-extras
       kio-fuse
     ];

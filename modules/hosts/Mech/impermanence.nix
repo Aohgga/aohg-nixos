@@ -105,28 +105,19 @@ in
     environment.persistence."/persistent" = {
       hideMounts = true;
       directories = [
-        # NixOS 自身的状态
-        "/var/lib/nixos"
-        "/var/lib/systemd"
-        "/var/log"
-
-        # 网络 / 蓝牙
-        "/var/lib/NetworkManager"
         "/etc/NetworkManager/system-connections"
-        "/var/lib/bluetooth"
-
-        # 登录管理器与桌面服务
-        "/var/lib/plasmalogin"
-        "/var/lib/AccountsService"
-        "/var/lib/upower"
-        "/var/lib/colord"
-
-        # 应用状态
-        "/var/lib/flatpak"
-        "/var/lib/private/mihomo"
-
-        # agenix 的主机密钥（age.identityPaths 依赖）
         "/etc/ssh"
+        "/var/lib/AccountsService"
+        "/var/lib/bluetooth"
+        "/var/lib/colord"
+        "/var/lib/flatpak"
+        "/var/lib/NetworkManager"
+        "/var/lib/nixos"
+        "/var/lib/plasmalogin"
+        "/var/lib/private/mihomo"
+        "/var/lib/systemd"
+        "/var/lib/upower"
+        "/var/log"
       ];
     };
 
@@ -140,33 +131,17 @@ in
       hideMounts = true;
       users.aohg = {
         directories = [
-          # 文档 / 项目
-          "Desktop"
-          "Documents"
-          "Downloads"
-          "Projects"
-          "VMs"
-          "Pictures"
-          "Videos"
-          "Music"
-          "Games"
-          "AppImages"
-
-          # 密钥 / 身份 / 其他
           ".android"
-          ".dsh"
-          { directory = ".gnupg"; mode = "0700"; }
-          ".pki"
-          { directory = ".ssh"; mode = "0700"; }
-          ".var/app"
-
-          # .config
+          ".cache/appimage-run"
+          ".cache/fish"
+          ".cache/fontconfig"
+          ".cache/noctalia"
+          ".config/@deepseek-ai"
           ".config/age"
           ".config/aohg-nixos"
           ".config/autostart"
           ".config/btop"
           ".config/dconf"
-          ".config/@deepseek-ai"
           ".config/DSH Desktop"
           ".config/ELYTerminal"
           ".config/fcitx5"
@@ -187,8 +162,8 @@ in
           ".config/xsettingsd"
           ".config/yazi"
           ".config/zed"
-
-          # .local
+          ".dsh"
+          { directory = ".gnupg"; mode = "0700"; }
           ".local/bin"
           ".local/share/app.getlux.com.sakuracat.app"
           ".local/share/applications"
@@ -222,12 +197,19 @@ in
           ".local/state/noctalia"
           ".local/state/nvim"
           ".local/state/wireplumber"
-
-          # .cache
-          ".cache/appimage-run"
-          ".cache/fish"
-          ".cache/fontconfig"
-          ".cache/noctalia"
+          ".pki"
+          { directory = ".ssh"; mode = "0700"; }
+          ".var/app"
+          "AppImages"
+          "Desktop"
+          "Documents"
+          "Downloads"
+          "Games"
+          "Music"
+          "Pictures"
+          "Projects"
+          "Videos"
+          "VMs"
         ];
         files = [
           ".bash_history"

@@ -4,9 +4,9 @@
     hardware.graphics = {
       enable = true;
       extraPackages = with pkgs; [
-        vulkan-loader
         intel-media-driver
         nvidia-vaapi-driver
+        vulkan-loader
       ];
     };
   };

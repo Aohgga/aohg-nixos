@@ -85,28 +85,19 @@ in
     environment.persistence."/persistent" = {
       hideMounts = true;
       directories = [
-        # NixOS 自身的状态
-        "/var/lib/nixos"
-        "/var/lib/systemd"
-        "/var/log"
-
-        # 网络 / 蓝牙
-        "/var/lib/NetworkManager"
-        "/etc/NetworkManager/system-connections"
-        "/var/lib/bluetooth"
-
-        # 登录管理器与桌面服务
-        "/var/lib/plasmalogin"
-        "/var/lib/AccountsService"
-        "/var/lib/upower"
-        "/var/lib/colord"
         "/etc/lact"
-
-        # 应用状态
-        "/var/lib/private/mihomo"
-
-        # agenix 的主机密钥（age.identityPaths 依赖）
+        "/etc/NetworkManager/system-connections"
         "/etc/ssh"
+        "/var/lib/AccountsService"
+        "/var/lib/bluetooth"
+        "/var/lib/colord"
+        "/var/lib/NetworkManager"
+        "/var/lib/nixos"
+        "/var/lib/plasmalogin"
+        "/var/lib/private/mihomo"
+        "/var/lib/systemd"
+        "/var/lib/upower"
+        "/var/log"
       ];
 
       # ──────────────────────────────────────────────────────────
@@ -117,37 +108,24 @@ in
       # ──────────────────────────────────────────────────────────
       users.aohg = {
         directories = [
-          # 文档 / 项目
-          "Desktop"
-          "Documents"
-          "Downloads"
-          "Projects"
-          "VMs"
-          "Applications"
-
-          # 密钥 / 身份 / 其他
           ".android"
-          ".dsh"
-          { directory = ".gnupg"; mode = "0700"; }
-          ".pki"
-          { directory = ".ssh"; mode = "0700"; }
-          ".steam"
-          ".var/app"
-
-          # .config
+          ".cache/appimage-run"
+          ".cache/fish"
+          ".cache/fontconfig"
+          ".cache/noctalia"
+          ".config/@deepseek-ai"
           ".config/age"
           ".config/aohg-dotfiles"
           ".config/aohg-nixos"
           ".config/autostart"
           ".config/btop"
           ".config/dconf"
-          ".config/@deepseek-ai"
           ".config/DSH Desktop"
           ".config/ELYTerminal"
           ".config/fcitx5"
+          ".config/GitHub Desktop"
           ".config/gtk-3.0"
           ".config/gtk-4.0"
-          ".config/GitHub Desktop"
           ".config/hypr"
           ".config/ibus"
           ".config/lact"
@@ -166,10 +144,10 @@ in
           ".config/VirtualBox"
           ".config/waybar"
           ".config/xsettingsd"
-          ".config/zen"
           ".config/zed"
-
-          # .local
+          ".config/zen"
+          ".dsh"
+          { directory = ".gnupg"; mode = "0700"; }
           ".local/bin"
           ".local/share/app.getlux.com.sakuracat.app"
           ".local/share/applications"
@@ -204,12 +182,16 @@ in
           ".local/state/noctalia"
           ".local/state/nvim"
           ".local/state/wireplumber"
-
-          # .cache
-          ".cache/appimage-run"
-          ".cache/fish"
-          ".cache/fontconfig"
-          ".cache/noctalia"
+          ".pki"
+          { directory = ".ssh"; mode = "0700"; }
+          ".steam"
+          ".var/app"
+          "Applications"
+          "Desktop"
+          "Documents"
+          "Downloads"
+          "Projects"
+          "VMs"
         ];
         files = [
           ".bash_history"

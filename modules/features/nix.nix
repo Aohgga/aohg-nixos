@@ -10,48 +10,11 @@
     age.secrets."github-token" = {
       file = ../../secrets/github-token.age;
       # root 读文件不受 owner 限制，这里让日常以 aohg 运行的 nix 也能读到。
-      owner = "aohg";
       mode = "0400";
+      owner = "aohg";
     };
 
-    nix = {
-      channel.enable = false;
-
-      # 用 !include 而不是 nix.settings.access-tokens：
-      # 后者会被写进 /nix/store 里的 /etc/nix/nix.conf，全局可读、还会被
-      # nix copy 带到二进制缓存；!include 指向运行时解密的路径，文件不存在
-      # 时会被静默跳过，所以 secret 还没写入时也不影响构建和 nix 使用。
-      extraOptions = ''
-        !include ${config.age.secrets."github-token".path}
-      '';
-
-      settings = {
-        experimental-features = [ "nix-command" "flakes" ];
-        auto-optimise-store = true;
-        trusted-users = [ "root" "aohg" ];
-        use-xdg-base-directories = true;
-        connect-timeout = 60;
-        download-attempts = 10;
-        # 让 flake 里声明的 cachix 真正生效（flake nixConfig 默认会被忽略）
-        substituters = [
-          "https://denial.cachix.org"
-          "https://noctalia.cachix.org"
-          "https://umbriel.cachix.org"
-          "https://deepseek-harness-nix.cachix.org"
-        ];
-        "trusted-public-keys" = [
-          "denial.cachix.org-1:wd8YTnvPmugFrtdMJWtR1XdVknR3/g2nmBJkT+vAruo="
-          "noctalia.cachix.org-1:pCOR47nnMEo5thcxNDtzWpOxNFQsBRglJzxWPp3dkU4="
-          "umbriel.cachix.org-1:JfNq/2yg2S6D6z4Z2dVSZrZlDPQTKtexB6GAVLD98nw="
-          "deepseek-harness-nix.cachix.org-1:5NrkwLN9veNMhiINtU5ZeV4isXFhFsOwn6Ms7J1M+TA="
-        ];
-      };
-      gc = {
-        automatic = true;
-        dates = "weekly";
-        options = "--delete-older-than 30d";
-      };
-    };
+    documentation.nixos.enable = false;
 
     # nix-output-monitor：直接提供 nom
     environment.systemPackages = [
@@ -82,7 +45,46 @@
       })
     ];
 
+    nix = {
+      channel.enable = false;
+
+      # 用 !include 而不是 nix.settings.access-tokens：
+      # 后者会被写进 /nix/store 里的 /etc/nix/nix.conf，全局可读、还会被
+      # nix copy 带到二进制缓存；!include 指向运行时解密的路径，文件不存在
+      # 时会被静默跳过，所以 secret 还没写入时也不影响构建和 nix 使用。
+      extraOptions = ''
+        !include ${config.age.secrets."github-token".path}
+      '';
+
+      gc = {
+        automatic = true;
+        dates = "weekly";
+        options = "--delete-older-than 30d";
+      };
+
+      settings = {
+        auto-optimise-store = true;
+        connect-timeout = 60;
+        download-attempts = 10;
+        experimental-features = [ "flakes" "nix-command" ];
+        # 让 flake 里声明的 cachix 真正生效（flake nixConfig 默认会被忽略）
+        substituters = [
+          "https://deepseek-harness-nix.cachix.org"
+          "https://denial.cachix.org"
+          "https://noctalia.cachix.org"
+          "https://umbriel.cachix.org"
+        ];
+        "trusted-public-keys" = [
+          "deepseek-harness-nix.cachix.org-1:5NrkwLN9veNMhiINtU5ZeV4isXFhFsOwn6Ms7J1M+TA="
+          "denial.cachix.org-1:wd8YTnvPmugFrtdMJWtR1XdVknR3/g2nmBJkT+vAruo="
+          "noctalia.cachix.org-1:pCOR47nnMEo5thcxNDtzWpOxNFQsBRglJzxWPp3dkU4="
+          "umbriel.cachix.org-1:JfNq/2yg2S6D6z4Z2dVSZrZlDPQTKtexB6GAVLD98nw="
+        ];
+        trusted-users = [ "aohg" "root" ];
+        use-xdg-base-directories = true;
+      };
+    };
+
     nixpkgs.config.allowUnfree = true;
-    documentation.nixos.enable = false;
   };
 }

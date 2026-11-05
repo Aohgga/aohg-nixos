@@ -3,30 +3,18 @@
     programs.go-musicfox = {
       enable = true;
       settings = {
-        startup = {
-          checkUpdate = false;
-        };
         main = {
-          visualizer = {
-            enable = true;
-          };
-          notification = {
-            enable = false;
-          };
-        };
-        theme = {
-          activeTheme = "Transparent";
+          notification.enable = false;
+          visualizer.enable = true;
         };
         player = {
+          beep.gapless = true;
           engine = "auto";
           songLevel = "lossless";
-          beep = {
-            gapless = true;
-          };
         };
-        reporter.netease = {
-          enable = false;
-        };
+        reporter.netease.enable = false;
+        startup.checkUpdate = false;
+        theme.activeTheme = "Transparent";
       };
     };
   };

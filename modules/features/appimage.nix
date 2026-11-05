@@ -1,8 +1,8 @@
 {
   flake.modules.nixos.appimage = { pkgs, ... }: {
     programs.appimage = {
-      enable = true;
       binfmt = true;
+      enable = true;
       package = pkgs.appimage-run.override {
         extraPkgs = pkgs: [
           pkgs.libepoxy

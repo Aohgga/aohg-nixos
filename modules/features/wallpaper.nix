@@ -1,12 +1,20 @@
 { ... }:
 let
+  # plasmalogin 读取这里（greeter 用户可读）
+  greeterWallpaper = "/var/lib/plasmalogin/wallpaper.png";
   user = "aohg";
   # noctalia 的 wallpaper_changed hook 写到这里（用户可写）
   userWallpaper = "/home/${user}/.local/share/plasmalogin/wallpaper.png";
-  # plasmalogin 读取这里（greeter 用户可读）
-  greeterWallpaper = "/var/lib/plasmalogin/wallpaper.png";
 in
 {
+  # 两台主机共用：noctalia 的换壁纸 hook
+  flake.modules.homeManager.wallpaper = {
+    xdg.configFile."noctalia/config.toml".text = ''
+      [hooks]
+      wallpaper_changed = ["/run/current-system/sw/bin/noctalia-wallpaper-hook"]
+    '';
+  };
+
   # 两台主机共用：plasmalogin 壁纸 + noctalia 换壁纸 hook
   flake.modules.nixos.wallpaper = { pkgs, ... }: {
     # plasmalogin 的壁纸配置在 plasmalogin.conf；/etc 每次启动重建，
@@ -42,31 +50,23 @@ in
     # 不设 PathExists：文件一直存在会被反复触发，容易撞上 systemd 的
     # start limit（上次 failed 就是这个原因）；首次同步由 service 开机执行。
     systemd.paths.plasmalogin-wallpaper = {
-      wantedBy = [ "multi-user.target" ];
-      unitConfig.StartLimitIntervalSec = 0;
       pathConfig = {
         PathChanged = userWallpaper;
         Unit = "plasmalogin-wallpaper.service";
       };
+      unitConfig.StartLimitIntervalSec = 0;
+      wantedBy = [ "multi-user.target" ];
     };
 
     systemd.services.plasmalogin-wallpaper = {
-      wantedBy = [ "multi-user.target" ];
-      unitConfig.StartLimitIntervalSec = 0;
-      serviceConfig.Type = "oneshot";
       script = ''
         if [ -r ${userWallpaper} ]; then
           ${pkgs.coreutils}/bin/install -Dm644 ${userWallpaper} ${greeterWallpaper}
         fi
       '';
+      serviceConfig.Type = "oneshot";
+      unitConfig.StartLimitIntervalSec = 0;
+      wantedBy = [ "multi-user.target" ];
     };
-  };
-
-  # 两台主机共用：noctalia 的换壁纸 hook
-  flake.modules.homeManager.wallpaper = {
-    xdg.configFile."noctalia/config.toml".text = ''
-      [hooks]
-      wallpaper_changed = ["/run/current-system/sw/bin/noctalia-wallpaper-hook"]
-    '';
   };
 }
