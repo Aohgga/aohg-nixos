@@ -109,7 +109,6 @@ in
       # 公共系统目录 + Mech 独有
       directories = common.systemDirs ++ [
         "/var/lib/flatpak"
-        "/var/lib/noctalia-greeter"
       ];
     };
 
