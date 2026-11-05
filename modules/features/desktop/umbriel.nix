@@ -24,5 +24,14 @@
   flake.modules.homeManager.umbriel = {
     imports = [ inputs.umbriel.homeModules.default ];
     programs.umbriel.enable = true;
+
+    # portal 配置是 umbriel 专属。手写文件而不是用 xdg.portal.config：
+    # 后者会为生成同一个文件把整个 portal 栈装进用户 profile，并改写
+    # NIX_XDG_DESKTOP_PORTAL_DIR，收益为零。
+    xdg.configFile."xdg-desktop-portal/umbriel-portals.conf".text = ''
+      [preferred]
+      default = umbriel;gtk
+      org.freedesktop.impl.portal.FileChooser = kde
+    '';
   };
 }

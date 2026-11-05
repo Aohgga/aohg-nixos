@@ -146,7 +146,8 @@ nix build .#nixosConfigurations.Legion.config.system.build.toplevel
   audio/bluetooth/tuning）。
 - `nixfmt` 会把整个仓库重排，不要未经允许全量跑；`nix fmt` 由人决定。
 - `config/umbriel/` 是纯数据，不被 import-tree 收集，改它不会产生新模块。
-- home-manager 的 `xdg.portal.enable` 会把 `NIX_XDG_DESKTOP_PORTAL_DIR` 指向用户
-  profile，且要求 `extraPortals` 非空。本仓库只借它生成 `portals.conf`：`extraPortals`
-  保持最小，两个 sessionVariables 用 `lib.mkForce` 指回
-  `/run/current-system/sw/share/xdg-desktop-portal/portals`，实现仍由 NixOS 管理。
+- portal 配置（`umbriel-portals.conf`）是 umbriel 专属，放
+  `modules/features/desktop/umbriel.nix` 的 homeManager 模块里，用 `xdg.configFile`
+  手写。不要改用 home-manager 的 `xdg.portal.config`：它需要开启 `xdg.portal.enable`，
+  会把 portal 栈装进用户 profile、改写 `NIX_XDG_DESKTOP_PORTAL_DIR`，却只生成同一个
+  文件。
