@@ -2,8 +2,6 @@
 let
   # Legion 的 nvme0n1p2（当前根分区，XFS），见 hosts/Legion/hardware-configuration.nix
   rootDevice = "/dev/disk/by-uuid/b35e382a-92d8-4a14-85f9-8e354d79ecf0";
-  # 两台机器共用的持久化条目
-  common = import ../../lib/persistence.nix;
 in
 {
   # ────────────────────────────────────────────────────────────────────────
@@ -86,9 +84,29 @@ in
     # ────────────────────────────────────────────────────────────
     environment.persistence."/persistent" = {
       hideMounts = true;
-      # 公共系统目录 + Legion 独有
-      directories = common.systemDirs ++ [
+      directories = [
+        # NixOS 自身的状态
+        "/var/lib/nixos"
+        "/var/lib/systemd"
+        "/var/log"
+
+        # 网络 / 蓝牙
+        "/var/lib/NetworkManager"
+        "/etc/NetworkManager/system-connections"
+        "/var/lib/bluetooth"
+
+        # 登录管理器与桌面服务
+        "/var/lib/plasmalogin"
+        "/var/lib/AccountsService"
+        "/var/lib/upower"
+        "/var/lib/colord"
         "/etc/lact"
+
+        # 应用状态
+        "/var/lib/private/mihomo"
+
+        # agenix 的主机密钥（age.identityPaths 依赖）
+        "/etc/ssh"
       ];
 
       # ──────────────────────────────────────────────────────────
@@ -98,22 +116,119 @@ in
       # 由 home-manager 的 home.file 每次开机重建，不在这里 bind。
       # ──────────────────────────────────────────────────────────
       users.aohg = {
-        directories = common.userDirs ++ [
+        directories = [
+          # 文档 / 项目
+          "Desktop"
+          "Documents"
+          "Downloads"
+          "Projects"
+          "VMs"
           "Applications"
+
+          # 密钥 / 身份 / 其他
+          ".android"
+          ".dsh"
+          { directory = ".gnupg"; mode = "0700"; }
+          ".pki"
+          { directory = ".ssh"; mode = "0700"; }
+          ".steam"
+          ".var/app"
+
+          # .config
+          ".config/age"
           ".config/aohg-dotfiles"
+          ".config/aohg-nixos"
+          ".config/autostart"
+          ".config/btop"
+          ".config/dconf"
+          ".config/@deepseek-ai"
+          ".config/DSH Desktop"
+          ".config/ELYTerminal"
+          ".config/fcitx5"
+          ".config/gtk-3.0"
+          ".config/gtk-4.0"
           ".config/GitHub Desktop"
           ".config/hypr"
+          ".config/ibus"
+          ".config/lact"
+          ".config/Ladybird"
+          ".config/libaccounts-glib"
+          ".config/menus"
           ".config/mozilla"
+          ".config/mpv-handler/cookies"
+          ".config/net.imput.helium"
+          ".config/nvim"
+          ".config/qBittorrent"
           ".config/qutebrowser"
           ".config/rofi"
+          ".config/swayimg"
+          ".config/umbriel"
+          ".config/VirtualBox"
           ".config/waybar"
+          ".config/xsettingsd"
           ".config/zen"
+          ".config/zed"
+
+          # .local
+          ".local/bin"
+          ".local/share/app.getlux.com.sakuracat.app"
+          ".local/share/applications"
+          ".local/share/ark"
+          ".local/share/color-schemes"
+          ".local/share/com.epicgames.eglv2"
+          ".local/share/dolphin"
+          ".local/share/ElyOffice"
+          ".local/share/fcitx5"
+          ".local/share/fish"
+          ".local/share/fonts"
+          ".local/share/go-musicfox"
+          ".local/share/gpu-screen-recorder"
           ".local/share/icons"
+          ".local/share/keyrings"
+          ".local/share/kwalletd"
+          ".local/share/Ladybird"
+          ".local/share/nautilus"
+          ".local/share/nvim"
+          ".local/share/pki"
+          ".local/share/plasmalogin"
+          ".local/share/qBittorrent"
           ".local/share/qutebrowser"
           ".local/share/Steam"
-          ".steam"
+          ".local/share/themes"
+          ".local/share/Trash"
+          ".local/share/umu"
+          ".local/share/zed"
+          ".local/state/dolphinstaterc"
+          ".local/state/go-musicfox"
+          ".local/state/mpv"
+          ".local/state/noctalia"
+          ".local/state/nvim"
+          ".local/state/wireplumber"
+
+          # .cache
+          ".cache/appimage-run"
+          ".cache/fish"
+          ".cache/fontconfig"
+          ".cache/noctalia"
         ];
-        files = common.userFiles;
+        files = [
+          ".bash_history"
+          ".config/arkrc"
+          ".config/darklyrc"
+          ".config/dolphinrc"
+          ".config/kcminputrc"
+          ".config/kdeglobals"
+          ".config/kglobalshortcutsrc"
+          ".config/kiorc"
+          ".config/kservicemenurc"
+          ".config/kwalletrc"
+          ".config/kxkbrc"
+          ".config/mimeapps.list"
+          ".config/trashrc"
+          ".gitconfig"
+          ".local/share/recently-used.xbel"
+          ".local/share/user-places.xbel"
+        ];
       };
     };
   };
