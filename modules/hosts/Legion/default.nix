@@ -3,6 +3,7 @@
   flake.modules.nixos.Legion = {
     imports = [
       self.modules.nixos.base
+      self.modules.nixos.persistence
 
       self.modules.nixos.LegionBoot
       self.modules.nixos.LegionGraphics

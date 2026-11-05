@@ -11,14 +11,22 @@ in
     fileSystems."/persistent" = {
       device = rootDevice;
       fsType = "btrfs";
-      options = [ "subvol=persistent" "compress=zstd:3" "noatime" ];
+      options = [
+        "subvol=persistent"
+        "compress=zstd:3"
+        "noatime"
+      ];
       neededForBoot = true;
     };
 
     fileSystems."/persist-home" = {
       device = homeDevice;
       fsType = "btrfs";
-      options = [ "subvol=home-persist" "compress=zstd:3" "noatime" ];
+      options = [
+        "subvol=home-persist"
+        "compress=zstd:3"
+        "noatime"
+      ];
       neededForBoot = true;
     };
 
@@ -86,133 +94,28 @@ in
     # 注意：/etc/machine-id、/etc/adjtime 不做 `files` 持久化。
     # impermanence 的 persist-files 在 /etc 已有同名文件时会让 activation 失败，
     # 而这两项都可以在启动时重新生成（machine-id 每次 boot 会变）。
+
+    aohg.persistence.homeRoot = "/persist-home";
+
     environment.persistence."/persistent" = {
       hideMounts = true;
-      directories = [
-        "/etc/NetworkManager/system-connections"
-        "/etc/ssh"
-        "/var/lib/AccountsService"
-        "/var/lib/bluetooth"
-        "/var/lib/colord"
-        "/var/lib/flatpak"
-        "/var/lib/NetworkManager"
-        "/var/lib/nixos"
-        "/var/lib/plasmalogin"
-        "/var/lib/private/mihomo"
-        "/var/lib/systemd"
-        "/var/lib/upower"
-        "/var/log"
-      ];
+      directories = [ "/var/lib/flatpak" ];
     };
-
-    #    注意：impermanence 的 users.<name> 存储路径固定为
-    #    /persist-home/home/aohg，不能改成 /persist-home/aohg
 
     environment.persistence."/persist-home" = {
       hideMounts = true;
-      users.aohg = {
-        directories = [
-          ".android"
-          ".cache/appimage-run"
-          ".cache/fish"
-          ".cache/fontconfig"
-          ".cache/noctalia"
-          ".config/@deepseek-ai"
-          ".config/age"
-          ".config/aohg-nixos"
-          ".config/autostart"
-          ".config/btop"
-          ".config/debial"
-          ".config/debial-home"
-          ".config/dconf"
-          ".config/DSH Desktop"
-          ".config/ELYTerminal"
-          ".config/fcitx5"
-          ".config/gtk-3.0"
-          ".config/gtk-4.0"
-          ".config/ibus"
-          ".config/lact"
-          ".config/Ladybird"
-          ".config/libaccounts-glib"
-          ".config/menus"
-          ".config/mpv-handler/cookies"
-          ".config/net.imput.helium"
-          ".config/nvim"
-          ".config/qBittorrent"
-          ".config/swayimg"
-          ".config/umbriel"
-          ".config/VirtualBox"
-          ".config/xsettingsd"
-          ".config/yazi"
-          ".config/zed"
-          ".dsh"
-          { directory = ".gnupg"; mode = "0700"; }
-          ".local/bin"
-          ".local/share/app.getlux.com.sakuracat.app"
-          ".local/share/applications"
-          ".local/share/ark"
-          ".local/share/backgrounds"
-          ".local/share/color-schemes"
-          ".local/share/com.epicgames.eglv2"
-          ".local/share/dolphin"
-          ".local/share/ElyOffice"
-          ".local/share/fcitx5"
-          ".local/share/fish"
-          ".local/share/flatpak"
-          ".local/share/fonts"
-          ".local/share/go-musicfox"
-          ".local/share/gpu-screen-recorder"
-          ".local/share/keyrings"
-          ".local/share/kwalletd"
-          ".local/share/Ladybird"
-          ".local/share/nautilus"
-          ".local/share/nvim"
-          ".local/share/pki"
-          ".local/share/plasmalogin"
-          ".local/share/qBittorrent"
-          ".local/share/themes"
-          ".local/share/Trash"
-          ".local/share/umu"
-          ".local/share/zed"
-          ".local/state/dolphinstaterc"
-          ".local/state/go-musicfox"
-          ".local/state/mpv"
-          ".local/state/noctalia"
-          ".local/state/nvim"
-          ".local/state/wireplumber"
-          ".pki"
-          { directory = ".ssh"; mode = "0700"; }
-          ".var/app"
-          "AppImages"
-          "Desktop"
-          "Documents"
-          "Downloads"
-          "Games"
-          "Music"
-          "Pictures"
-          "Projects"
-          "Videos"
-          "VMs"
-        ];
-        files = [
-          ".bash_history"
-          ".config/arkrc"
-          ".config/darklyrc"
-          ".config/dolphinrc"
-          ".config/kcminputrc"
-          ".config/kdeglobals"
-          ".config/kglobalshortcutsrc"
-          ".config/kiorc"
-          ".config/kservicemenurc"
-          ".config/kwalletrc"
-          ".config/kxkbrc"
-          ".config/mimeapps.list"
-          ".config/trashrc"
-          ".gitconfig"
-          ".local/share/recently-used.xbel"
-          ".local/share/user-places.xbel"
-        ];
-      };
+
+      users.aohg.directories = [
+        ".local/share/backgrounds"
+        ".local/share/flatpak"
+        "AppImages"
+        "Documents"
+        "Downloads"
+        "Games"
+        "Music"
+        "Pictures"
+        "Videos"
+      ];
     };
   };
 }

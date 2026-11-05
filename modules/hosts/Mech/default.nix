@@ -3,6 +3,7 @@
   flake.modules.nixos.Mech = {
     imports = [
       self.modules.nixos.base
+      self.modules.nixos.persistence
 
       self.modules.nixos.MechFilesystem
       self.modules.nixos.MechGraphics
