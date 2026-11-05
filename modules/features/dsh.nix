@@ -1,22 +1,5 @@
 { inputs, ... }:
 {
-  flake.modules.homeManager.dsh = { pkgs, ... }: {
-    imports = [ inputs.deepseek-harness.homeModules.default ];
-
-    programs.dsh = {
-      enable = true;
-      # 用本系统 pkgs 里的 dsh（overlay 已注入），而不是
-      # inputs.deepseek-harness.packages.…：后者会用 DSH 自己 pin 的
-      # nixpkgs 再构建一遍，和下面的 bundles 分属两套 nixpkgs。
-      package = pkgs.dsh.dsh;
-      profiles.web = {
-        bundles = [ pkgs.dsh.bundles.web-app ];
-        # 允许运行时用 `dsh plugin` 或插件市场安装，Nix 不再覆盖 profile。
-        mode = "mutable";
-      };
-    };
-  };
-
   flake.modules.nixos.dsh = { config, lib, ... }: {
     imports = [ inputs.deepseek-harness.nixosModules.default ];
     nixpkgs.overlays = [ inputs.deepseek-harness.overlays.default ];
@@ -63,6 +46,23 @@
       # 系统服务默认只有主组；补上用户原有的附加组，
       # 否则视频、输入设备、NetworkManager 等会和以前不一致。
       SupplementaryGroups = config.users.users.aohg.extraGroups;
+    };
+  };
+
+  flake.modules.homeManager.dsh = { pkgs, ... }: {
+    imports = [ inputs.deepseek-harness.homeModules.default ];
+
+    programs.dsh = {
+      enable = true;
+      # 用本系统 pkgs 里的 dsh（overlay 已注入），而不是
+      # inputs.deepseek-harness.packages.…：后者会用 DSH 自己 pin 的
+      # nixpkgs 再构建一遍，和下面的 bundles 分属两套 nixpkgs。
+      package = pkgs.dsh.dsh;
+      profiles.web = {
+        bundles = [ pkgs.dsh.bundles.web-app ];
+        # 允许运行时用 `dsh plugin` 或插件市场安装，Nix 不再覆盖 profile。
+        mode = "mutable";
+      };
     };
   };
 }

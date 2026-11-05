@@ -8,8 +8,8 @@ Dendritic Pattern + flake-parts 的 NixOS 配置。
 ## 目录职责
 
 ```
-flake.nix                     inputs 与 mkFlake 引导，不写配置
-agenix-rules.nix              agenix CLI 的接收者规则（工具要求放根目录）
+flake.nix                     inputs 与 mkFlake 引导，不写配置；inputs 按字母序
+agenix-rules.nix              agenix CLI 的接收者规则；条目按密文路径字母序
 config/                       纯数据/生成器（不是 flake 模块，不被自动收集）
 secrets/                      agenix 密文（*.age）
 modules/
@@ -39,58 +39,94 @@ modules/
 
 ## 命名规则
 
-- 目录：小写 kebab-case。唯一例外：`modules/hosts/<Host>/` 用 PascalCase，必须等于 `networking.hostName`。
+- 目录：小写 kebab-case。唯一例外：`modules/hosts/<Host>/` 用 PascalCase，必须等于
+  `networking.hostName`。
 - 文件：小写 kebab-case，单数，见名知意。
 - 文件名 = 模块名（去掉 class 前缀）：
   - `features/networking.nix` → `flake.modules.nixos.networking`
   - `features/shell/fish.nix` → `flake.modules.homeManager.fish`
   - `hosts/Mech/filesystem.nix` → `flake.modules.nixos.MechFilesystem`
   - `hosts/Mech/default.nix` → `flake.modules.nixos.Mech`（入口模块）
-- 不用 `xxx/default.nix` 包单个模块；目录本身就是入口时（`hosts/<Host>/`）才用 `default.nix`。
-- 类别目录只用于聚合同一领域的多个模块（`desktop/`、`hardware/`、`shell/`）；单个模块直接平铺。
+- 不用 `xxx/default.nix` 包单个模块；目录本身就是入口时（`hosts/<Host>/`）才用
+  `default.nix`。
+- 类别目录只用于聚合同一领域的多个模块（`desktop/`、`hardware/`、`shell/`）。
 
-## 文件内写作顺序
+## 排序总则
 
-1. 文件头注释（可选，只写“为什么”，不写“是什么”）
-2. 函数参数：按字母序，如 `{ config, inputs, lib, self, ... }`
-3. `let` 绑定：按字母序
-4. `flake.modules.<class>.<name>` 定义：先按 class 字母序（`homeManager` 在 `nixos` 前），
-   同类按 name 字母序
-5. 每个模块内部：
-   1. `imports`
-   2. 其余选项按 option path 字母序（`boot` < `environment` < `fileSystems` < `hardware`
-      < `home-manager` < `networking` < `nix` < `programs` < `services` < `systemd` < `users` < `xdg`）
-   3. 选项的 attrset 内，键按字母序
-   4. 注释放在被解释的选项正上方
-6. 例外：`hosts/*/impermanence.nix` 这类有执行顺序语义的大模块保留分区注释结构，
-   只对列表值排序。
+排序分两套，不要混用：
 
-## 列表排序
+- **NixOS 模块**（`flake.modules.nixos.*`）按**功能主次**排，见下一节。
+- **应用与用户级配置**（`flake.modules.homeManager.*`、`config/` 里的应用配置）
+  按**名字母序**排。
 
-除“顺序有语义”的列表外，一律按不区分大小写的字母序排列（等价于 `LC_ALL=C sort -f`，
-点文件排在最前）：
+纯字符串列表在同类内部按 `LC_ALL=C sort -f`（不区分大小写，点文件在前）排序。
 
-- 包列表：`home.packages`、`environment.systemPackages`、`extraPackages`、`addons`
-- 持久化清单：`directories`（含 `{ directory = ...; }` 按 directory 排）、`files`
-- `imports`、`trusted-users`、`extraGroups`、`kernelParams`
-- `substituters` / `trusted-public-keys`：按主机名字母序，两表保持同一顺序
+## NixOS 模块的顺序（功能主次）
+
+一个 NixOS 模块内，选项按下面的层级从底到顶排列；同一层内按表中从左到右的顺序，
+表里没有的选项排在最后并按字母序：
+
+| 层级 | 选项 |
+| --- | --- |
+| 1. 启动与硬件 | `boot`、`hardware`、`fileSystems`、`swapDevices`、`zramSwap` |
+| 2. 网络 | `networking` |
+| 3. 安全与身份 | `security`、`age`、`users` |
+| 4. 包管理与环境 | `nix`、`nixpkgs`、`environment`、`documentation` |
+| 5. 本地化 | `i18n`、`time`、`fonts` |
+| 6. 服务与系统管理 | `services`、`systemd`、`system` |
+| 7. 系统级程序 | `programs` |
+| 8. 虚拟化 | `virtualisation` |
+| 9. 用户层 | `home-manager`、`xdg` |
+
+`imports` 永远排在最前。一个文件同时定义两类模块时，先 NixOS、后 homeManager。
+
+聚合器（`modules/profiles.nix`、`modules/hosts/*/default.nix`）的 `imports` 也按层级
+分组，组内按字母序，组间用一句注释说明：
+
+```nix
+imports = [
+  # 系统基础
+  self.modules.nixos.base
+
+  # 本机硬件与存储
+  self.modules.nixos.MechGraphics
+  self.modules.nixos.MechHardware
+
+  # 桌面
+  self.modules.nixos.desktop
+
+  # 额外服务与程序
+  self.modules.nixos.flatpak
+];
+```
+
+`hosts/*/impermanence.nix` 这类有执行顺序语义的大模块保留分区注释结构，只对列表值
+排序。
+
+## 应用级配置的顺序
+
+- 包列表（`home.packages`、`environment.systemPackages`、`extraPackages`）按字母序。
+- 应用配置（`programs.<应用>.settings`、`config/` 下的应用配置）内部键按字母序。
+- 多个应用并列时按应用名字母序（`programs.fish` < `programs.kitty` …）。
+- 持久化清单（`directories` / `files`）按字母序，`{ directory = ...; }` 按 directory 排。
 
 不排序（顺序即语义）：
 
-- `systemd.services.dsh-web.environment.PATH` 这类 PATH 优先级列表
-- 端口列表、`systemd` 的 `after`/`before`/`requires` 依赖
-- `imports` 里显式表达层次的嵌套（如果需要）
+- `PATH` 这类优先级列表、端口列表
+- `systemd` 的 `after` / `before` / `requires` 依赖
+- `kernelParams`、`substituters` 这类需要人工控制优先级的列表
 
 ## 加东西时
 
-- **新主机**：建 `modules/hosts/<Name>/default.nix`，定义 `flake.modules.nixos.<Name>`；
-  `machine.nix` 自动发现（要求有 `default.nix` 且目录名 = 模块名）。
-- **新公共特性**：`modules/features/<name>.nix` 定义 `flake.modules.nixos.<name>` 或
-  `flake.modules.homeManager.<name>`；要全局启用就在 `modules/profiles.nix` 的
-  `base`/`desktop` 列表里加一行（按字母序插入）。
+- **新主机**：建 `modules/hosts/<Name>/default.nix`，定义
+  `flake.modules.nixos.<Name>`；`machine.nix` 自动发现（要求有 `default.nix` 且目录名
+  = 模块名）。
+- **新公共特性**：`modules/features/<name>.nix` 定义对应 class 的模块；要全局启用就在
+  `modules/profiles.nix` 对应层级里加一行（组内按字母序插入）。
 - **主机专属模块**：`modules/hosts/<Host>/<aspect>.nix`，模块名 `<Host><Aspect>`。
 - **新包**：加到 `features/apps.nix`（公共）或对应主机的 `apps.nix`，按字母序插入。
 - **新持久化目录**：加到对应主机的 `impermanence.nix`，按字母序插入。
+- **新应用配置**：放 `modules/features/<app>.nix`，配置键按字母序。
 
 改完跑 `nix fmt`（nixfmt）和 `nix flake check`。构建两台机器：
 

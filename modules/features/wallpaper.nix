@@ -7,14 +7,6 @@ let
   userWallpaper = "/home/${user}/.local/share/plasmalogin/wallpaper.png";
 in
 {
-  # 两台主机共用：noctalia 的换壁纸 hook
-  flake.modules.homeManager.wallpaper = {
-    xdg.configFile."noctalia/config.toml".text = ''
-      [hooks]
-      wallpaper_changed = ["/run/current-system/sw/bin/noctalia-wallpaper-hook"]
-    '';
-  };
-
   # 两台主机共用：plasmalogin 壁纸 + noctalia 换壁纸 hook
   flake.modules.nixos.wallpaper = { pkgs, ... }: {
     # plasmalogin 的壁纸配置在 plasmalogin.conf；/etc 每次启动重建，
@@ -68,5 +60,13 @@ in
       unitConfig.StartLimitIntervalSec = 0;
       wantedBy = [ "multi-user.target" ];
     };
+  };
+
+  # 两台主机共用：noctalia 的换壁纸 hook
+  flake.modules.homeManager.wallpaper = {
+    xdg.configFile."noctalia/config.toml".text = ''
+      [hooks]
+      wallpaper_changed = ["/run/current-system/sw/bin/noctalia-wallpaper-hook"]
+    '';
   };
 }

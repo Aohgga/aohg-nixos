@@ -1,4 +1,18 @@
 {
+  flake.modules.nixos.theme = { pkgs, ... }: {
+    # 保留：部分 KDE 应用依赖 /share 下的翻译/服务文件才能正常显示中文
+    environment.pathsToLink = [ "/share" ];
+    # greeter 用户读不到 ~/.local/share/icons 里的光标主题，
+    # 必须装到系统级 /run/current-system/sw/share/icons 才能在登录界面显示光标。
+    environment.systemPackages = with pkgs; [
+      bibata-cursors
+    ] ++ (with pkgs.kdePackages; [
+      breeze
+      kconfig
+      kwidgetsaddons
+    ]);
+  };
+
   flake.modules.homeManager.theme = { config, pkgs, ... }:
     let
       # KDE/Qt 的字体串格式：family,size,...,style，重复写容易出错，集中定义
@@ -71,18 +85,4 @@
         "themes/${config.gtk.theme.name}".source = "${config.gtk.theme.package}/share/themes/${config.gtk.theme.name}";
       };
     };
-
-  flake.modules.nixos.theme = { pkgs, ... }: {
-    # 保留：部分 KDE 应用依赖 /share 下的翻译/服务文件才能正常显示中文
-    environment.pathsToLink = [ "/share" ];
-    # greeter 用户读不到 ~/.local/share/icons 里的光标主题，
-    # 必须装到系统级 /run/current-system/sw/share/icons 才能在登录界面显示光标。
-    environment.systemPackages = with pkgs; [
-      bibata-cursors
-    ] ++ (with pkgs.kdePackages; [
-      breeze
-      kconfig
-      kwidgetsaddons
-    ]);
-  };
 }

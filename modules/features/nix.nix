@@ -14,37 +14,6 @@
       owner = "aohg";
     };
 
-    documentation.nixos.enable = false;
-
-    # nix-output-monitor：直接提供 nom
-    environment.systemPackages = [
-      pkgs.nix-output-monitor
-
-      # nrs [switch|boot|test|build|dry-activate ...] [额外参数...]
-      # 把 nixos-rebuild 的 internal-json 日志交给 nom 渲染
-      (pkgs.writeShellApplication {
-        name = "nrs";
-        runtimeInputs = [ pkgs.nix-output-monitor ];
-        text = ''
-          flake="''${NRS_FLAKE:-/home/aohg/.config/aohg-nixos}"
-          host="''${NRS_HOST:-$(hostname)}"
-
-          if [ "$#" -gt 0 ]; then
-            op="$1"
-            shift
-          else
-            op="switch"
-          fi
-
-          # 先单独认证：密码提示不能被后面的管道吞掉
-          sudo -v
-
-          sudo nixos-rebuild "$op" --flake "$flake#$host" \
-            --log-format internal-json "$@" 2>&1 | nom --json
-        '';
-      })
-    ];
-
     nix = {
       channel.enable = false;
 
@@ -86,5 +55,36 @@
     };
 
     nixpkgs.config.allowUnfree = true;
+
+    # nix-output-monitor：直接提供 nom
+    environment.systemPackages = [
+      pkgs.nix-output-monitor
+
+      # nrs [switch|boot|test|build|dry-activate ...] [额外参数...]
+      # 把 nixos-rebuild 的 internal-json 日志交给 nom 渲染
+      (pkgs.writeShellApplication {
+        name = "nrs";
+        runtimeInputs = [ pkgs.nix-output-monitor ];
+        text = ''
+          flake="''${NRS_FLAKE:-/home/aohg/.config/aohg-nixos}"
+          host="''${NRS_HOST:-$(hostname)}"
+
+          if [ "$#" -gt 0 ]; then
+            op="$1"
+            shift
+          else
+            op="switch"
+          fi
+
+          # 先单独认证：密码提示不能被后面的管道吞掉
+          sudo -v
+
+          sudo nixos-rebuild "$op" --flake "$flake#$host" \
+            --log-format internal-json "$@" 2>&1 | nom --json
+        '';
+      })
+    ];
+
+    documentation.nixos.enable = false;
   };
 }

@@ -25,6 +25,11 @@
       plymouth.enable = true;
       zswap.enable = false;
     };
+    zramSwap = {
+      algorithm = "lz4";
+      enable = true;
+      memoryPercent = 50;
+    };
     services.kmscon = {
       config = {
         font-name = "Maple Mono NL NF CN";
@@ -34,11 +39,6 @@
         multi-monitor = "largest";
       };
       enable = true;
-    };
-    zramSwap = {
-      algorithm = "lz4";
-      enable = true;
-      memoryPercent = 50;
     };
   };
 }

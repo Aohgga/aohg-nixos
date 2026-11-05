@@ -3,7 +3,6 @@
     age.secrets.aohg-password = {
       file = ../../secrets/passwords/aohg-password.age;
     };
-    services.userborn.enable = true;
     users = {
       mutableUsers = false;
       users.aohg = {
@@ -14,5 +13,6 @@
         useDefaultShell = true;
       };
     };
+    services.userborn.enable = true;
   };
 }

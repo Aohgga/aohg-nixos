@@ -1,5 +1,7 @@
 {
   flake.modules.nixos.virtualisation = {
+    users.extraGroups.vboxusers.members = [ "aohg" ];
+
     # VBoxSDL 是 setuid 程序，LD_LIBRARY_PATH 会被安全模式忽略，
     # 导致 DXVK 找不到 libvulkan.so.1（3D 开启时崩溃）。
     # 给 VBoxSDL / VBoxDxVk.so 写入 RUNPATH，setuid 下也能找到 Vulkan loader。
@@ -21,7 +23,6 @@
       [Unit]
       ConditionVirtualization=oracle
     '';
-    users.extraGroups.vboxusers.members = [ "aohg" ];
     virtualisation.virtualbox = {
       guest = {
         enable = true;
