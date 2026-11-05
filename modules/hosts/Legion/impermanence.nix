@@ -173,8 +173,6 @@
           ".var/app"
           "Applications"
           "Desktop"
-          "Documents"
-          "Downloads"
           "Projects"
           "VMs"
         ];
