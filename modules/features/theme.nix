@@ -13,8 +13,6 @@
     ]);
   };
 
-  # 这里就是最终写进 kdeglobals / gtk 配置的内容，不再用 let 改写字体串，
-  # 方便直接对照生成结果。
   flake.modules.homeManager.theme = { config, pkgs, ... }: {
     gtk = {
       enable = true;

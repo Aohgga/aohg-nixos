@@ -3,8 +3,6 @@ let
   fm = config.flake.modules;
 in
 {
-  # NixOS 模块按功能层级排序：启动/硬件 → 网络 → 安全 → 包管理与环境 →
-  # 本地化 → 服务 → 系统级程序 → 用户层；同一层内按字母序。
   flake.modules.nixos.base = {
     imports = [
       # 启动与硬件
@@ -45,7 +43,6 @@ in
     ];
   };
 
-  # 两台机器共用的桌面环境
   flake.modules.nixos.desktop = {
     imports = [
       fm.nixos.denial
@@ -56,7 +53,6 @@ in
     ];
   };
 
-  # 应用级配置（home-manager）按应用名字母序
   flake.modules.homeManager.base = {
     imports = [
       fm.homeManager.apps

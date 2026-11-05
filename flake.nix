@@ -3,7 +3,6 @@
 
   # 缓存配置统一放在 modules/features/nix.nix 的 nix.settings 里，
   # 避免 flake nixConfig 每次换用户（aohg/root）都触发信任询问。
-  # inputs 按名字母序排列。
 
   inputs = {
     aohg-pkgs = {
