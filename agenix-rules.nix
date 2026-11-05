@@ -9,4 +9,7 @@ in
 
   # mihomo 主配置
   "secrets/mihomo/config.yaml.age".publicKeys = [ admin mech legion ];
+
+  # GitHub API token（flake 输入解析 / nix flake update 的配额）
+  "secrets/github-token.age".publicKeys = [ admin mech legion ];
 }
