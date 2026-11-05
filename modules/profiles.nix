@@ -5,40 +5,32 @@ in
 {
   flake.modules.nixos.base = {
     imports = [
-      # 启动与硬件
       fm.nixos.audio
       fm.nixos.bluetooth
       fm.nixos.boot
       fm.nixos.graphics
       fm.nixos.tuning
 
-      # 网络
       fm.nixos.networking
       fm.nixos.proxy
 
-      # 安全与身份
       fm.nixos.agenix
       fm.nixos.security
       fm.nixos.user
 
-      # 包管理与环境
       fm.nixos.environment
       fm.nixos.nix
       fm.nixos.overlays
 
-      # 本地化
       fm.nixos.fonts
       fm.nixos.i18n
 
-      # 服务与系统
       fm.nixos.dsh
       fm.nixos.fstrim
       fm.nixos.wallpaper
 
-      # 系统级程序
       fm.nixos.appimage
 
-      # 用户层
       fm.nixos.home-manager
     ];
   };
