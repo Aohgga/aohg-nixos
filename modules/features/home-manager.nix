@@ -4,9 +4,9 @@
   flake.modules.nixos.home-manager = {
     imports = [ inputs.home-manager.nixosModules.default ];
     home-manager = {
-      backupFileExtension = "hm-backup";
       useGlobalPkgs = true;
       useUserPackages = true;
+      backupFileExtension = "hm-backup";
     };
   };
 }

@@ -6,11 +6,11 @@
     users = {
       mutableUsers = false;
       users.aohg = {
-        autoSubUidGidRange = true;
+        isNormalUser = true;
         extraGroups = [ "input" "networkmanager" "video" "wheel" ];
         hashedPasswordFile = config.age.secrets."aohg-password".path;
-        isNormalUser = true;
         useDefaultShell = true;
+        autoSubUidGidRange = true;
       };
     };
     services.userborn.enable = true;

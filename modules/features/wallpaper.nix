@@ -51,12 +51,12 @@ in
     };
 
     systemd.services.plasmalogin-wallpaper = {
+      serviceConfig.Type = "oneshot";
       script = ''
         if [ -r ${userWallpaper} ]; then
           ${pkgs.coreutils}/bin/install -Dm644 ${userWallpaper} ${greeterWallpaper}
         fi
       '';
-      serviceConfig.Type = "oneshot";
       unitConfig.StartLimitIntervalSec = 0;
       wantedBy = [ "multi-user.target" ];
     };

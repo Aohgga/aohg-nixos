@@ -18,10 +18,10 @@
       self.modules.nixos.flatpak
       self.modules.nixos.virtualisation
     ];
+    networking.hostName = "Mech";
+    system.stateVersion = "26.11";
     home-manager.users.aohg = {
       imports = [ self.modules.homeManager.Mech ];
     };
-    networking.hostName = "Mech";
-    system.stateVersion = "26.11";
   };
 }

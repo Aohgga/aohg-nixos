@@ -20,37 +20,35 @@
       smallFont = "苹方-简,8,-1,5,400,0,0,0,0,0,0,0,0,0,0,1,常规体,0,0";
       uiFont = "苹方-简,10,-1,5,400,0,0,0,0,0,0,0,0,0,0,1,常规体,0,0";
     in {
-      dconf.settings = {
-        "org/gnome/desktop/wm/preferences" = {
-          button-layout = "close,maximize,minimize,appmenu:";
-        };
-      };
       gtk = {
+        enable = true;
+        theme = {
+          name = "adw-gtk3";
+          package = pkgs.adw-gtk3;
+        };
+        iconTheme = {
+          name = "Papirus";
+          package = pkgs.papirus-icon-theme;
+        };
         cursorTheme = {
           name = "Bibata-Modern-Ice";
           package = pkgs.bibata-cursors;
           size = 20;
         };
-        enable = true;
         font = {
           name = "苹方-简";
           size = 10;
         };
         gtk2.enable = false;
-        iconTheme = {
-          name = "Papirus";
-          package = pkgs.papirus-icon-theme;
-        };
-        theme = {
-          name = "adw-gtk3";
-          package = pkgs.adw-gtk3;
-        };
       };
-      home.packages = with pkgs; [
-        xrdb
-      ];
       qt = {
         enable = true;
+        style = {
+          package = pkgs.darkly;
+        };
+        platformTheme = {
+          name = "kde";
+        };
         kde.settings.kdeglobals = {
           General = {
             fixed = monoFont;
@@ -72,13 +70,15 @@
             activeFont = uiFont;
           };
         };
-        platformTheme = {
-          name = "kde";
-        };
-        style = {
-          package = pkgs.darkly;
+      };
+      dconf.settings = {
+        "org/gnome/desktop/wm/preferences" = {
+          button-layout = "close,maximize,minimize,appmenu:";
         };
       };
+      home.packages = with pkgs; [
+        xrdb
+      ];
       xdg.dataFile = {
         "icons/${config.gtk.cursorTheme.name}".source = "${config.gtk.cursorTheme.package}/share/icons/${config.gtk.cursorTheme.name}";
         "icons/${config.gtk.iconTheme.name}".source = "${config.gtk.iconTheme.package}/share/icons/${config.gtk.iconTheme.name}";

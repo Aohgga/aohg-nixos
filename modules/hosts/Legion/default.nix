@@ -17,10 +17,10 @@
       self.modules.nixos.jellyfin
       self.modules.nixos.steam
     ];
+    networking.hostName = "Legion";
+    system.stateVersion = "26.05";
     home-manager.users.aohg = {
       imports = [ self.modules.homeManager.Legion ];
     };
-    networking.hostName = "Legion";
-    system.stateVersion = "26.05";
   };
 }

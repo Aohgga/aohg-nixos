@@ -1,10 +1,10 @@
 {
   flake.modules.nixos.MechGraphics = { config, ... }: {
     hardware.nvidia = {
+      package = config.boot.kernelPackages.nvidiaPackages.latest;
+      open = true;
       modesetting.enable = true;
       nvidiaSettings = false;
-      open = true;
-      package = config.boot.kernelPackages.nvidiaPackages.latest;
       powerManagement = {
         enable = false;
         finegrained = false;

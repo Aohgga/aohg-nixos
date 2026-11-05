@@ -55,18 +55,22 @@ modules/
 
 ## 排序总则
 
-排序分两套，不要混用：
+排序分三种，不要混用：
 
-- **NixOS 模块**（`flake.modules.nixos.*`）按**功能主次**排，见下一节。
-- **应用与用户级配置**（`flake.modules.homeManager.*`、`config/` 里的应用配置）
-  按**名字母序**排。
+| 对象 | 规则 |
+| --- | --- |
+| 模块选项（NixOS / home-manager 的 option） | 按功能主次，**不按字母** |
+| 应用自己的配置（`programs.<应用>.settings`/`config`、`config/` 下文件） | 按字母 |
+| 路径映射（`home.file`、`xdg.*`、`environment.etc` 的键） | 按路径字母 |
+| 纯字符串列表（包、目录、组、包名） | `LC_ALL=C sort -f` |
 
-纯字符串列表在同类内部按 `LC_ALL=C sort -f`（不区分大小写，点文件在前）排序。
+## 模块选项的顺序
 
-## NixOS 模块的顺序（功能主次）
+分两层看：**哪个选项在前**，以及**一个选项内部各个键谁在前**。
 
-一个 NixOS 模块内，选项按下面的层级从底到顶排列；同一层内按表中从左到右的顺序，
-表里没有的选项排在最后并按字母序：
+### 选项路径（模块顶层）
+
+按下面的层级从底到顶排列；表里没列出的选项排在最后，按相关性就近放置：
 
 | 层级 | 选项 |
 | --- | --- |
@@ -82,8 +86,32 @@ modules/
 
 `imports` 永远排在最前。一个文件同时定义两类模块时，先 NixOS、后 homeManager。
 
-聚合器（`modules/profiles.nix`、`modules/hosts/*/default.nix`）的 `imports` 也按层级
-分组，组内按字母序，组间用一句注释说明：
+### 选项内部的键（`services.foo = { ... }` 这一层）
+
+按“**开关 → 实现 → 身份与位置 → 端点 → 内容 → 集成 → 其他**”排，不按字母：
+
+```nix
+services.foo = {
+  enable = true;                  # 1. 开关永远第一
+  package = pkgs.foo;             # 2. 用哪个实现
+  user = "foo";                   # 3. 以谁的身份、数据放哪
+  group = "foo";
+  dataDir = "/var/lib/foo";
+  cacheDir = "/var/cache/foo";
+  port = 1234;                    # 4. 对外端点
+  listenAddress = "127.0.0.1";
+  openFirewall = true;
+  settings = { ... };             # 5. 内容与行为
+  systemd.services.foo = { ... }; # 6. 系统集成
+};
+```
+
+落不到上面几类的键，紧跟在语义相关的键旁边，不强行字母序。
+
+### 聚合器的 imports
+
+`modules/profiles.nix`、`modules/hosts/*/default.nix` 的 `imports` 按层级分组，
+组内按字母序，组间用一句注释说明：
 
 ```nix
 imports = [
@@ -107,9 +135,14 @@ imports = [
 
 ## 应用级配置的顺序
 
+这里才用字母序：
+
 - 包列表（`home.packages`、`environment.systemPackages`、`extraPackages`）按字母序。
-- 应用配置（`programs.<应用>.settings`、`config/` 下的应用配置）内部键按字母序。
+- 应用配置（`programs.<应用>.settings`、`programs.mpv.config`、`config/` 下的配置）
+  内部键按字母序。
 - 多个应用并列时按应用名字母序（`programs.fish` < `programs.kitty` …）。
+- 路径映射（`home.file`、`xdg.configFile`、`xdg.dataFile`、`environment.etc`）按路径
+  字母序。
 - 持久化清单（`directories` / `files`）按字母序，`{ directory = ...; }` 按 directory 排。
 
 不排序（顺序即语义）：

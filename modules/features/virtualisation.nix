@@ -24,16 +24,16 @@
       ConditionVirtualization=oracle
     '';
     virtualisation.virtualbox = {
-      guest = {
-        enable = true;
-        use3rdPartyModules = true;
-      };
       host = {
-        addNetworkInterface = true;
         enable = true;
         enableExtensionPack = true;
         enableHardening = true;
         enableKvm = false;
+        addNetworkInterface = true;
+      };
+      guest = {
+        enable = true;
+        use3rdPartyModules = true;
       };
     };
   };

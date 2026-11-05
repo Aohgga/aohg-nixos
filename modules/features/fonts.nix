@@ -2,22 +2,6 @@
   flake.modules.nixos.fonts = { pkgs, ... }: {
     fonts = {
       enableDefaultPackages = false;
-      fontconfig = {
-        allowBitmaps = true;
-        defaultFonts = {
-          emoji = [ "Noto Color Emoji" ];
-          monospace = [ "Maple Mono NL NF CN" ];
-          sansSerif = [ "Noto Sans CJK SC" ];
-          serif = [ "Noto Serif CJK SC" ];
-        };
-        enable = true;
-        hinting.enable = false;
-        subpixel = {
-          lcdfilter = "default";
-          rgba = "rgb";
-        };
-        useEmbeddedBitmaps = true;
-      };
       packages = with pkgs; [
         maple-mono.NL-NF-CN-unhinted
         nerd-fonts.zed-mono
@@ -26,6 +10,22 @@
         noto-fonts-cjk-serif
         noto-fonts-color-emoji
       ];
+      fontconfig = {
+        enable = true;
+        defaultFonts = {
+          sansSerif = [ "Noto Sans CJK SC" ];
+          serif = [ "Noto Serif CJK SC" ];
+          monospace = [ "Maple Mono NL NF CN" ];
+          emoji = [ "Noto Color Emoji" ];
+        };
+        hinting.enable = false;
+        subpixel = {
+          rgba = "rgb";
+          lcdfilter = "default";
+        };
+        allowBitmaps = true;
+        useEmbeddedBitmaps = true;
+      };
     };
   };
 }
