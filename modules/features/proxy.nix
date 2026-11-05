@@ -4,11 +4,11 @@
       default = "http://127.0.0.1:7890";
       noProxy = "127.0.0.1,localhost,::1";
     };
-    age.secrets.mihomoConfig = {
-      file = ../../secrets/mihomo/config.yaml.age;
+    age.secrets."mihomo-config" = {
+      file = ../../secrets/mihomo-config.age;
     };
     services.mihomo = {
-      configFile = config.age.secrets.mihomoConfig.path;
+      configFile = config.age.secrets."mihomo-config".path;
       enable = true;
       tunMode = false;
     };

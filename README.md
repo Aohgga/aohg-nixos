@@ -50,6 +50,8 @@ modules/
 - 不用 `xxx/default.nix` 包单个模块；目录本身就是入口时（`hosts/<Host>/`）才用
   `default.nix`。
 - 类别目录只用于聚合同一领域的多个模块（`desktop/`、`hardware/`、`shell/`）。
+- 密文放在 `secrets/` 根下，不建子目录：`secrets/<name>.age`，其中 `<name>` 同时是
+  `age.secrets."<name>"` 和解密后的 `/run/agenix/<name>`。
 
 ## 排序总则
 
