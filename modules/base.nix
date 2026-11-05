@@ -18,6 +18,8 @@ in
       fm.nixos.audio
       fm.nixos.bluetooth
       fm.nixos.tuning
+      fm.nixos.fstrim
+      fm.nixos.graphics
       fm.nixos.proxy
       fm.nixos.overlays
       fm.nixos.agenix

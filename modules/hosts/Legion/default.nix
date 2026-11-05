@@ -6,7 +6,6 @@
       self.modules.nixos.desktop
       self.modules.nixos.LegionHardware
       self.modules.nixos.LegionGraphics
-      self.modules.nixos.LegionFilesystem
       self.modules.nixos.LegionImpermanence
       self.modules.nixos.steam
       self.modules.nixos.jellyfin
