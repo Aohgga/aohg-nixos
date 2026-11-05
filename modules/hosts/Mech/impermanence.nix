@@ -122,6 +122,8 @@ in
           ".config/aohg-nixos"
           ".config/autostart"
           ".config/btop"
+          ".config/debial"
+          ".config/debial-home"
           ".config/dconf"
           ".config/DSH Desktop"
           ".config/ELYTerminal"

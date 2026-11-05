@@ -102,6 +102,8 @@
           ".config/aohg-nixos"
           ".config/autostart"
           ".config/btop"
+          ".config/denial"
+          ".config/denial-home"
           ".config/dconf"
           ".config/DSH Desktop"
           ".config/ELYTerminal"
