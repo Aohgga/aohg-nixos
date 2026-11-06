@@ -10,6 +10,11 @@
         finegrained = false;
       };
     };
+    # 单显卡：Vulkan/VAAPI 只走 NVIDIA，避免回落到软件渲染
+    environment.sessionVariables = {
+      LIBVA_DRIVER_NAME = "nvidia";
+      VK_ICD_FILENAMES = "/run/opengl-driver/share/vulkan/icd.d/nvidia_icd.json";
+    };
     services.xserver = {
       enable = false;
       videoDrivers = [ "nvidia" ];

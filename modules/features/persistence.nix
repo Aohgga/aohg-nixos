@@ -113,27 +113,6 @@ in
     };
 
     config = {
-      # /etc/machine-id 不持久化，每次开机都会变；journald 按 machine-id 建目录，
-      # 不回收会无限增长。
-      systemd.services.journal-prune = {
-        description = "Drop journal directories from previous machine-ids";
-        wantedBy = [ "multi-user.target" ];
-        after = [ "systemd-journald.service" ];
-        path = [ pkgs.coreutils ];
-        serviceConfig.Type = "oneshot";
-        script = ''
-          current=$(cat /etc/machine-id)
-          for dir in /var/log/journal/*/; do
-            [ -d "$dir" ] || continue
-            [ "''${dir%/}" = "/var/log/journal/$current" ] || rm -rf "$dir"
-          done
-        '';
-      };
-
-      services.journald.settings.Journal.SystemMaxUse = "1G";
-
-      systemd.tmpfiles.rules = [ "e /home/aohg/.dsh/logs - - - 7d" ];
-
       environment.persistence = lib.mkMerge [
         {
           "/persistent".directories = [
@@ -160,6 +139,12 @@ in
           };
         })
       ];
+
+      # homeFiles 是符号链接，目标文件不存在时链接悬空、应用写入会静默丢失；
+      # 开机先按清单补出空文件，新加的条目不用手动 touch。
+      systemd.tmpfiles.rules = lib.optionals (config.aohg.persistence.homeRoot != null) (
+        map (f: "f ${config.aohg.persistence.homeRoot}/home/aohg/${f.file} 0600 aohg users -") homeFiles
+      );
     };
   };
 }

@@ -6,11 +6,8 @@
     # 必须装到系统级 /run/current-system/sw/share/icons 才能在登录界面显示光标。
     environment.systemPackages = with pkgs; [
       bibata-cursors
-    ] ++ (with pkgs.kdePackages; [
-      breeze
-      kconfig
-      kwidgetsaddons
-    ]);
+      kdePackages.breeze
+    ];
   };
 
   flake.modules.homeManager.theme = { config, pkgs, ... }: {
@@ -70,9 +67,13 @@
         button-layout = "close,maximize,minimize,appmenu:";
       };
     };
+    # KDE 应用的中文来自这两个包的 share/locale，用户 profile 已在 XDG_DATA_DIRS 里
     home.packages = with pkgs; [
       xrdb
-    ];
+    ] ++ (with pkgs.kdePackages; [
+      kconfig
+      kwidgetsaddons
+    ]);
     # Qt6 的 xcb 光标实现（libxcb-cursor）不读 XCURSOR_THEME，只认 Xcursor.theme
     # 资源，缺失时回退到 default 主题；建 default 继承 gtk.cursorTheme。
     home.file.".icons/default/index.theme".text = ''

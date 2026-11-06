@@ -42,7 +42,7 @@
       gc = {
         automatic = true;
         dates = "weekly";
-        options = "--delete-older-than 30d";
+        options = "--delete-older-than 14d";
       };
 
       # 用 !include 而不是 nix.settings.access-tokens：

@@ -52,6 +52,9 @@
       };
     };
 
+    # swap 由 zram-generator 提供，不用磁盘 swap
+    swapDevices = lib.mkForce [ ];
+
     environment.persistence."/persistent" = {
       hideMounts = true;
 

@@ -123,8 +123,11 @@
 - `fileSystems` 是跨模块合并的 attrset：不同路径不冲突；同一路径重复定义必须用
   `lib.mkForce` 明确覆盖（Legion 的 `/` 就是 hardware 的 xfs 被 impermanence 用
   `lib.mkForce` 覆盖成 tmpfs）。
-- 设备 UUID 在 hardware 与 impermanence 各写一份（Legion 的 `/persistent`、Mech 的
-  `/persistent` / `/persist-home`）；换盘后必须同时改。
+- 设备 UUID 只写在 `hardware-configuration.nix`：Mech 的 `/persistent`、`/persist-home`
+  从 `config.fileSystems` 的 `/`、`/home` 派生。例外是 Legion 的 `/persistent` 与
+  hardware 的 `/` 同分区但根被换成了 tmpfs，换盘要改两处。
+- 不用磁盘 swap（`swapDevices = lib.mkForce [ ]`，swap 由 zram-generator 提供）写在
+  host 的 impermanence 模块里，不写进生成的 hardware-configuration.nix。
 - `hardware-configuration.nix` 里的 `fileSystems.*.options` 是生成时从挂载状态读的，
   不是手写默认值，一般不用动。
 

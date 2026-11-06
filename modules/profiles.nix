@@ -27,6 +27,7 @@ in
 
       fm.nixos.dsh
       fm.nixos.fstrim
+      fm.nixos.journald
       fm.nixos.wallpaper
 
       fm.nixos.appimage

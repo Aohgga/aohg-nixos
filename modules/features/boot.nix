@@ -1,5 +1,5 @@
 {
-  flake.modules.nixos.boot = { pkgs, ... }: {
+  flake.modules.nixos.boot = { lib, pkgs, ... }: {
     boot = {
       loader = {
         systemd-boot = {
@@ -9,7 +9,7 @@
         efi.canTouchEfiVariables = true;
         timeout = 0;
       };
-      kernelPackages = pkgs.linuxPackages_latest;
+      kernelPackages = lib.mkDefault pkgs.linuxPackages_latest;
       kernelParams = [
         "quiet"
         "rd.systemd.show_status=auto"

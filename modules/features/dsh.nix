@@ -47,6 +47,7 @@
         "/run/current-system/sw/bin"
       ]
     );
+    systemd.tmpfiles.rules = [ "e /home/aohg/.dsh/logs - - - 7d" ];
   };
 
   flake.modules.homeManager.dsh = { pkgs, ... }: {
