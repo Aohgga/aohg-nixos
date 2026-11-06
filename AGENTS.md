@@ -98,8 +98,12 @@
 ## let 与注释
 
 - `let` 只用于：同一值多处复用（agenix 公钥、`fm`、Mech 的 UUID），或真正的中间
-  计算（`hostNames`）。纯别名会遮蔽生成内容，禁止：例如字体串不要包成 `uiFont`，
-  直接写进 `kdeglobals`。
+  计算（`hostNames`）。只有一个使用点的值不要包成变量。
+- 字体只在 `gtk.font` 声明一次；`kdeglobals` 的 `font`/`menuFont`/`toolBarFont`/
+  `activeFont` 用 `family,size` 短格式（`QFont::fromString` 只认 1、2 或 10–17 段），
+  内联 `config.gtk.font.name`/`config.gtk.font.size`，`smallestReadableFont` 用
+  `size - 2`，等宽字体直接写 `fixed`；不抽 `let`，也不要抄 KDE 生成的整串
+  `QFont::toString()`。
 - **不要主动加注释。** 只有解释非显然的约束、踩坑原因、外部耦合时才写，通常 1–2 行。
 - 禁止写：文件头、分组/分区标题（如 `# 系统基础`）、编号步骤、复述代码、格式约定、
   设计取舍的长篇论证。约定写本文件，决策写提交信息。

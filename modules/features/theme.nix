@@ -45,11 +45,11 @@
       };
       kde.settings.kdeglobals = {
         General = {
-          fixed = "Maple Mono NL NF CN,10,-1,5,400,0,0,0,0,0,0,0,0,0,0,1,,0,0";
-          font = "苹方-简,10,-1,5,400,0,0,0,0,0,0,0,0,0,0,1,常规体,0,0";
-          menuFont = "苹方-简,10,-1,5,400,0,0,0,0,0,0,0,0,0,0,1,常规体,0,0";
-          smallestReadableFont = "苹方-简,8,-1,5,400,0,0,0,0,0,0,0,0,0,0,1,常规体,0,0";
-          toolBarFont = "苹方-简,10,-1,5,400,0,0,0,0,0,0,0,0,0,0,1,常规体,0,0";
+          fixed = "Maple Mono NL NF CN,10";
+          font = "${config.gtk.font.name},${toString config.gtk.font.size}";
+          menuFont = "${config.gtk.font.name},${toString config.gtk.font.size}";
+          smallestReadableFont = "${config.gtk.font.name},${toString (config.gtk.font.size - 2)}";
+          toolBarFont = "${config.gtk.font.name},${toString config.gtk.font.size}";
           XftAntialias = "true";
           XftHintStyle = "hintnone";
           XftSubPixel = "rgb";
@@ -61,7 +61,7 @@
           widgetStyle = "Darkly";
         };
         WM = {
-          activeFont = "苹方-简,10,-1,5,400,0,0,0,0,0,0,0,0,0,0,1,常规体,0,0";
+          activeFont = "${config.gtk.font.name},${toString config.gtk.font.size}";
         };
       };
     };
