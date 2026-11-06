@@ -106,8 +106,10 @@ in
       hideMounts = true;
 
       users.aohg.directories = [
+        ".config/VirtualBox"
         ".local/share/backgrounds"
         ".local/share/flatpak"
+        ".var/app"
         "AppImages"
         "Documents"
         "Downloads"
@@ -115,6 +117,7 @@ in
         "Music"
         "Pictures"
         "Videos"
+        "VMs"
       ];
     };
   };

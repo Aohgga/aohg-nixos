@@ -38,7 +38,6 @@ let
     ".config/systemd/user"
     ".config/ttyper"
     ".config/umbriel"
-    ".config/VirtualBox"
     ".config/xdg-desktop-portal"
     ".config/xsettingsd"
     ".config/yazi"
@@ -66,6 +65,7 @@ let
     ".local/share/Ladybird"
     ".local/share/nautilus"
     ".local/share/nvim"
+    ".local/share/org.localsend.localsend_app"
     ".local/share/pki"
     ".local/share/plasmalogin"
     ".local/share/qBittorrent"
@@ -85,10 +85,8 @@ let
       directory = ".ssh";
       mode = "0700";
     }
-    ".var/app"
     "Desktop"
     "Projects"
-    "VMs"
   ];
 
   homeFiles = [
