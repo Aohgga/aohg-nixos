@@ -111,6 +111,7 @@ in
         ".local/share/flatpak"
         ".var/app"
         "AppImages"
+        "Archive"
         "Documents"
         "Downloads"
         "Games"
