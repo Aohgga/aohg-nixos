@@ -1,6 +1,5 @@
 { ... }:
 let
-  # home 是 tmpfs：未列入的路径重启后消失，/data 与 ~/Documents 等由 home-manager 重建。
   homeDirectories = [
     ".android"
     ".cache/appimage-run"
@@ -34,7 +33,6 @@ let
     ".config/nvim"
     ".config/qBittorrent"
     ".config/swayimg"
-    ".config/systemd/user"
     ".config/ttyper"
     ".config/umbriel"
     ".config/xdg-desktop-portal"
@@ -66,18 +64,15 @@ let
     ".local/share/pki"
     ".local/share/plasmalogin"
     ".local/share/qBittorrent"
-    ".local/share/themes"
     ".local/share/Trash"
     ".local/share/umu"
     ".local/share/zed"
-    ".local/state/dolphinstaterc"
     ".local/state/go-musicfox"
     ".local/state/mpv"
     ".local/state/noctalia"
     ".local/state/nvim"
     ".local/state/wireplumber"
     ".local/state/yazi"
-    ".pki"
     {
       directory = ".ssh";
       mode = "0700";
@@ -107,6 +102,7 @@ let
     { file = ".gitconfig"; method = "symlink"; }
     { file = ".local/share/recently-used.xbel"; method = "symlink"; }
     { file = ".local/share/user-places.xbel"; method = "symlink"; }
+    { file = ".local/state/dolphinstaterc"; method = "symlink"; }
   ];
 in
 {
@@ -133,6 +129,10 @@ in
           done
         '';
       };
+
+      services.journald.settings.Journal.SystemMaxUse = "1G";
+
+      systemd.tmpfiles.rules = [ "e /home/aohg/.dsh/logs - - - 7d" ];
 
       environment.persistence = lib.mkMerge [
         {
