@@ -73,6 +73,12 @@
     home.packages = with pkgs; [
       xrdb
     ];
+    # Qt6 的 xcb 光标实现（libxcb-cursor）不读 XCURSOR_THEME，只认 Xcursor.theme
+    # 资源，缺失时回退到 default 主题；建 default 继承 gtk.cursorTheme。
+    home.file.".icons/default/index.theme".text = ''
+      [Icon Theme]
+      Inherits=${config.gtk.cursorTheme.name}
+    '';
     xdg.dataFile = {
       "icons/${config.gtk.cursorTheme.name}".source = "${config.gtk.cursorTheme.package}/share/icons/${config.gtk.cursorTheme.name}";
       "icons/${config.gtk.iconTheme.name}".source = "${config.gtk.iconTheme.package}/share/icons/${config.gtk.iconTheme.name}";
