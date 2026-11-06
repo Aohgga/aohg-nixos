@@ -19,22 +19,12 @@
       })
     ];
 
-    systemd.units."dev-vboxguest.device".text = ''
-      [Unit]
-      ConditionVirtualization=oracle
-    '';
-    virtualisation.virtualbox = {
-      host = {
-        enable = true;
-        enableExtensionPack = true;
-        enableHardening = true;
-        enableKvm = false;
-        addNetworkInterface = true;
-      };
-      guest = {
-        enable = true;
-        use3rdPartyModules = true;
-      };
+    virtualisation.virtualbox.host = {
+      enable = true;
+      enableExtensionPack = true;
+      enableHardening = true;
+      enableKvm = false;
+      addNetworkInterface = true;
     };
   };
 }
