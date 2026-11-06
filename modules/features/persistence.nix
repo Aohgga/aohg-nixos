@@ -110,13 +110,30 @@ let
   ];
 in
 {
-  flake.modules.nixos.persistence = { config, lib, ... }: {
+  flake.modules.nixos.persistence = { config, lib, pkgs, ... }: {
     options.aohg.persistence.homeRoot = lib.mkOption {
       type = lib.types.nullOr lib.types.str;
       default = "/persistent";
     };
 
     config = {
+      # /etc/machine-id 不持久化，每次开机都会变；journald 按 machine-id 建目录，
+      # 不回收会无限增长。
+      systemd.services.journal-prune = {
+        description = "Drop journal directories from previous machine-ids";
+        wantedBy = [ "multi-user.target" ];
+        after = [ "systemd-journald.service" ];
+        path = [ pkgs.coreutils ];
+        serviceConfig.Type = "oneshot";
+        script = ''
+          current=$(cat /etc/machine-id)
+          for dir in /var/log/journal/*/; do
+            [ -d "$dir" ] || continue
+            [ "''${dir%/}" = "/var/log/journal/$current" ] || rm -rf "$dir"
+          done
+        '';
+      };
+
       environment.persistence = lib.mkMerge [
         {
           "/persistent".directories = [
