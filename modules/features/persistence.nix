@@ -22,7 +22,6 @@ let
     ".config/go-musicfox"
     ".config/gtk-3.0"
     ".config/gtk-4.0"
-    ".config/ibus"
     ".config/kitty"
     ".config/lact"
     ".config/Ladybird"
@@ -52,7 +51,6 @@ let
     ".local/share/applications"
     ".local/share/ark"
     ".local/share/color-schemes"
-    ".local/share/com.epicgames.eglv2"
     ".local/share/dolphin"
     ".local/share/ElyOffice"
     ".local/share/fcitx5"
@@ -63,7 +61,6 @@ let
     ".local/share/keyrings"
     ".local/share/kwalletd"
     ".local/share/Ladybird"
-    ".local/share/nautilus"
     ".local/share/nvim"
     ".local/share/org.localsend.localsend_app"
     ".local/share/pki"
@@ -89,23 +86,27 @@ let
     "Projects"
   ];
 
+  # 单文件持久化改用符号链接而不是 bind mount：
+  # KConfig / Qt 的 QSaveFile 会解析符号链接，把临时文件写到目标目录再 rename，
+  # 所以应用仍能正常保存；bind mount 下 rename 会返回 EBUSY，写入被静默丢弃。
+  # 注意：目标文件必须已存在于持久化目录，否则符号链接悬空、写入无效。
   homeFiles = [
-    ".bash_history"
-    ".config/arkrc"
-    ".config/darklyrc"
-    ".config/dolphinrc"
-    ".config/kcminputrc"
-    ".config/kdeglobals"
-    ".config/kglobalshortcutsrc"
-    ".config/kiorc"
-    ".config/kservicemenurc"
-    ".config/kwalletrc"
-    ".config/kxkbrc"
-    ".config/mimeapps.list"
-    ".config/trashrc"
-    ".gitconfig"
-    ".local/share/recently-used.xbel"
-    ".local/share/user-places.xbel"
+    { file = ".bash_history"; method = "symlink"; }
+    { file = ".config/arkrc"; method = "symlink"; }
+    { file = ".config/darklyrc"; method = "symlink"; }
+    { file = ".config/dolphinrc"; method = "symlink"; }
+    { file = ".config/kcminputrc"; method = "symlink"; }
+    { file = ".config/kdeglobals"; method = "symlink"; }
+    { file = ".config/kglobalshortcutsrc"; method = "symlink"; }
+    { file = ".config/kiorc"; method = "symlink"; }
+    { file = ".config/kservicemenurc"; method = "symlink"; }
+    { file = ".config/kwalletrc"; method = "symlink"; }
+    { file = ".config/kxkbrc"; method = "symlink"; }
+    { file = ".config/mimeapps.list"; method = "symlink"; }
+    { file = ".config/trashrc"; method = "symlink"; }
+    { file = ".gitconfig"; method = "symlink"; }
+    { file = ".local/share/recently-used.xbel"; method = "symlink"; }
+    { file = ".local/share/user-places.xbel"; method = "symlink"; }
   ];
 in
 {
