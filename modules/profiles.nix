@@ -49,7 +49,6 @@ in
   flake.modules.homeManager.base = {
     imports = [
       fm.homeManager.apps
-      fm.homeManager.dsh
       fm.homeManager.editor
       fm.homeManager.file-manager
       fm.homeManager.fish
