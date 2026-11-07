@@ -89,13 +89,6 @@
       Net/ThemeName "${config.gtk.theme.name}"
       Net/IconThemeName "${config.gtk.iconTheme.name}"
       Gtk/CursorThemeName "${config.gtk.cursorTheme.name}"
-      Net/SoundThemeName "ocean"
-      Net/EnableEventSounds 1
-      Net/EnableInputFeedbackSounds 0
-      Xft/Antialias 1
-      Xft/Hinting 0
-      Xft/HintStyle "hintnone"
-      Xft/RGBA "rgb"
     '';
   };
 }
