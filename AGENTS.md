@@ -35,12 +35,16 @@
 - 有图形设置界面、或者能在应用里改设置的（fcitx5-configtool、noctalia 设置、
   Steam、浏览器、qBittorrent、zed、denial 等）：不要用 Nix 锁它的设置文件。
 - 没有图形界面、只能改配置文件的（mpv、kitty、fish、yazi、swayimg、umbriel、
-  mihomo 等）：设置写进 Nix，而且只写跟上游默认不一样的部分。
+  mihomo 等）：设置写进 Nix，而且只写跟上游默认不一样的部分；mihomo 这种配置在
+  `secrets/mihomo-config.age` 里，由 Nix 引用。
 - 例外：KDE 的 `kdeglobals` 虽然是 GUI 写的，但我不用 KDE 设置界面，只拿它设主题；
   这个文件已经持久化、可写，所以 `qt.kde.settings` 保留。
 - 例外：nvim 的 LazyVim 运行时还要写锁文件，继续放在用户目录里，不搬进 Nix。
-- 应用配置搬进 Nix 后，记得从 `persistence.nix` 里删掉对应目录；只读的 store
-  链接会让 GUI 保存失败，看到 GUI 应用的配置是 store 链接就是 bug。
+- fcitx5 自己的设置交给 fcitx5-configtool；`fcitx5/rime/default.custom.yaml` 属于
+  rime 的文件配置，写进 Nix 没问题。
+- 应用配置搬进 Nix 后，把 `persistence.nix` 里不再需要的目录删掉；应用还要写
+  运行数据的保留（比如 yazi 仍留 `.config/yazi` 和 `.local/state/yazi`）。
+  只读的 store 链接会让 GUI 保存失败，看到 GUI 应用的配置是 store 链接就是 bug。
 
 ## 命名
 
@@ -69,7 +73,8 @@
 
 ## 排序规则
 
-排序分三类，不要混着用：
+排序分三类，不要混着用。排序只用于新写的代码或明确要求整理时，不要为了排序
+重排现有文件。
 
 ### 1. 模块选项（NixOS / home-manager 的 option）——按功能主次，不按字母
 
@@ -146,6 +151,8 @@
   host 的 impermanence 模块里，不写进生成的 hardware-configuration.nix。
 - `hardware-configuration.nix` 里的 `fileSystems.*.options` 是生成时从挂载状态读的，
   不是手写默认值，一般不用动。
+- 不要整目录持久化 `/etc` 下由 NixOS 生成的目录（比如 `/etc/tuned`）：bind mount 会
+  盖住 NixOS 生成的配置，服务可能起不来。只持久化运行时状态文件，并确认生成的配置还在。
 
 ## 修改后的验证
 
@@ -156,6 +163,8 @@ nix build .#nixosConfigurations.Mech.config.system.build.toplevel
 nix build .#nixosConfigurations.Legion.config.system.build.toplevel
 ```
 
+先 `git diff` 看一下，确认只动了该动的行；纯文档/注释改动不用重新 build。
+
 判断是不是只改了排版：
 
 - 纯顺序/注释调整应该保持 **system store path 不变**；变了就说明有语义变化，要查。
@@ -164,6 +173,11 @@ nix build .#nixosConfigurations.Legion.config.system.build.toplevel
 - 包集合用 `nix store diff-closures <旧> <新>` 确认没有增删。
 - 改密码/密钥相关时，检查 `age.secrets."<name>".path` 和 `mihomo.service` 的
   `LoadCredential`。
+
+## 提交
+
+- 只有用户明确说提交时才 commit/push，不要顺手提交。
+- 一次提交只做一件事；提交信息写清做了什么、为什么，不要只写“更新配置”。
 
 ## 常见坑
 
@@ -176,8 +190,5 @@ nix build .#nixosConfigurations.Legion.config.system.build.toplevel
   audio/bluetooth/tuning）。
 - `nixfmt` 会把整个仓库重排，没得到允许不要全量跑；`nix fmt` 由人决定。
 - `config/umbriel/` 是纯数据，不会被 import-tree 收集，改它不会产生新模块。
-- portal 配置（`umbriel-portals.conf`）是 umbriel 专用的，放在
-  `modules/features/desktop/umbriel.nix` 的 homeManager 模块里，用 `xdg.configFile`
-  手写。不要改用 home-manager 的 `xdg.portal.config`：它需要开 `xdg.portal.enable`，
-  会把 portal 栈装进用户 profile、改写 `NIX_XDG_DESKTOP_PORTAL_DIR`，结果只生成同一个
-  文件。
+- `umbriel-portals.conf` 放 `modules/features/desktop/umbriel.nix`，用 `xdg.configFile`
+  手写；不要用 `xdg.portal.config`，它会多装一套 portal 栈并改环境变量，却只生成同一个文件。
