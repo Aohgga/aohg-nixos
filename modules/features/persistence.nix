@@ -117,7 +117,6 @@ in
             "/etc/lact"
             "/etc/NetworkManager/system-connections"
             "/etc/ssh"
-            "/etc/tuned"
             "/var/lib/AccountsService"
             "/var/lib/bluetooth"
             "/var/lib/colord"
@@ -141,9 +140,21 @@ in
 
       # homeFiles 是符号链接，目标文件不存在时链接悬空、应用写入会静默丢失；
       # 开机先按清单补出空文件，新加的条目不用手动 touch。
-      systemd.tmpfiles.rules = lib.optionals (config.aohg.persistence.homeRoot != null) (
-        map (f: "f ${config.aohg.persistence.homeRoot}/home/aohg/${f.file} 0600 aohg users -") homeFiles
-      );
+      systemd.tmpfiles.rules =
+        lib.optionals (config.aohg.persistence.homeRoot != null) (
+          map (f: "f ${config.aohg.persistence.homeRoot}/home/aohg/${f.file} 0600 aohg users -") homeFiles
+        )
+        ++ [
+          # /etc/tuned 由 NixOS 生成配置，整目录持久化会盖掉 tuned-main.conf；
+          # 只把运行状态文件链接到持久化目录。
+          "d /persistent/etc/tuned 0755 root root -"
+          "f /persistent/etc/tuned/active_profile 0644 root root -"
+          "f /persistent/etc/tuned/ppd_base_profile 0644 root root -"
+          "f /persistent/etc/tuned/profile_mode 0644 root root -"
+          "L+ /etc/tuned/active_profile - - - - /persistent/etc/tuned/active_profile"
+          "L+ /etc/tuned/ppd_base_profile - - - - /persistent/etc/tuned/ppd_base_profile"
+          "L+ /etc/tuned/profile_mode - - - - /persistent/etc/tuned/profile_mode"
+        ];
     };
   };
 }
