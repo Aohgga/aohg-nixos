@@ -1,5 +1,5 @@
 {
-  flake.modules.nixos.tuning = {
+  flake.modules.nixos.hardware-tuning = {
     hardware.steam-hardware.enable = true;
     services = {
       scx = {

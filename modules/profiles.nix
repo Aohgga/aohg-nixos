@@ -9,7 +9,7 @@ in
       fm.nixos.bluetooth
       fm.nixos.boot
       fm.nixos.graphics
-      fm.nixos.tuning
+      fm.nixos.hardware-tuning
 
       fm.nixos.networking
       fm.nixos.proxy
