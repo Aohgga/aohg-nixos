@@ -54,9 +54,11 @@ in
       fm.homeManager.file-manager
       fm.homeManager.fish
       fm.homeManager.home
+      fm.homeManager.input-method
       fm.homeManager.kitty
       fm.homeManager.mpv
       fm.homeManager.musicfox
+      fm.homeManager.swayimg
       fm.homeManager.theme
       fm.homeManager.ttyper
       fm.homeManager.umbriel

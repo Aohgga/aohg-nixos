@@ -15,4 +15,11 @@
     };
     services.libinput.enable = true;
   };
+
+  flake.modules.homeManager.input-method = {
+    xdg.dataFile."fcitx5/rime/default.custom.yaml".text = ''
+      patch:
+        __include: rime_ice_suggestion:/
+    '';
+  };
 }

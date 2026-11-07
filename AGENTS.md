@@ -27,6 +27,20 @@
   生成的内容。手写的硬件相关配置放 `modules/hosts/<Host>/<aspect>.nix`
   （例如 `boot.nix`、`graphics.nix`）。
 
+## 配置边界
+
+判断应用配置该不该写进 Nix，看应用能不能自己保存设置：
+
+- 有图形设置界面、或能在应用内改设置的应用（fcitx5-configtool、noctalia 设置、
+  Steam、浏览器、qbittorrent、zed、denial 等）：不用 Nix 锁它的设置文件。
+- 没有图形设置界面、只能改配置文件的应用（mpv、kitty、fish、yazi、swayimg、
+  umbriel、mihomo 等）：设置写进 Nix，只写与上游默认不同的部分。
+- 例外：KDE 的 `kdeglobals` 由 GUI 写入，但本机不用 KDE 设置界面，只借它设置主题；
+  文件已持久化且可写，`qt.kde.settings` 保留。
+- 例外：nvim 的 LazyVim 要在运行时写锁文件，保持用户目录管理，不迁进 Nix。
+- 应用配置写进 Nix 后，从 `persistence.nix` 移除对应目录；只读 store 链接会让
+  GUI 保存失败，发现 GUI 应用的配置是 store 链接就是 bug。
+
 ## 命名
 
 - 目录小写 kebab-case；唯一例外 `modules/hosts/<Host>/` 用 PascalCase，必须等于

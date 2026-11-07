@@ -46,6 +46,13 @@
           dark = "noctalia";
           light = "noctalia";
         };
+        icon = {
+          conds = [ ];
+          dirs = [ ];
+          exts = [ ];
+          files = [ ];
+          globs = [ ];
+        };
         mgr.border_symbol = " ";
       };
     };
