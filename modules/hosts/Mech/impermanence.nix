@@ -84,6 +84,8 @@
       # impermanence 的 persist-files 在 /etc 已有同名文件时会让 activation 失败，
       # 而这两项都可以在启动时重新生成（machine-id 每次 boot 会变）。
 
+      # 自定义选项（来自 features/persistence.nix）：Mech 的家目录持久化在
+      # /persist-home（btrfs 子卷），系统级持久化在 /persistent。
       aohg.persistence.homeRoot = "/persist-home";
 
       environment.persistence."/persistent" = {

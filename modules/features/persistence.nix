@@ -1,84 +1,5 @@
 { ... }:
 let
-  homeDirectories = [
-    ".android"
-    ".cache/appimage-run"
-    ".cache/fish"
-    ".cache/fontconfig"
-    ".cache/noctalia"
-    ".config/age"
-    ".config/aohg-nixos"
-    ".config/autostart"
-    ".config/btop"
-    ".config/dconf"
-    ".config/denial"
-    ".config/denial-home"
-    ".config/ELYTerminal"
-    ".config/environment.d"
-    ".config/fcitx5"
-    ".config/fish"
-    ".config/fontconfig"
-    ".config/go-musicfox"
-    ".config/gtk-3.0"
-    ".config/gtk-4.0"
-    ".config/kitty"
-    ".config/lact"
-    ".config/Ladybird"
-    ".config/libaccounts-glib"
-    ".config/menus"
-    ".config/mpv"
-    ".config/mpv-handler"
-    ".config/net.imput.helium"
-    ".config/noctalia"
-    ".config/nvim"
-    ".config/qBittorrent"
-    ".config/ttyper"
-    ".config/umbriel"
-    ".config/xdg-desktop-portal"
-    ".config/yazi"
-    ".config/zed"
-    ".dsh"
-    {
-      directory = ".gnupg";
-      mode = "0700";
-    }
-    ".local/bin"
-    ".local/share/app.getlux.com.sakuracat.app"
-    ".local/share/applications"
-    ".local/share/ark"
-    ".local/share/color-schemes"
-    ".local/share/dolphin"
-    ".local/share/ElyOffice"
-    ".local/share/fcitx5"
-    ".local/share/fish"
-    ".local/share/fonts"
-    ".local/share/go-musicfox"
-    ".local/share/gpu-screen-recorder"
-    ".local/share/keyrings"
-    ".local/share/kwalletd"
-    ".local/share/Ladybird"
-    ".local/share/nvim"
-    ".local/share/org.localsend.localsend_app"
-    ".local/share/pki"
-    ".local/share/plasmalogin"
-    ".local/share/qBittorrent"
-    ".local/share/Trash"
-    ".local/share/umu"
-    ".local/share/zed"
-    ".local/state/go-musicfox"
-    ".local/state/mpv"
-    ".local/state/noctalia"
-    ".local/state/nvim"
-    ".local/state/wireplumber"
-    ".local/state/yazi"
-    {
-      directory = ".ssh";
-      mode = "0700";
-    }
-    "Desktop"
-    "Projects"
-  ];
-
   # 单文件持久化改用符号链接而不是 bind mount：
   # KConfig / Qt 的 QSaveFile 会解析符号链接，把临时文件写到目标目录再 rename，
   # 所以应用仍能正常保存；bind mount 下 rename 会返回 EBUSY，写入被静默丢弃。
@@ -105,6 +26,7 @@ let
 in
 {
   flake.modules.nixos.persistence = { config, lib, ... }: {
+    # 自定义选项：用户 home 的持久化根目录；Mech 覆盖为 /persist-home，Legion 用默认值。
     options.aohg.persistence.homeRoot = lib.mkOption {
       type = lib.types.nullOr lib.types.str;
       default = "/persistent";
@@ -133,7 +55,84 @@ in
 
         (lib.mkIf (config.aohg.persistence.homeRoot != null) {
           ${config.aohg.persistence.homeRoot}.users.aohg = {
-            directories = homeDirectories;
+            directories = [
+              ".android"
+              ".cache/appimage-run"
+              ".cache/fish"
+              ".cache/fontconfig"
+              ".cache/noctalia"
+              ".config/age"
+              ".config/aohg-nixos"
+              ".config/autostart"
+              ".config/btop"
+              ".config/dconf"
+              ".config/denial"
+              ".config/denial-home"
+              ".config/ELYTerminal"
+              ".config/environment.d"
+              ".config/fcitx5"
+              ".config/fish"
+              ".config/fontconfig"
+              ".config/go-musicfox"
+              ".config/gtk-3.0"
+              ".config/gtk-4.0"
+              ".config/kitty"
+              ".config/lact"
+              ".config/Ladybird"
+              ".config/libaccounts-glib"
+              ".config/menus"
+              ".config/mpv"
+              ".config/mpv-handler"
+              ".config/net.imput.helium"
+              ".config/noctalia"
+              ".config/nvim"
+              ".config/qBittorrent"
+              ".config/ttyper"
+              ".config/umbriel"
+              ".config/xdg-desktop-portal"
+              ".config/yazi"
+              ".config/zed"
+              ".dsh"
+              {
+                directory = ".gnupg";
+                mode = "0700";
+              }
+              ".local/bin"
+              ".local/share/app.getlux.com.sakuracat.app"
+              ".local/share/applications"
+              ".local/share/ark"
+              ".local/share/color-schemes"
+              ".local/share/dolphin"
+              ".local/share/ElyOffice"
+              ".local/share/fcitx5"
+              ".local/share/fish"
+              ".local/share/fonts"
+              ".local/share/go-musicfox"
+              ".local/share/gpu-screen-recorder"
+              ".local/share/keyrings"
+              ".local/share/kwalletd"
+              ".local/share/Ladybird"
+              ".local/share/nvim"
+              ".local/share/org.localsend.localsend_app"
+              ".local/share/pki"
+              ".local/share/plasmalogin"
+              ".local/share/qBittorrent"
+              ".local/share/Trash"
+              ".local/share/umu"
+              ".local/share/zed"
+              ".local/state/go-musicfox"
+              ".local/state/mpv"
+              ".local/state/noctalia"
+              ".local/state/nvim"
+              ".local/state/wireplumber"
+              ".local/state/yazi"
+              {
+                directory = ".ssh";
+                mode = "0700";
+              }
+              "Desktop"
+              "Projects"
+            ];
             files = homeFiles;
           };
         })
