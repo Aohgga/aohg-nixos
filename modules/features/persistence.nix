@@ -1,9 +1,11 @@
 { ... }:
 let
-  # 单文件持久化改用符号链接而不是 bind mount：
-  # KConfig / Qt 的 QSaveFile 会解析符号链接，把临时文件写到目标目录再 rename，
-  # 所以应用仍能正常保存；bind mount 下 rename 会返回 EBUSY，写入被静默丢弃。
-  # 注意：目标文件必须已存在于持久化目录，否则符号链接悬空、写入无效。
+  # 同一份清单同时给 users.aohg.files 和 tmpfiles 用：前者声明持久化，后者在开机时
+  # 预创建目标文件，避免 symlink 悬空。
+
+  # 单文件用 symlink 而不是 bind mount：KConfig / Qt 的 QSaveFile 会解析符号链接，
+  # 把临时文件写到目标目录再 rename，所以应用仍能正常保存；bind mount 下 rename 会
+  # 返回 EBUSY，写入被静默丢弃。
   homeFiles = [
     { file = ".bash_history"; method = "symlink"; }
     { file = ".config/arkrc"; method = "symlink"; }
