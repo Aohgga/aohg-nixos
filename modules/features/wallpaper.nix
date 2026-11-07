@@ -59,11 +59,4 @@ in
       wantedBy = [ "multi-user.target" ];
     };
   };
-
-  flake.modules.homeManager.wallpaper = {
-    xdg.configFile."noctalia/config.toml".text = ''
-      [hooks]
-      wallpaper_changed = ["/run/current-system/sw/bin/noctalia-wallpaper-hook"]
-    '';
-  };
 }

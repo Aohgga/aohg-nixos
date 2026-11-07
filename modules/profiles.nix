@@ -62,7 +62,6 @@ in
       fm.homeManager.theme
       fm.homeManager.ttyper
       fm.homeManager.umbriel
-      fm.homeManager.wallpaper
       fm.homeManager.yazi
     ];
   };
