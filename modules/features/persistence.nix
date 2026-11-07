@@ -113,24 +113,22 @@ in
     config = {
       environment.persistence = lib.mkMerge [
         {
-          "/persistent" = {
-            directories = [
-              "/etc/lact"
-              "/etc/NetworkManager/system-connections"
-              "/etc/ssh"
-              "/var/lib/AccountsService"
-              "/var/lib/bluetooth"
-              "/var/lib/colord"
-              "/var/lib/NetworkManager"
-              "/var/lib/nixos"
-              "/var/lib/plasmalogin"
-              "/var/lib/power-profiles-daemon"
-              "/var/lib/private/mihomo"
-              "/var/lib/systemd"
-              "/var/lib/upower"
-              "/var/log"
-            ];
-          };
+          "/persistent".directories = [
+            "/etc/lact"
+            "/etc/NetworkManager/system-connections"
+            "/etc/ssh"
+            "/var/lib/AccountsService"
+            "/var/lib/bluetooth"
+            "/var/lib/colord"
+            "/var/lib/NetworkManager"
+            "/var/lib/nixos"
+            "/var/lib/plasmalogin"
+            "/var/lib/power-profiles-daemon"
+            "/var/lib/private/mihomo"
+            "/var/lib/systemd"
+            "/var/lib/upower"
+            "/var/log"
+          ];
         }
 
         (lib.mkIf (config.aohg.persistence.homeRoot != null) {
