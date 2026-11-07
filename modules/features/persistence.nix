@@ -117,6 +117,7 @@ in
             "/etc/lact"
             "/etc/NetworkManager/system-connections"
             "/etc/ssh"
+            "/etc/tuned"
             "/var/lib/AccountsService"
             "/var/lib/bluetooth"
             "/var/lib/colord"
