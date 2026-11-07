@@ -85,10 +85,5 @@
       "icons/${config.gtk.iconTheme.name}".source = "${config.gtk.iconTheme.package}/share/icons/${config.gtk.iconTheme.name}";
       "themes/${config.gtk.theme.name}".source = "${config.gtk.theme.package}/share/themes/${config.gtk.theme.name}";
     };
-    xdg.configFile."xsettingsd/xsettingsd.conf".text = ''
-      Net/ThemeName "${config.gtk.theme.name}"
-      Net/IconThemeName "${config.gtk.iconTheme.name}"
-      Gtk/CursorThemeName "${config.gtk.cursorTheme.name}"
-    '';
   };
 }
