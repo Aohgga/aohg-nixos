@@ -104,7 +104,7 @@ let
   ];
 in
 {
-  flake.modules.nixos.persistence = { config, lib, pkgs, ... }: {
+  flake.modules.nixos.persistence = { config, lib, ... }: {
     options.aohg.persistence.homeRoot = lib.mkOption {
       type = lib.types.nullOr lib.types.str;
       default = "/persistent";
