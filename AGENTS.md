@@ -169,7 +169,8 @@ nix build .#nixosConfigurations.Legion.config.system.build.toplevel
 
 - 未经允许不要改结构：只该加一行或改一个值时，就只动那一行；不要把
   `foo.bar = [...]` 改成嵌套 attrset，也不要顺手重排、重命名。结构变了即使
-  求值结果一样也算越界，先问。
+  求值结果一样也算越界，先问；结构一动，commit 的 diff 就会变成整块重写，
+  很难看出真正改了什么。
 - 忘了 `git add`：`error: Path '...' is not tracked by Git`。
 - 在 `profiles.nix` 重排 imports 时漏模块 → 包闭包会少东西（发生过，丢了
   audio/bluetooth/tuning）。
