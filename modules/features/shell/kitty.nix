@@ -1,9 +1,6 @@
 {
-  flake.modules.nixos.kitty = {
-    aohg.persistence.home.directories = [ ".config/kitty" ];
-  };
-
-  flake.modules.homeManager.kitty = { pkgs, ... }: {
+  flake.modules.homeManager.kitty = { osConfig, pkgs, ... }: {
+    home.persistence."${osConfig.aohg.persistence.homeRoot}".directories = [ ".config/kitty" ];
     programs.kitty = {
       enable = true;
       font = {

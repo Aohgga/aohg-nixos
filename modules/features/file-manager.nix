@@ -1,24 +1,21 @@
 {
-  flake.modules.nixos.file-manager = {
-    aohg.persistence = {
-      home.directories = [
+  flake.modules.homeManager.file-manager = { osConfig, pkgs, ... }: {
+    home.persistence."${osConfig.aohg.persistence.homeRoot}" = {
+      directories = [
         ".local/share/Trash"
         ".local/share/ark"
         ".local/share/dolphin"
       ];
-      home.files = [
-        { file = ".config/arkrc"; }
-        { file = ".config/dolphinrc"; }
-        { file = ".config/kiorc"; }
-        { file = ".config/kservicemenurc"; }
-        { file = ".config/trashrc"; }
-        { file = ".local/share/user-places.xbel"; }
-        { file = ".local/state/dolphinstaterc"; }
+      files = [
+        { file = ".config/arkrc"; method = "symlink"; }
+        { file = ".config/dolphinrc"; method = "symlink"; }
+        { file = ".config/kiorc"; method = "symlink"; }
+        { file = ".config/kservicemenurc"; method = "symlink"; }
+        { file = ".config/trashrc"; method = "symlink"; }
+        { file = ".local/share/user-places.xbel"; method = "symlink"; }
+        { file = ".local/state/dolphinstaterc"; method = "symlink"; }
       ];
     };
-  };
-
-  flake.modules.homeManager.file-manager = { pkgs, ... }: {
     home.packages = with pkgs.kdePackages; [
       ark
       dolphin

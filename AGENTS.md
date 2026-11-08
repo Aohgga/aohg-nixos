@@ -22,7 +22,7 @@
 | 只对某台机器成立（硬件、GPU、分区、持久化、专属包/服务） | `modules/hosts/<Host>/` |
 | 多台机器共用的组合 | `modules/profiles.nix` |
 | flake-parts 与 home-manager 的 flake 集成 | `modules/flake-parts.nix` |
-| 持久化注册 | 应用模块的 `aohg.persistence`；没有模块认领的放 `features/persistence.nix` 的 base 列表 |
+| 持久化注册 | homeManager 应用用 `home.persistence`；nixos 应用用 `aohg.persistence`；base 在 `features/persistence.nix` |
 | 纯数据（不是模块，比如 umbriel 配置） | `config/` |
 | agenix 密文 | `secrets/` |
 | agenix CLI 规则 | `agenix-rules.nix`（必须放在根目录） |
@@ -57,20 +57,35 @@ include/drop-in、或 config 与 state 分离）：
 
 ## 持久化注册
 
-持久化跟着应用模块走：模块在 `aohg.persistence` 下注册自己需要的路径。
+持久化跟着应用模块的类型走。
 
-- `aohg.persistence.home.directories`：home 下要跨重启保留的目录。
-- `aohg.persistence.home.files`：home 下的单文件（`{ file = "..."; }`）。
-- `aohg.persistence.system.directories`：系统级持久化目录（`/etc`、`/var` 下）。
-- `aohg.persistence.homeRoot`：home 持久化根目录，默认 `/persistent`，Mech 覆盖为
-  `/persist-home`。
+应用是 homeManager 模块时，用 `home.persistence`：
 
-`features/persistence.nix` 只定义这些选项、汇总各模块的注册，并持有 `baseFiles` /
-`baseDirectories` / `baseSystemDirectories`：没有应用模块认领的路径放在那里。新增应用
-时不要往 base 列表里加条目，应在应用模块里注册。
+```nix
+home.persistence."${osConfig.aohg.persistence.homeRoot}".directories = [ ... ];
+home.persistence."${osConfig.aohg.persistence.homeRoot}".files = [
+  { file = "..."; method = "symlink"; }
+];
+```
 
-纯 homeManager 模块需要注册持久化时，在同一个文件里再定义一个
-`flake.modules.nixos.<name>`，并在 `modules/profiles.nix` 的 `nixos.base` 里 import。
+应用是 nixos 模块时，用 `aohg.persistence`：
+
+```nix
+aohg.persistence = {
+  home.directories = [ ... ];
+  home.files = [ { file = "..."; } ];
+  system.directories = [ "/etc/..." "/var/..." ];
+};
+```
+
+`aohg.persistence.homeRoot` 是 home 持久化根目录，默认 `/persistent`，Mech 覆盖为
+`/persist-home`。单文件必须用 symlink（`home.persistence` 显式写 `method = "symlink"`，
+`aohg.persistence.home.files` 默认就是 symlink），否则 bind mount 下 KConfig/QSaveFile
+的 rename 会返回 EBUSY。
+
+`features/persistence.nix` 持有 `baseFiles` / `baseDirectories` /
+`baseSystemDirectories`：没有应用模块认领的路径放在那里。新增应用时不要往这些列表里
+加条目，应在应用自己的模块里注册。
 
 ## 命名
 
@@ -201,7 +216,7 @@ nix build .#nixosConfigurations.Legion.config.system.build.toplevel
 
 - 纯顺序/注释调整应该保持 **system store path 不变**；如果变了，说明有语义变化，
   需要检查。
-- 涉及持久化时，比较两台机器 `environment.persistence` 的 directories/files 集合，
+- 涉及持久化时，比较两台机器 `home.persistence` 与 `environment.persistence` 的并集，
   确认没有意外增删。
 - 包集合用 `nix store diff-closures <旧> <新>` 确认没有增删。
 - 修改密码/密钥相关配置时，检查 `age.secrets."<name>".path` 和 `mihomo.service` 的

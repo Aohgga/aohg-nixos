@@ -1,9 +1,6 @@
 {
-  flake.modules.nixos.ttyper = {
-    aohg.persistence.home.directories = [ ".config/ttyper" ];
-  };
-
-  flake.modules.homeManager.ttyper = {
+  flake.modules.homeManager.ttyper = { osConfig, ... }: {
+    home.persistence."${osConfig.aohg.persistence.homeRoot}".directories = [ ".config/ttyper" ];
     programs.ttyper = {
       enable = true;
       settings = {

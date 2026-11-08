@@ -49,7 +49,7 @@ in
             };
           }));
           default = [ ];
-          description = "各应用模块注册的 home 持久化目录。";
+          description = "nixos 模块注册的 home 持久化目录。";
         };
         files = lib.mkOption {
           type = lib.types.listOf (lib.types.submodule {
@@ -62,16 +62,14 @@ in
             };
           });
           default = [ ];
-          description = "各应用模块注册的 home 持久化单文件。";
+          description = "nixos 模块注册的 home 持久化单文件。";
         };
       };
 
-      system = {
-        directories = lib.mkOption {
-          type = lib.types.listOf lib.types.str;
-          default = [ ];
-          description = "各模块注册的系统持久化目录。";
-        };
+      system.directories = lib.mkOption {
+        type = lib.types.listOf lib.types.str;
+        default = [ ];
+        description = "各模块注册的系统持久化目录。";
       };
     };
 

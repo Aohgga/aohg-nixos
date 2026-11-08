@@ -1,18 +1,15 @@
 {
-  flake.modules.nixos.editor = {
-    aohg.persistence = {
-      home.directories = [
+  flake.modules.homeManager.editor = { osConfig, pkgs, ... }: {
+    home.persistence."${osConfig.aohg.persistence.homeRoot}" = {
+      directories = [
         ".config/nvim"
         ".config/zed"
         ".local/share/nvim"
         ".local/share/zed"
         ".local/state/nvim"
       ];
-      home.files = [ { file = ".gitconfig"; } ];
+      files = [ { file = ".gitconfig"; method = "symlink"; } ];
     };
-  };
-
-  flake.modules.homeManager.editor = { pkgs, ... }: {
     home.packages = with pkgs; [
       git
       nil

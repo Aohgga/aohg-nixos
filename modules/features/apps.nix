@@ -1,15 +1,12 @@
 {
-  flake.modules.nixos.apps = {
-    aohg.persistence.home.directories = [
+  flake.modules.homeManager.apps = { osConfig, pkgs, ... }: {
+    home.persistence."${osConfig.aohg.persistence.homeRoot}".directories = [
       ".android"
       ".config/btop"
       ".config/qBittorrent"
       ".local/share/qBittorrent"
       ".local/share/umu"
     ];
-  };
-
-  flake.modules.homeManager.apps = { pkgs, ... }: {
     home.packages = with pkgs; [
       android-tools
       app2unit

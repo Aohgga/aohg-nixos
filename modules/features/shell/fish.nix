@@ -1,13 +1,10 @@
 {
-  flake.modules.nixos.fish = {
-    aohg.persistence.home.directories = [
+  flake.modules.homeManager.fish = { osConfig, ... }: {
+    home.persistence."${osConfig.aohg.persistence.homeRoot}".directories = [
       ".cache/fish"
       ".config/fish"
       ".local/share/fish"
     ];
-  };
-
-  flake.modules.homeManager.fish = {
     programs.fish = {
       enable = true;
       functions = {
