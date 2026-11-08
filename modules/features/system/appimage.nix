@@ -22,6 +22,8 @@
 
     aohg.persistence.home.directories = [
       ".cache/appimage-run"
+      ".local/share/app-manager"
+      ".local/share/icons"
       "Applications"
     ];
   };
