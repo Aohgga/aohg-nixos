@@ -17,7 +17,7 @@
     "Mod+Alt+Equal" = "window-modify-secondary-extent 0.1";
     "Mod+Alt+Minus" = "window-modify-secondary-extent -0.1";
     "Mod+Alt+R" = "window-cycle-secondary-extent";
-    "Mod+Alt+Shift+R" = "window-cycle-secondary-extent";
+    "Mod+Alt+Shift+R" = "window-cycle-secondary-extent-back";
     "Mod+B" = {
       action = "spawn pgrep bluetui && pkill bluetui || app2unit kitty -e --app-id float_term bluetui";
       repeat = false;

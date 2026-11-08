@@ -3,7 +3,7 @@
   flake.modules.homeManager.MechUmbriel = {
     programs.umbriel.settings =
       (import ../../../config/umbriel) {
-        "ASUSTek COMPUTER INC XG27UCG SBLMQS067078" = {
+        "DP-1" = {
           focus_at_startup = true;
           mode = "3840x2160@119.88";
           position = [ 1600 0 ];
@@ -16,7 +16,7 @@
           workspace_axis = "vertical";
         };
 
-        "BOE 0x0B40 Unknown" = {
+        "eDP-1" = {
           mode = "2560x1440@165.003";
           position = [ 0 0 ];
           scale = 1.6;

@@ -13,7 +13,7 @@
         width = 1020;
       };
       match = {
-        app_id = "^dev.noctalia.Noctalia$";
+        app_id = "^dev\\.noctalia\\.Noctalia$";
       };
     }
     {
@@ -23,7 +23,7 @@
         width = 800;
       };
       match = {
-        app_id = "^dev.noctalia.UmbrielSharePicker$";
+        app_id = "^dev\\.noctalia\\.UmbrielSharePicker$";
       };
     }
     {
@@ -53,19 +53,19 @@
     {
       default_floating = false;
       match = {
-        app_id = "org.kde.dolphin";
+        app_id = "org\\.kde\\.dolphin";
       };
     }
     {
       default_floating = true;
       match = {
-        app_id = "org.kde.isoimagewriter";
+        app_id = "org\\.kde\\.isoimagewriter";
       };
     }
     {
       default_floating = true;
       match = {
-        app_id = "org.freedesktop.impl.portal.desktop.kde";
+        app_id = "org\\.freedesktop\\.impl\\.portal\\.desktop\\.kde";
       };
     }
     {
@@ -101,7 +101,7 @@
     {
       default_floating = true;
       match = {
-        app_id = "com.github.AppManager";
+        app_id = "com\\.github\\.AppManager";
       };
     }
     {
@@ -113,7 +113,7 @@
     {
       default_floating = true;
       match = {
-        app_id = "org.kde.kdialog";
+        app_id = "org\\.kde\\.kdialog";
       };
     }
     {
@@ -125,7 +125,7 @@
     {
       default_floating = true;
       match = {
-        app_id = "steam_app_*";
+        app_id = "^steam_app_";
       };
     }
     {
@@ -137,7 +137,7 @@
     {
       default_floating = true;
       match = {
-        app_id = ".exe";
+        app_id = "\\.exe$";
       };
     }
     {
@@ -160,13 +160,13 @@
       corner_radius = 0;
       default_floating = false;
       match = {
-        app_id = "com.github.iwalton3.jellyfin-mpv-shim";
+        app_id = "com\\.github\\.iwalton3\\.jellyfin-mpv-shim";
       };
     }
     {
       default_floating = true;
       match = {
-        app_id = "org.kde.dolphin";
+        app_id = "org\\.kde\\.dolphin";
         title = "的属性";
       };
     }
