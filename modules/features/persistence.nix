@@ -32,6 +32,11 @@ let
   ];
 in
 {
+  flake-file.inputs.impermanence = {
+    url = "github:nix-community/impermanence";
+    inputs.nixpkgs.follows = "nixpkgs";
+  };
+
   flake.modules.nixos.persistence = { config, lib, ... }: {
     options.aohg.persistence = {
       homeRoot = lib.mkOption {

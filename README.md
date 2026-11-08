@@ -9,13 +9,15 @@
   需要保留的内容放在 XFS 分区的 `/persistent`。
 
 `modules/` 下每个 `.nix` 都是 flake-parts 模块，`import-tree` 会自动把它们收集为
-`flake.modules`；`flake.nix` 只声明 inputs 和 flake 的启动入口，不写系统配置。
+`flake.modules`；`flake.nix` 由 flake-file 从各模块的 `flake-file.inputs` 生成，
+输出入口在 `outputs.nix`。
 
 修改之前请先读 [AGENTS.md](./AGENTS.md)：目录职责、命名、排序、密文、验证和提交的
 规则都在那里。
 
 ```
 modules/
+├── flake-file.nix       引入 flake-file 并声明基础 inputs
 ├── flake-parts.nix      引入 flake-parts 的 flake.modules 输出和 home-manager 集成
 ├── profiles.nix         跨主机组合（nixos.base / nixos.desktop / homeManager.base）
 ├── features/            多台机器通用的模块
@@ -40,6 +42,7 @@ secrets/*.age            agenix 密文，接收者写在 agenix-rules.nix
 
 ```sh
 nix flake check --no-write-lock-file   # 只检查配置能否求值，不构建
+nix run .#write-flake                   # 改了 flake-file.inputs 后重新生成 flake.nix
 nix build .#nixosConfigurations.Mech.config.system.build.toplevel
 nix build .#nixosConfigurations.Legion.config.system.build.toplevel
 nrs                          # 切换本机配置；也可以接 boot / test / build / dry-activate

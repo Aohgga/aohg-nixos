@@ -20,6 +20,7 @@ in
 
       fm.nixos.environment
       fm.nixos.nix
+      fm.nixos.nrs
       fm.nixos.overlays
 
       fm.nixos.fonts
@@ -57,6 +58,7 @@ in
       fm.homeManager.kitty
       fm.homeManager.mpv
       fm.homeManager.musicfox
+      fm.homeManager.nrs
       fm.homeManager.swayimg
       fm.homeManager.theme
       fm.homeManager.ttyper

@@ -1,8 +1,17 @@
 { inputs, ... }:
 {
+  flake-file.inputs.deepseek-harness.url = "github:moraxyc/deepseek-harness.nix";
+
   flake.modules.nixos.dsh = { config, lib, pkgs, ... }: {
     imports = [ inputs.deepseek-harness.nixosModules.default ];
     nixpkgs.overlays = [ inputs.deepseek-harness.overlays.default ];
+
+    nix.settings = {
+      substituters = [ "https://deepseek-harness-nix.cachix.org" ];
+      "trusted-public-keys" = [
+        "deepseek-harness-nix.cachix.org-1:5NrkwLN9veNMhiINtU5ZeV4isXFhFsOwn6Ms7J1M+TA="
+      ];
+    };
 
     programs.dsh = {
       enable = true;
