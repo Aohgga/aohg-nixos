@@ -19,7 +19,6 @@ let
     ".config/Ladybird"
     ".config/libaccounts-glib"
     ".config/menus"
-    ".config/net.imput.helium"
     ".local/share/app.getlux.com.sakuracat.app"
     ".local/share/applications"
     ".local/share/gpu-screen-recorder"
