@@ -92,18 +92,19 @@ aohg.persistence = {
 - 目录使用小写 kebab-case；只有 `modules/hosts/<Host>/` 使用 PascalCase，并且必须等于
   `networking.hostName`。
 - 文件名使用小写 kebab-case、单数；**文件名就是模块名**：
-  - `features/networking.nix` → `flake.modules.nixos.networking`
+  - `features/system/networking.nix` → `flake.modules.nixos.networking`
   - `features/shell/fish.nix` → `flake.modules.homeManager.fish`
   - `hosts/Mech/filesystem.nix` → `flake.modules.nixos.MechFilesystem`
   - `hosts/Mech/default.nix` → `flake.modules.nixos.Mech`（入口）
 - 单个模块不要使用 `xxx/default.nix`；只有目录本身是入口时才使用 `default.nix`。
-- 分类目录只给确实有多个模块的领域使用：`desktop/`、`hardware/`、`shell/`。
+- 分类目录只给确实有多个模块的领域使用：`system/`、`desktop/`、`apps/`、`shell/`、
+  `hardware/`。
 
 ## 模块注册与组合
 
-- 增加公共特性：在 `modules/features/<name>.nix` 中定义 `flake.modules.nixos.<name>` 或
-  `flake.modules.homeManager.<name>`；要全局启用，就在 `modules/profiles.nix` 的对应层
-  加一行。
+- 增加公共特性：在 `modules/features/<category>/<name>.nix` 中定义
+  `flake.modules.nixos.<name>` 或 `flake.modules.homeManager.<name>`；要全局启用，就在
+  `modules/profiles.nix` 的对应层加一行。
 - 增加新主机：创建 `modules/hosts/<Name>/default.nix`，定义 `flake.modules.nixos.<Name>`；
   `machine.nix` 会自动发现（目录名 = 模块名，并且必须有 `default.nix`）。
 - 主机专属的用户配置：`flake.modules.homeManager.<Host>`。

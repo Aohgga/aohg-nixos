@@ -8,7 +8,7 @@
     # 写入方式（在仓库根目录，会自动读 agenix-rules.nix）：
     #   agenix -e secrets/github-token.age
     age.secrets."github-token" = {
-      file = ../../secrets/github-token.age;
+      file = ../../../secrets/github-token.age;
       # root 读文件不受 owner 限制，这里让日常以 aohg 运行的 nix 也能读到。
       owner = "aohg";
       mode = "0400";

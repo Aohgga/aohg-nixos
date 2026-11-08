@@ -5,7 +5,7 @@
       noProxy = "127.0.0.1,localhost,::1";
     };
     age.secrets."mihomo-config" = {
-      file = ../../secrets/mihomo-config.age;
+      file = ../../../secrets/mihomo-config.age;
     };
     services.mihomo = {
       configFile = config.age.secrets."mihomo-config".path;

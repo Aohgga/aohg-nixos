@@ -1,7 +1,7 @@
 {
   flake.modules.nixos.user = { config, ... }: {
     age.secrets."aohg-password" = {
-      file = ../../secrets/aohg-password.age;
+      file = ../../../secrets/aohg-password.age;
     };
     users = {
       mutableUsers = false;
