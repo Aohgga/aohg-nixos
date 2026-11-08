@@ -2,9 +2,9 @@
   flake.modules.nixos.hardware-tuning = {
     hardware.steam-hardware.enable = true;
     services = {
-      scx = {
+      scx-loader = {
         enable = true;
-        scheduler = "scx_bpfland";
+        config.default_sched = "scx_bpfland";
       };
       lact.enable = true;
       power-profiles-daemon.enable = true;
