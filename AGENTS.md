@@ -22,6 +22,7 @@
 | 只对某台机器成立（硬件、GPU、分区、持久化、专属包/服务） | `modules/hosts/<Host>/` |
 | 多台机器共用的组合 | `modules/profiles.nix` |
 | flake-parts 与 home-manager 的 flake 集成 | `modules/flake-parts.nix` |
+| 持久化注册 | 应用模块的 `aohg.persistence`；没有模块认领的放 `features/persistence.nix` 的 base 列表 |
 | 纯数据（不是模块，比如 umbriel 配置） | `config/` |
 | agenix 密文 | `secrets/` |
 | agenix CLI 规则 | `agenix-rules.nix`（必须放在根目录） |
@@ -31,23 +32,45 @@
 
 ## 配置边界
 
-判断一份应用配置该不该写进 Nix，要看应用能不能自己保存设置：
+判断一份应用配置该不该写进 Nix，先看应用有没有分层机制（读取多个文件、支持
+include/drop-in、或 config 与 state 分离）：
 
-- 有图形设置界面、或能在应用内修改设置的（fcitx5-configtool、Steam、浏览器、
-  qBittorrent、zed、denial 等）：不要用 Nix 锁住它的设置文件。
-- 没有图形界面、只能修改配置文件的（mpv、kitty、fish、yazi、swayimg、umbriel、
-  mihomo 等）：把设置写进 Nix，而且只写与上游默认值不同的部分；mihomo 的配置在
+- 有分层机制：Nix 写底层默认值，用户在应用里改顶层，两边不覆盖。noctalia 是范例：
+  Nix 写 `~/.config/noctalia/config.toml` 作为默认，设置界面写
+  `~/.local/state/noctalia/settings.toml` 作为覆盖。
+- 无分层机制、有图形设置界面（fcitx5、Steam、浏览器、qBittorrent、zed、denial 等）：
+  不要用 Nix 锁住它的设置文件，整块让渡给运行时。
+- 无分层机制、无图形界面（mpv、kitty、fish、yazi、swayimg、umbriel、mihomo 等）：
+  把设置写进 Nix，只写与上游默认值不同的部分；mihomo 的配置在
   `secrets/mihomo-config.age` 里，由 Nix 引用。
+- 只写差异：应用装好自带的默认值不要抄进 Nix，没有差异就不写。Nix 写默认值的理由
+  只有两种：契约要求（跨应用一致，比如 `kdeglobals` 的字体）或上游缺失（应用没有
+  可用的默认，比如 umbriel 的合成器设置）。
 - 例外：KDE 的 `kdeglobals` 由图形界面写入，但本机不使用 KDE 设置界面，只用它设置
   主题；文件已经持久化并且可写，所以保留 `qt.kde.settings`。
 - 例外：nvim 的 LazyVim 在运行时还需要写锁文件，继续放在用户目录里，不搬进 Nix。
-- 例外：noctalia 的 Nix 配置写入 `~/.config/noctalia/config.toml`，只作为默认值；
-  在设置界面里的修改写入 `~/.local/state/noctalia/settings.toml`，两边不会互相覆盖。
 - fcitx5 自己的设置交给 fcitx5-configtool；`fcitx5/rime/default.custom.yaml` 属于 rime
   的文件配置，写进 Nix 没有问题。
-- 应用配置搬进 Nix 后，要把 `persistence.nix` 里不再需要的目录删掉；应用仍然需要写入
+- 应用配置搬进 Nix 后，把它注册的持久化条目从应用模块里删掉；应用仍然需要写入
   运行数据的目录要保留（比如 yazi 仍保留 `.config/yazi` 和 `.local/state/yazi`）。
   只读的 store 链接会让图形界面保存失败，如果 GUI 应用的配置是 store 链接，就说明有 bug。
+
+## 持久化注册
+
+持久化跟着应用模块走：模块在 `aohg.persistence` 下注册自己需要的路径。
+
+- `aohg.persistence.home.directories`：home 下要跨重启保留的目录。
+- `aohg.persistence.home.files`：home 下的单文件（`{ file = "..."; }`）。
+- `aohg.persistence.system.directories`：系统级持久化目录（`/etc`、`/var` 下）。
+- `aohg.persistence.homeRoot`：home 持久化根目录，默认 `/persistent`，Mech 覆盖为
+  `/persist-home`。
+
+`features/persistence.nix` 只定义这些选项、汇总各模块的注册，并持有 `baseFiles` /
+`baseDirectories` / `baseSystemDirectories`：没有应用模块认领的路径放在那里。新增应用
+时不要往 base 列表里加条目，应在应用模块里注册。
+
+纯 homeManager 模块需要注册持久化时，在同一个文件里再定义一个
+`flake.modules.nixos.<name>`，并在 `modules/profiles.nix` 的 `nixos.base` 里 import。
 
 ## 命名
 
@@ -178,8 +201,8 @@ nix build .#nixosConfigurations.Legion.config.system.build.toplevel
 
 - 纯顺序/注释调整应该保持 **system store path 不变**；如果变了，说明有语义变化，
   需要检查。
-- 涉及持久化时，比较两台机器 `etc/systemd/system` 下 `persist-*` 和 `home-aohg-*`
-  单元集合是否一致。
+- 涉及持久化时，比较两台机器 `environment.persistence` 的 directories/files 集合，
+  确认没有意外增删。
 - 包集合用 `nix store diff-closures <旧> <新>` 确认没有增删。
 - 修改密码/密钥相关配置时，检查 `age.secrets."<name>".path` 和 `mihomo.service` 的
   `LoadCredential`。

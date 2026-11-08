@@ -12,5 +12,14 @@
       # 机械盘（/data）没有 SMART 监控
       smartd.enable = true;
     };
+
+    aohg.persistence = {
+      home.directories = [ ".config/lact" ];
+      system.directories = [
+        "/etc/lact"
+        "/var/lib/power-profiles-daemon"
+        "/var/lib/upower"
+      ];
+    };
   };
 }

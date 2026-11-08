@@ -1,4 +1,11 @@
 {
+  flake.modules.nixos.yazi = {
+    aohg.persistence.home.directories = [
+      ".config/yazi"
+      ".local/state/yazi"
+    ];
+  };
+
   flake.modules.homeManager.yazi = { pkgs, ... }: {
     programs.yazi = {
       enable = true;

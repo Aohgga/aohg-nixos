@@ -18,5 +18,7 @@
     };
 
     services.journald.settings.Journal.SystemMaxUse = "1G";
+
+    aohg.persistence.system.directories = [ "/var/log" ];
   };
 }

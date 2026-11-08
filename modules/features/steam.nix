@@ -8,5 +8,10 @@
       gamescopeSession.enable = false;
       protontricks.enable = true;
     };
+
+    aohg.persistence.home.directories = [
+      ".local/share/Steam"
+      ".steam"
+    ];
   };
 }

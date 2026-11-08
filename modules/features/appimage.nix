@@ -9,5 +9,7 @@
       };
       binfmt = true;
     };
+
+    aohg.persistence.home.directories = [ ".cache/appimage-run" ];
   };
 }

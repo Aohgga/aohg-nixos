@@ -1,4 +1,8 @@
 {
+  flake.modules.nixos.kitty = {
+    aohg.persistence.home.directories = [ ".config/kitty" ];
+  };
+
   flake.modules.homeManager.kitty = { pkgs, ... }: {
     programs.kitty = {
       enable = true;

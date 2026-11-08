@@ -62,8 +62,6 @@
         ".aspnet"
         ".config/Subtitle Edit"
         ".config/zen"
-        ".local/share/Steam"
-        ".steam"
         "Applications"
       ];
     };

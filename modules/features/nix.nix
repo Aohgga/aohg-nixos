@@ -86,5 +86,7 @@
     ];
 
     documentation.nixos.enable = false;
+
+    aohg.persistence.system.directories = [ "/var/lib/nixos" ];
   };
 }

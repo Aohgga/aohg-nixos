@@ -7,5 +7,7 @@
         pulse.enable = true;
       };
     };
+
+    aohg.persistence.home.directories = [ ".local/state/wireplumber" ];
   };
 }

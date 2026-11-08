@@ -7,5 +7,7 @@
       QT_QPA_PLATFORMTHEME = "kde";
     };
     programs.nix-ld.enable = true;
+
+    aohg.persistence.home.directories = [ ".local/bin" ];
   };
 }

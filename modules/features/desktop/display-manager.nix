@@ -8,5 +8,10 @@
       };
       defaultSession = "umbriel";
     };
+
+    aohg.persistence = {
+      home.directories = [ ".local/share/plasmalogin" ];
+      system.directories = [ "/var/lib/plasmalogin" ];
+    };
   };
 }

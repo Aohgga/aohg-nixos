@@ -27,5 +27,7 @@
         useEmbeddedBitmaps = true;
       };
     };
+
+    aohg.persistence.home.directories = [ ".local/share/fonts" ];
   };
 }

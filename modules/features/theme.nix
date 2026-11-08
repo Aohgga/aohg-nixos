@@ -8,6 +8,22 @@
       bibata-cursors
       kdePackages.breeze
     ];
+
+    aohg.persistence = {
+      home.directories = [
+        ".cache/fontconfig"
+        ".config/dconf"
+        ".config/fontconfig"
+        ".config/gtk-3.0"
+        ".config/gtk-4.0"
+        ".local/share/color-schemes"
+      ];
+      home.files = [
+        { file = ".config/darklyrc"; }
+        { file = ".config/kdeglobals"; }
+      ];
+      system.directories = [ "/var/lib/colord" ];
+    };
   };
 
   flake.modules.homeManager.theme = { config, pkgs, ... }: {
@@ -40,25 +56,29 @@
       platformTheme = {
         name = "kde";
       };
-      kde.settings.kdeglobals = {
-        General = {
-          fixed = "Maple Mono NL NF CN,10";
-          font = "${config.gtk.font.name},${toString config.gtk.font.size}";
-          menuFont = "${config.gtk.font.name},${toString config.gtk.font.size}";
-          smallestReadableFont = "${config.gtk.font.name},${toString (config.gtk.font.size - 2)}";
-          toolBarFont = "${config.gtk.font.name},${toString config.gtk.font.size}";
-          XftAntialias = "true";
-          XftHintStyle = "hintnone";
-          XftSubPixel = "rgb";
+      kde.settings = {
+        kdeglobals = {
+          General = {
+            fixed = "Maple Mono NL NF CN,10";
+            font = "${config.gtk.font.name},${toString config.gtk.font.size}";
+            menuFont = "${config.gtk.font.name},${toString config.gtk.font.size}";
+            smallestReadableFont = "${config.gtk.font.name},${toString (config.gtk.font.size - 2)}";
+            toolBarFont = "${config.gtk.font.name},${toString config.gtk.font.size}";
+          };
+          Icons = {
+            Theme = "breeze-dark";
+          };
+          KDE = {
+            widgetStyle = "Darkly";
+          };
+          WM = {
+            activeFont = "${config.gtk.font.name},${toString config.gtk.font.size}";
+          };
         };
-        Icons = {
-          Theme = "breeze-dark";
-        };
-        KDE = {
-          widgetStyle = "Darkly";
-        };
-        WM = {
-          activeFont = "${config.gtk.font.name},${toString config.gtk.font.size}";
+
+        kcminputrc.Mouse = {
+          cursorSize = config.gtk.cursorTheme.size;
+          cursorTheme = config.gtk.cursorTheme.name;
         };
       };
     };

@@ -1,4 +1,12 @@
 {
+  flake.modules.nixos.mpv = {
+    aohg.persistence.home.directories = [
+      ".config/mpv"
+      ".config/mpv-handler"
+      ".local/state/mpv"
+    ];
+  };
+
   flake.modules.homeManager.mpv = { config, pkgs, ... }: {
     home.packages = with pkgs; [
       mpv-handler

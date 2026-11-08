@@ -19,11 +19,24 @@
       kdePackages.xdg-desktop-portal-kde
       xdg-desktop-portal-gtk
     ];
+
+    aohg.persistence.home.directories = [
+      ".cache/noctalia"
+      ".config/noctalia"
+      ".config/umbriel"
+      ".config/xdg-desktop-portal"
+      ".local/state/noctalia"
+    ];
   };
 
   flake.modules.homeManager.umbriel = {
     imports = [ inputs.umbriel.homeModules.default ];
     programs.umbriel.enable = true;
+
+    xdg.configFile."noctalia/config.toml".text = ''
+      [theme]
+      source = "wallpaper"
+    '';
 
     xdg.configFile."xdg-desktop-portal/umbriel-portals.conf".text = ''
       [preferred]

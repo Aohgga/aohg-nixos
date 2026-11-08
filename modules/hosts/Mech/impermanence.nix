@@ -88,10 +88,7 @@
       # /persist-home（btrfs 子卷），系统级持久化在 /persistent。
       aohg.persistence.homeRoot = "/persist-home";
 
-      environment.persistence."/persistent" = {
-        hideMounts = true;
-        directories = [ "/var/lib/flatpak" ];
-      };
+      environment.persistence."/persistent".hideMounts = true;
 
       environment.persistence."/persist-home" = {
         hideMounts = true;
@@ -99,8 +96,6 @@
         users.aohg.directories = [
           ".config/VirtualBox"
           ".local/share/backgrounds"
-          ".local/share/flatpak"
-          ".var/app"
           "AppImages"
           "Archive"
           "Documents"

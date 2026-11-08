@@ -32,6 +32,16 @@ in
 
       fm.nixos.appimage
 
+      fm.nixos.apps
+      fm.nixos.editor
+      fm.nixos.file-manager
+      fm.nixos.fish
+      fm.nixos.kitty
+      fm.nixos.musicfox
+      fm.nixos.mpv
+      fm.nixos.ttyper
+      fm.nixos.yazi
+
       fm.nixos.home-manager
     ];
   };

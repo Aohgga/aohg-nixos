@@ -8,5 +8,10 @@
       plugins.enable = true;
       ddc.enable = true;
     };
+
+    aohg.persistence.home.directories = [
+      ".config/denial"
+      ".config/denial-home"
+    ];
   };
 }

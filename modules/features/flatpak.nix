@@ -26,5 +26,13 @@
       uninstallUnmanaged = false;
       update.onActivation = false;
     };
+
+    aohg.persistence = {
+      home.directories = [
+        ".local/share/flatpak"
+        ".var/app"
+      ];
+      system.directories = [ "/var/lib/flatpak" ];
+    };
   };
 }

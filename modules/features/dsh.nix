@@ -44,5 +44,7 @@
       ]
     );
     systemd.tmpfiles.rules = [ "e /home/aohg/.dsh/logs - - - 7d" ];
+
+    aohg.persistence.home.directories = [ ".dsh" ];
   };
 }

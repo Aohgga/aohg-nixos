@@ -14,6 +14,14 @@
       };
     };
     services.libinput.enable = true;
+
+    aohg.persistence = {
+      home.directories = [
+        ".config/fcitx5"
+        ".local/share/fcitx5"
+      ];
+      home.files = [ { file = ".config/kxkbrc"; } ];
+    };
   };
 
   flake.modules.homeManager.input-method = {

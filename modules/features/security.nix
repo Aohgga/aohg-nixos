@@ -6,5 +6,13 @@
     };
     services.gnome.gnome-keyring.enable = true;
     programs.seahorse.enable = true;
+
+    aohg.persistence = {
+      home.directories = [
+        ".local/share/keyrings"
+        ".local/share/kwalletd"
+      ];
+      system.directories = [ "/var/lib/AccountsService" ];
+    };
   };
 }

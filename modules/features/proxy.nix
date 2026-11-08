@@ -12,5 +12,7 @@
       enable = true;
       tunMode = false;
     };
+
+    aohg.persistence.system.directories = [ "/var/lib/private/mihomo" ];
   };
 }
