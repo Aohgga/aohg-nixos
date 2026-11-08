@@ -1,4 +1,7 @@
+{ inputs, ... }:
 {
+  flake-file.inputs.app-manager.url = "github:kem-a/AppManager";
+
   flake.modules.nixos.appimage = { pkgs, ... }: {
     programs.appimage = {
       enable = true;
@@ -10,6 +13,16 @@
       binfmt = true;
     };
 
-    aohg.persistence.home.directories = [ ".cache/appimage-run" ];
+    environment.systemPackages = [
+      inputs.app-manager.packages.${pkgs.stdenv.hostPlatform.system}.default
+    ];
+
+    # sandbox 挂载需要 setuid 的 fusermount3，由 wrapper 提供
+    programs.fuse.enable = true;
+
+    aohg.persistence.home.directories = [
+      ".cache/appimage-run"
+      "Applications"
+    ];
   };
 }

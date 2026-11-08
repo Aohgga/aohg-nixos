@@ -96,7 +96,6 @@
         users.aohg.directories = [
           ".config/VirtualBox"
           ".local/share/backgrounds"
-          "AppImages"
           "Archive"
           "Documents"
           "Downloads"

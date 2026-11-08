@@ -62,7 +62,6 @@
         ".aspnet"
         ".config/Subtitle Edit"
         ".config/zen"
-        "Applications"
       ];
     };
   };

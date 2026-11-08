@@ -53,6 +53,7 @@ in
       fm.homeManager.editor
       fm.homeManager.file-manager
       fm.homeManager.fish
+      fm.homeManager.helium
       fm.homeManager.home
       fm.homeManager.input-method
       fm.homeManager.kitty

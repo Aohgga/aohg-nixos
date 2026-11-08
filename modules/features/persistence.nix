@@ -12,20 +12,18 @@ let
   baseSystemDirectories = [ "/var/lib/systemd" ];
 
   baseDirectories = [
-    ".config/ELYTerminal"
-    ".config/Ladybird"
     ".config/aohg-nixos"
     ".config/autostart"
+    ".config/ELYTerminal"
     ".config/environment.d"
+    ".config/Ladybird"
     ".config/libaccounts-glib"
     ".config/menus"
     ".config/net.imput.helium"
-    ".local/share/ElyOffice"
-    ".local/share/Ladybird"
     ".local/share/app.getlux.com.sakuracat.app"
     ".local/share/applications"
     ".local/share/gpu-screen-recorder"
-    ".local/share/org.localsend.localsend_app"
+    ".local/share/Ladybird"
     ".local/share/pki"
     "Desktop"
     "Projects"

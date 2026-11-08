@@ -12,10 +12,15 @@
       url = "github:Aohgga/aohg-pkgs";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    app-manager.url = "github:kem-a/AppManager";
     deepseek-harness.url = "github:moraxyc/deepseek-harness.nix";
     denial.url = "github:denialwm/denial";
     flake-file.url = "github:denful/flake-file";
     flake-parts.url = "github:hercules-ci/flake-parts";
+    helium-flake = {
+      url = "github:oxcl/nix-flake-helium-browser";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
     home-manager = {
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
