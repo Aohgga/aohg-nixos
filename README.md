@@ -51,16 +51,28 @@ nix fmt                      # 用 nixfmt 格式化；会重排整个仓库，�
 
 ### 装一台新机器
 
-在 live 环境里生成硬件文件，放进新的主机目录：
+在 live 环境里生成硬件文件：
 
 ```sh
 nixos-generate-config --root /mnt
 mkdir -p modules/hosts/<Name>
-cp /mnt/etc/nixos/hardware-configuration.nix modules/hosts/<Name>/
+```
+
+把生成文件的内容粘进 `modules/hosts/<Name>/hardware-configuration.nix`，外面包一层
+`flake.modules.nixos.<Name>Hardware`——`modules/` 下的文件都会被 `import-tree` 当
+flake-parts 模块，裸 NixOS 模块会求值失败：
+
+```nix
+{
+  flake.modules.nixos.<Name>Hardware = { config, lib, modulesPath, ... }: {
+    # /mnt/etc/nixos/hardware-configuration.nix 的内容
+  };
+}
 ```
 
 照 `hosts/Legion/default.nix` 的结构写 `hosts/<Name>/default.nix`，定义
-`flake.modules.nixos.<Name>`；`machine.nix` 会自动发现它。首次安装：
+`flake.modules.nixos.<Name>` 并 import `<Name>Hardware`；`machine.nix` 会自动发现它。
+首次安装：
 
 ```sh
 git add -A

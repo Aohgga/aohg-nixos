@@ -33,8 +33,10 @@
 | agenix 密文 | `secrets/` |
 | agenix CLI 规则 | `agenix-rules.nix`（必须放在根目录） |
 
-`modules/hosts/<Host>/hardware-configuration.nix` 只放 `nixos-generate-config` 生成的内容；
-手写的硬件配置放在同目录的 `<aspect>.nix`（比如 `boot.nix`、`graphics.nix`）。
+`modules/hosts/<Host>/hardware-configuration.nix` 放 `nixos-generate-config` 生成的内容，
+外面包一层 `flake.modules.nixos.<Host>Hardware`（`import-tree` 要求 `modules/` 下的文件都是
+flake-parts 模块，裸 NixOS 模块缺少 `modulesPath` 会求值失败）；手写的硬件配置放在同目录的
+`<aspect>.nix`（比如 `boot.nix`、`graphics.nix`）。
 
 ## 配置边界
 
@@ -199,7 +201,8 @@ local.persistence = {
 
 ## hardware / fileSystems 与 impermanence
 
-- `hardware-configuration.nix` 只放生成的内容，手写项移到其他文件。
+- `hardware-configuration.nix` 放生成的内容，外面包 `flake.modules.nixos.<Host>Hardware`；
+  手写项移到其他文件。
 - `fileSystems` 是跨模块合并的 attrset：不同路径不会冲突；同一路径重复定义必须用
   `lib.mkForce` 明确覆盖（Legion 的 `/` 就是 hardware 里的 xfs 被 impermanence 用
   `lib.mkForce` 覆盖成 tmpfs）。
