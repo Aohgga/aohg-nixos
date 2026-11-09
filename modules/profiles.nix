@@ -61,6 +61,7 @@ in
       fm.homeManager.mpv
       fm.homeManager.musicfox
       fm.homeManager.nrs
+      fm.homeManager.splayer-next
       fm.homeManager.swayimg
       fm.homeManager.theme
       fm.homeManager.ttyper
