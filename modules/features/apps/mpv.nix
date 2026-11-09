@@ -22,14 +22,12 @@
         volume-max = 200;
       };
       enable = true;
-      scriptOpts.uosc = {
-        languages = "slang,zh-hans";
-        scale = "1.3";
-        top_bar_controls = "left";
+      scriptOpts.material-osc = {
+        accent_color = "\"#D0BCFF\"";
       };
       scripts = with pkgs; [
         bilibili-mpv
-        mpvScripts.uosc
+        material-osc
       ];
     };
     programs.yt-dlp.enable = true;
