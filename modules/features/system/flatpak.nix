@@ -29,7 +29,7 @@
       update.onActivation = false;
     };
 
-    aohg.persistence = {
+    local.persistence = {
       home.directories = [
         ".local/share/flatpak"
         ".var/app"

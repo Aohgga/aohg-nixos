@@ -9,7 +9,7 @@
       protontricks.enable = true;
     };
 
-    aohg.persistence.home.directories = [
+    local.persistence.home.directories = [
       ".local/share/Steam"
       ".steam"
     ];

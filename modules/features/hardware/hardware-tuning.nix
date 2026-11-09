@@ -13,7 +13,7 @@
       smartd.enable = true;
     };
 
-    aohg.persistence = {
+    local.persistence = {
       home.directories = [ ".config/lact" ];
       system.directories = [
         "/etc/lact"

@@ -86,14 +86,14 @@
 
       # 自定义选项（来自 features/persistence.nix）：Mech 的家目录持久化在
       # /persist-home（btrfs 子卷），系统级持久化在 /persistent。
-      aohg.persistence.homeRoot = "/persist-home";
+      local.persistence.homeRoot = "/persist-home";
 
       environment.persistence."/persistent".hideMounts = true;
 
       environment.persistence."/persist-home" = {
         hideMounts = true;
 
-        users.aohg.directories = [
+        users.${config.local.primaryUser.name}.directories = [
           ".config/VirtualBox"
           ".local/share/backgrounds"
           "Archive"

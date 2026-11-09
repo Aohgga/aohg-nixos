@@ -1,6 +1,6 @@
 {
   flake.modules.homeManager.file-manager = { osConfig, pkgs, ... }: {
-    home.persistence."${osConfig.aohg.persistence.homeRoot}" = {
+    home.persistence."${osConfig.local.persistence.homeRoot}" = {
       directories = [
         ".local/share/Trash"
         ".local/share/ark"

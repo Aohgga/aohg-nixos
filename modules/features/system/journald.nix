@@ -19,6 +19,6 @@
 
     services.journald.settings.Journal.SystemMaxUse = "1G";
 
-    aohg.persistence.system.directories = [ "/var/log" ];
+    local.persistence.system.directories = [ "/var/log" ];
   };
 }

@@ -7,7 +7,7 @@
     services.gnome.gnome-keyring.enable = true;
     programs.seahorse.enable = true;
 
-    aohg.persistence = {
+    local.persistence = {
       home.directories = [
         ".local/share/keyrings"
         ".local/share/kwalletd"

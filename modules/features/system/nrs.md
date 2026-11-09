@@ -2,7 +2,7 @@
 
 `nrs` 是 `nixos-rebuild` + `nix-output-monitor`（nom）的包装，默认作用于本机配置。
 
-- 配置目录：`/home/aohg/.config/aohg-nixos`
+- 配置目录：`$HOME/.config/aohg-nixos`
 - 默认主机：当前 `hostname`（`Mech` / `Legion`）
 
 ## 基本用法
@@ -35,7 +35,7 @@ nrs switch --show-trace
 
 | 变量 | 默认 | 作用 |
 |---|---|---|
-| `NRS_FLAKE` | `/home/aohg/.config/aohg-nixos` | 配置目录 |
+| `NRS_FLAKE` | `$HOME/.config/aohg-nixos` | 配置目录 |
 | `NRS_HOST` | 当前 hostname | 目标主机 |
 | `NRS_NOM=0` | 未设置 | 关闭 nom 渲染，直接输出原始日志 |
 

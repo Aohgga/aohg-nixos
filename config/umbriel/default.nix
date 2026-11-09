@@ -1,4 +1,4 @@
-outputs:
+settings:
 (builtins.foldl' (acc: file: acc // (import file)) { } [
   ./appearance.nix
   ./general.nix
@@ -13,5 +13,5 @@ outputs:
   ./workspaces.nix
 ])
 // {
-  output = outputs;
+  output = settings;
 }

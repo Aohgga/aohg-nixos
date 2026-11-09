@@ -8,6 +8,6 @@
     };
     programs.nix-ld.enable = true;
 
-    aohg.persistence.home.directories = [ ".local/bin" ];
+    local.persistence.home.directories = [ ".local/bin" ];
   };
 }

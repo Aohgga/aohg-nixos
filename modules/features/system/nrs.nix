@@ -9,7 +9,7 @@
         name = "nrs";
         runtimeInputs = [ pkgs.nix-output-monitor ];
         text = ''
-          flake="''${NRS_FLAKE:-/home/aohg/.config/aohg-nixos}"
+          flake="''${NRS_FLAKE:-''$HOME/.config/aohg-nixos}"
           host="''${NRS_HOST:-$(hostname)}"
           nom_on="''${NRS_NOM:-1}"
 
@@ -29,7 +29,7 @@
             help          显示本帮助
 
           环境变量:
-            NRS_FLAKE     配置目录，默认 /home/aohg/.config/aohg-nixos
+            NRS_FLAKE     配置目录，默认 $HOME/.config/aohg-nixos
             NRS_HOST      主机名，默认当前 hostname
             NRS_NOM=0     关闭 nom 的输出渲染
 

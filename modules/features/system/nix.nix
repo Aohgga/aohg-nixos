@@ -10,7 +10,7 @@
     age.secrets."github-token" = {
       file = ../../../secrets/github-token.age;
       # root 读文件不受 owner 限制，这里让日常以 aohg 运行的 nix 也能读到。
-      owner = "aohg";
+      owner = config.local.primaryUser.name;
       mode = "0400";
     };
 
@@ -19,7 +19,8 @@
 
       settings = {
         experimental-features = [ "flakes" "nix-command" ];
-        trusted-users = [ "aohg" "root" ];
+        # 默认值已包含 root，这里只补主用户
+        trusted-users = [ config.local.primaryUser.name ];
         auto-optimise-store = true;
         connect-timeout = 60;
         download-attempts = 10;
@@ -45,6 +46,6 @@
 
     documentation.nixos.enable = false;
 
-    aohg.persistence.system.directories = [ "/var/lib/nixos" ];
+    local.persistence.system.directories = [ "/var/lib/nixos" ];
   };
 }

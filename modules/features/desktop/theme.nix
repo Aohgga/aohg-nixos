@@ -9,7 +9,7 @@
       kdePackages.breeze
     ];
 
-    aohg.persistence = {
+    local.persistence = {
       home.directories = [
         ".cache/fontconfig"
         ".config/dconf"

@@ -1,6 +1,6 @@
 {
   flake.modules.homeManager.kitty = { osConfig, pkgs, ... }: {
-    home.persistence."${osConfig.aohg.persistence.homeRoot}".directories = [ ".config/kitty" ];
+    home.persistence."${osConfig.local.persistence.homeRoot}".directories = [ ".config/kitty" ];
     programs.kitty = {
       enable = true;
       font = {

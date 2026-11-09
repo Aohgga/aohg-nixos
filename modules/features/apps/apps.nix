@@ -1,6 +1,6 @@
 {
   flake.modules.homeManager.apps = { osConfig, pkgs, ... }: {
-    home.persistence."${osConfig.aohg.persistence.homeRoot}".directories = [
+    home.persistence."${osConfig.local.persistence.homeRoot}".directories = [
       ".android"
       ".config/btop"
       ".config/qBittorrent"
@@ -18,7 +18,6 @@
       qbittorrent-enhanced
       quickemu
       resources
-      swayimg
       tree
       wev
       wget

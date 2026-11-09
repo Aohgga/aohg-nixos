@@ -19,7 +19,7 @@
       ddc.enable = true;
     };
 
-    aohg.persistence.home.directories = [
+    local.persistence.home.directories = [
       ".config/denial"
       ".config/denial-home"
     ];

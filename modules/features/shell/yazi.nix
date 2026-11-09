@@ -1,6 +1,6 @@
 {
   flake.modules.homeManager.yazi = { osConfig, pkgs, ... }: {
-    home.persistence."${osConfig.aohg.persistence.homeRoot}".directories = [
+    home.persistence."${osConfig.local.persistence.homeRoot}".directories = [
       ".config/yazi"
       ".local/state/yazi"
     ];

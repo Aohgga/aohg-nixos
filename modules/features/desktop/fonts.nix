@@ -28,6 +28,6 @@
       };
     };
 
-    aohg.persistence.home.directories = [ ".local/share/fonts" ];
+    local.persistence.home.directories = [ ".local/share/fonts" ];
   };
 }

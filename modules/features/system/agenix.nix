@@ -14,6 +14,6 @@
       inputs.agenix.packages.${pkgs.stdenv.hostPlatform.system}.default
     ];
 
-    aohg.persistence.home.directories = [ ".config/age" ];
+    local.persistence.home.directories = [ ".config/age" ];
   };
 }

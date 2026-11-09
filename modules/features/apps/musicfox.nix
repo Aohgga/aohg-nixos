@@ -1,6 +1,6 @@
 {
   flake.modules.homeManager.musicfox = { osConfig, ... }: {
-    home.persistence."${osConfig.aohg.persistence.homeRoot}".directories = [
+    home.persistence."${osConfig.local.persistence.homeRoot}".directories = [
       ".config/go-musicfox"
       ".local/share/go-musicfox"
       ".local/state/go-musicfox"

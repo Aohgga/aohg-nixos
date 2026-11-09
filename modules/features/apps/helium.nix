@@ -9,6 +9,6 @@
     imports = [ inputs.helium-flake.homeModules.default ];
     programs.helium.enable = true;
 
-    home.persistence."${osConfig.aohg.persistence.homeRoot}".directories = [ ".config/net.imput.helium" ];
+    home.persistence."${osConfig.local.persistence.homeRoot}".directories = [ ".config/net.imput.helium" ];
   };
 }

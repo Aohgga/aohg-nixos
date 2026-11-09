@@ -1,5 +1,7 @@
 {
-  flake.modules.nixos.LegionGraphics = { config, ... }: {
+  flake.modules.nixos.LegionGraphics = { config, pkgs, ... }: {
+    # nvidia-vaapi-driver 由 hardware.nvidia.videoAcceleration 默认提供
+    hardware.graphics.extraPackages = [ pkgs.intel-media-driver ];
     hardware.nvidia = {
       package = config.boot.kernelPackages.nvidiaPackages.legacy_580;
       open = false;

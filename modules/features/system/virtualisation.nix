@@ -1,6 +1,6 @@
 {
-  flake.modules.nixos.virtualisation = {
-    users.extraGroups.vboxusers.members = [ "aohg" ];
+  flake.modules.nixos.virtualisation = { config, ... }: {
+    users.extraGroups.vboxusers.members = [ config.local.primaryUser.name ];
 
     # VBoxSDL 是 setuid 程序，LD_LIBRARY_PATH 会被安全模式忽略，
     # 导致 DXVK 找不到 libvulkan.so.1（3D 开启时崩溃）。

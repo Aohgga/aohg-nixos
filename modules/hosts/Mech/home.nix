@@ -5,6 +5,5 @@
       self.modules.homeManager.base
       self.modules.homeManager.MechUmbriel
     ];
-    home.stateVersion = "26.11";
   };
 }

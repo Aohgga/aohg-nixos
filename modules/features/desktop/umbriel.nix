@@ -37,7 +37,7 @@
       xdg-desktop-portal-gtk
     ];
 
-    aohg.persistence.home.directories = [
+    local.persistence.home.directories = [
       ".cache/noctalia"
       ".config/noctalia"
       ".config/umbriel"

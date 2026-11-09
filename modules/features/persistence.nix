@@ -34,68 +34,75 @@ in
     inputs.nixpkgs.follows = "nixpkgs";
   };
 
-  flake.modules.nixos.persistence = { config, lib, ... }: {
-    options.aohg.persistence = {
-      homeRoot = lib.mkOption {
-        type = lib.types.str;
-        default = "/persistent";
-        description = "用户 home 的持久化根目录；Mech 覆盖为 /persist-home。";
+  flake.modules.nixos.persistence =
+    { config, lib, ... }:
+    let
+      cfg = config.local.persistence;
+      userName = config.local.primaryUser.name;
+      userHome = config.users.users.${userName}.home;
+    in
+    {
+      options.local.persistence = {
+        homeRoot = lib.mkOption {
+          type = lib.types.str;
+          default = "/persistent";
+          description = "用户 home 的持久化根目录；Mech 覆盖为 /persist-home。";
+        };
+
+        home = {
+          directories = lib.mkOption {
+            type = lib.types.listOf (lib.types.either lib.types.str (lib.types.submodule {
+              options = {
+                directory = lib.mkOption { type = lib.types.str; };
+                mode = lib.mkOption { type = lib.types.str; default = "0755"; };
+              };
+            }));
+            default = [ ];
+            description = "nixos 模块注册的 home 持久化目录。";
+          };
+          files = lib.mkOption {
+            type = lib.types.listOf (lib.types.submodule {
+              options = {
+                file = lib.mkOption { type = lib.types.str; };
+                method = lib.mkOption {
+                  type = lib.types.enum [ "auto" "symlink" ];
+                  default = "symlink";
+                };
+              };
+            });
+            default = [ ];
+            description = "nixos 模块注册的 home 持久化单文件。";
+          };
+        };
+
+        system.directories = lib.mkOption {
+          type = lib.types.listOf lib.types.str;
+          default = [ ];
+          description = "各模块注册的系统持久化目录。";
+        };
       };
 
-      home = {
-        directories = lib.mkOption {
-          type = lib.types.listOf (lib.types.either lib.types.str (lib.types.submodule {
-            options = {
-              directory = lib.mkOption { type = lib.types.str; };
-              mode = lib.mkOption { type = lib.types.str; default = "0755"; };
-            };
-          }));
-          default = [ ];
-          description = "nixos 模块注册的 home 持久化目录。";
-        };
-        files = lib.mkOption {
-          type = lib.types.listOf (lib.types.submodule {
-            options = {
-              file = lib.mkOption { type = lib.types.str; };
-              method = lib.mkOption {
-                type = lib.types.enum [ "auto" "symlink" ];
-                default = "symlink";
+      config = {
+        environment.persistence = lib.mkMerge [
+          {
+            "/persistent".directories =
+              cfg.system.directories ++ baseSystemDirectories;
+          }
+          {
+            "${cfg.homeRoot}" = {
+              users.${userName} = {
+                directories = cfg.home.directories ++ baseDirectories;
+                files = cfg.home.files ++ baseFiles;
               };
             };
-          });
-          default = [ ];
-          description = "nixos 模块注册的 home 持久化单文件。";
-        };
-      };
+          }
+        ];
 
-      system.directories = lib.mkOption {
-        type = lib.types.listOf lib.types.str;
-        default = [ ];
-        description = "各模块注册的系统持久化目录。";
+        # 目标文件不存在时应用写入会静默丢失；开机先按清单补出空文件，
+        # 新加的条目不用手动 touch。
+        systemd.tmpfiles.rules =
+          map (f: "f ${cfg.homeRoot}${userHome}/${f.file} 0600 ${userName} users -")
+            (cfg.home.files ++ baseFiles);
       };
     };
-
-    config = {
-      environment.persistence = lib.mkMerge [
-        {
-          "/persistent".directories =
-            config.aohg.persistence.system.directories ++ baseSystemDirectories;
-        }
-        {
-          "${config.aohg.persistence.homeRoot}" = {
-            users.aohg = {
-              directories = config.aohg.persistence.home.directories ++ baseDirectories;
-              files = config.aohg.persistence.home.files ++ baseFiles;
-            };
-          };
-        }
-      ];
-
-      # 目标文件不存在时应用写入会静默丢失；开机先按清单补出空文件，
-      # 新加的条目不用手动 touch。
-      systemd.tmpfiles.rules =
-        map (f: "f ${config.aohg.persistence.homeRoot}/home/aohg/${f.file} 0600 aohg users -")
-          (config.aohg.persistence.home.files ++ baseFiles);
-    };
-  };
 }

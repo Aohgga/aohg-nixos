@@ -28,7 +28,7 @@
 | flake-parts 与 home-manager 的 flake 集成 | `modules/flake-parts.nix` |
 | flake input 声明 | 模块里的 `flake-file.inputs`；基础 inputs 在 `modules/flake-file.nix` |
 | flake 的输出入口 | `outputs.nix`；`flake.nix` 由 flake-file 生成，不要手改 |
-| 持久化注册 | homeManager 应用用 `home.persistence`；nixos 应用用 `aohg.persistence`；base 在 `features/persistence.nix` |
+| 持久化注册 | homeManager 应用用 `home.persistence`；nixos 应用用 `local.persistence`；base 在 `features/persistence.nix` |
 | 纯数据（不是模块，比如 umbriel 配置） | `config/` |
 | agenix 密文 | `secrets/` |
 | agenix CLI 规则 | `agenix-rules.nix`（必须放在根目录） |
@@ -68,25 +68,25 @@ include/drop-in、或 config 与 state 分离）：
 应用是 homeManager 模块时，用 `home.persistence`：
 
 ```nix
-home.persistence."${osConfig.aohg.persistence.homeRoot}".directories = [ ... ];
-home.persistence."${osConfig.aohg.persistence.homeRoot}".files = [
+home.persistence."${osConfig.local.persistence.homeRoot}".directories = [ ... ];
+home.persistence."${osConfig.local.persistence.homeRoot}".files = [
   { file = "..."; method = "symlink"; }
 ];
 ```
 
-应用是 nixos 模块时，用 `aohg.persistence`：
+应用是 nixos 模块时，用 `local.persistence`：
 
 ```nix
-aohg.persistence = {
+local.persistence = {
   home.directories = [ ... ];
   home.files = [ { file = "..."; } ];
   system.directories = [ "/etc/..." "/var/..." ];
 };
 ```
 
-`aohg.persistence.homeRoot` 是 home 持久化根目录，默认 `/persistent`，Mech 覆盖为
+`local.persistence.homeRoot` 是 home 持久化根目录，默认 `/persistent`，Mech 覆盖为
 `/persist-home`。单文件必须用 symlink（`home.persistence` 显式写 `method = "symlink"`，
-`aohg.persistence.home.files` 默认就是 symlink），否则 bind mount 下 KConfig/QSaveFile
+`local.persistence.home.files` 默认就是 symlink），否则 bind mount 下 KConfig/QSaveFile
 的 rename 会返回 EBUSY。
 
 `features/persistence.nix` 持有 `baseFiles` / `baseDirectories` /
@@ -108,6 +108,8 @@ aohg.persistence = {
 
 ## 模块注册与组合
 
+- 本仓库的自定义选项统一放在 `local.*` 下（`local.primaryUser`、`local.persistence`），
+  前缀表示“本仓库的策略”，不要用作者名或用户名，避免和登录名混淆。
 - 增加公共特性：在 `modules/features/<category>/<name>.nix` 中定义
   `flake.modules.nixos.<name>` 或 `flake.modules.homeManager.<name>`；要全局启用，就在
   `modules/profiles.nix` 的对应层加一行。
@@ -116,6 +118,9 @@ aohg.persistence = {
 - 增加新主机：创建 `modules/hosts/<Name>/default.nix`，定义 `flake.modules.nixos.<Name>`；
   `machine.nix` 会自动发现（目录名 = 模块名，并且必须有 `default.nix`）。
 - 主机专属的用户配置：`flake.modules.homeManager.<Host>`。
+- 用户名只在 `features/system/user.nix` 的 `local.primaryUser.name` 默认值里写一次；主机需要不同的
+  用户名就覆盖 `local.primaryUser.name`，`home.username`、home 路径、service 账户和持久化都从它派生。
+  改名时 `local.primaryUser.uid` 必须保持不变，否则已有文件的属主会错位。
 - 一个文件定义多个模块时，按 class 排序：**NixOS 在前、homeManager 在后**，同类按名字
   排序。
 - 新文件如果没有执行 `git add`，flake 就看不到；构建前请先 `git add`。

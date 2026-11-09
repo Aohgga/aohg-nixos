@@ -1,6 +1,6 @@
 {
   flake.modules.homeManager.mpv = { config, osConfig, pkgs, ... }: {
-    home.persistence."${osConfig.aohg.persistence.homeRoot}".directories = [
+    home.persistence."${osConfig.local.persistence.homeRoot}".directories = [
       ".config/mpv"
       ".config/mpv-handler"
       ".local/state/mpv"

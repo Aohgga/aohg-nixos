@@ -15,7 +15,7 @@
     };
     services.libinput.enable = true;
 
-    aohg.persistence = {
+    local.persistence = {
       home.directories = [
         ".config/fcitx5"
         ".local/share/fcitx5"

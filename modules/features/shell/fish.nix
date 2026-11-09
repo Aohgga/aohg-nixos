@@ -1,6 +1,6 @@
 {
   flake.modules.homeManager.fish = { osConfig, ... }: {
-    home.persistence."${osConfig.aohg.persistence.homeRoot}".directories = [
+    home.persistence."${osConfig.local.persistence.homeRoot}".directories = [
       ".cache/fish"
       ".config/fish"
       ".local/share/fish"

@@ -1,6 +1,6 @@
 {
   flake.modules.homeManager.editor = { osConfig, pkgs, ... }: {
-    home.persistence."${osConfig.aohg.persistence.homeRoot}" = {
+    home.persistence."${osConfig.local.persistence.homeRoot}" = {
       directories = [
         ".config/nvim"
         ".config/zed"

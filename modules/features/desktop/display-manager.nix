@@ -1,15 +1,15 @@
 {
-  flake.modules.nixos.display-manager = {
+  flake.modules.nixos.display-manager = { config, ... }: {
     services.displayManager = {
       plasma-login-manager.enable = true;
       autoLogin = {
         enable = true;
-        user = "aohg";
+        user = config.local.primaryUser.name;
       };
       defaultSession = "umbriel";
     };
 
-    aohg.persistence = {
+    local.persistence = {
       home.directories = [ ".local/share/plasmalogin" ];
       system.directories = [ "/var/lib/plasmalogin" ];
     };

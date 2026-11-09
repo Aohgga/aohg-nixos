@@ -16,11 +16,6 @@
         "rd.udev.log_level=3"
       ];
       kernelModules = [ "ntsync" ];
-      blacklistedKernelModules = [ "kvm_amd" ];
-      # udev 的 modalias 自动加载不读 modprobe blacklist，用 install 规则拦掉。
-      extraModprobeConfig = ''
-        install kvm_amd ${pkgs.coreutils}/bin/true
-      '';
       kernel.sysctl = {
         "kernel.split_lock_mitigate" = 0;
         "vm.max_map_count" = 2147483642;

@@ -3,7 +3,7 @@
   # tmpfs 根 + tmpfs /home，系统状态和用户状态都持久化在同一个分区
   # （nvme0n1p2）。原根分区整块挂到 /persistent，nix store 通过
   # /persistent/nix 的 bind mount 原地保留，不需要搬数据。
-  flake.modules.nixos.LegionImpermanence = { lib, ... }: {
+  flake.modules.nixos.LegionImpermanence = { config, lib, ... }: {
     imports = [ inputs.impermanence.nixosModules.impermanence ];
 
     fileSystems = {
@@ -58,7 +58,7 @@
     environment.persistence."/persistent" = {
       hideMounts = true;
 
-      users.aohg.directories = [
+      users.${config.local.primaryUser.name}.directories = [
         ".aspnet"
         ".config/Subtitle Edit"
         ".config/zen"

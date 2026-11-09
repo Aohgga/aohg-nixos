@@ -8,6 +8,6 @@
       };
     };
 
-    aohg.persistence.home.directories = [ ".local/state/wireplumber" ];
+    local.persistence.home.directories = [ ".local/state/wireplumber" ];
   };
 }

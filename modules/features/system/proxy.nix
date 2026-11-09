@@ -8,11 +8,17 @@
       file = ../../../secrets/mihomo-config.age;
     };
     services.mihomo = {
-      configFile = config.age.secrets."mihomo-config".path;
       enable = true;
-      tunMode = false;
+      configFile = config.age.secrets."mihomo-config".path;
+      tunMode = true;
     };
 
-    aohg.persistence.system.directories = [ "/var/lib/private/mihomo" ];
+    # TUN 的回包源地址来自 fake-ip 段，strict rpfilter 会直接丢弃
+    networking.firewall = {
+      checkReversePath = "loose";
+      trustedInterfaces = [ "Meta" ];
+    };
+
+    local.persistence.system.directories = [ "/var/lib/private/mihomo" ];
   };
 }

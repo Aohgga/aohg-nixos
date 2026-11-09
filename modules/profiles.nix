@@ -5,6 +5,8 @@ in
 {
   flake.modules.nixos.base = {
     imports = [
+      fm.nixos.persistence
+
       fm.nixos.audio
       fm.nixos.bluetooth
       fm.nixos.boot

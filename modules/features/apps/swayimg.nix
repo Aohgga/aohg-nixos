@@ -1,5 +1,6 @@
 {
-  flake.modules.homeManager.swayimg = {
+  flake.modules.homeManager.swayimg = { pkgs, ... }: {
+    home.packages = [ pkgs.swayimg ];
     xdg.configFile."swayimg/init.lua".text = ''
       swayimg.text.size = 16
 
