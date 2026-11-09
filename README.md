@@ -46,3 +46,64 @@ nix build .#nixosConfigurations.Legion.config.system.build.toplevel
 nrs                          # 切换本机配置；也可以接 boot / test / build / dry-activate
 nix fmt                      # 用 nixfmt 格式化；会重排整个仓库，按 AGENTS 的规则慎用
 ```
+
+## 运维
+
+### 装一台新机器
+
+在 live 环境里生成硬件文件，放进新的主机目录：
+
+```sh
+nixos-generate-config --root /mnt
+mkdir -p modules/hosts/<Name>
+cp /mnt/etc/nixos/hardware-configuration.nix modules/hosts/<Name>/
+```
+
+照 `hosts/Legion/default.nix` 的结构写 `hosts/<Name>/default.nix`，定义
+`flake.modules.nixos.<Name>`；`machine.nix` 会自动发现它。首次安装：
+
+```sh
+git add -A
+nixos-install --flake .#<Name>
+```
+
+### 回滚
+
+```sh
+sudo nixos-rebuild switch --rollback    # 当前会话退回上一代
+sudo nixos-rebuild list-generations     # 查看所有代际
+```
+
+系统起不来时，重启在 systemd-boot 菜单里选旧 generation。
+
+### 改用户名
+
+用户名只在 `modules/features/system/user.nix` 的默认值里写一次，主机覆盖它。例如把
+`aohg` 改成 `alice`：
+
+```nix
+# modules/hosts/<Name>/default.nix
+local.primaryUser.name = "alice";
+```
+
+再把持久化目录从旧名迁到新名，`uid` 保持不变：
+
+```sh
+sudo mv /persist-home/home/aohg /persist-home/home/alice   # Mech：旧 → 新
+sudo mv /persistent/home/aohg    /persistent/home/alice    # Legion：旧 → 新
+nrs switch
+```
+
+重启后才会 bind 到新 home。
+
+### 轮换 secrets
+
+```sh
+cd ~/.config/aohg-nixos
+sudo EDITOR=nvim agenix -e secrets/<name>.age -i /etc/ssh/ssh_host_ed25519_key
+sudo chown aohg:users secrets/<name>.age
+nrs switch
+```
+
+新增 secret 时先在 `agenix-rules.nix` 加一行、在模块里声明 `age.secrets."<name>"`，
+再用上面的命令生成密文。
