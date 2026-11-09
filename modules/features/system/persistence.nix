@@ -46,7 +46,7 @@ in
         homeRoot = lib.mkOption {
           type = lib.types.str;
           default = "/persistent";
-          description = "用户 home 的持久化根目录；Mech 覆盖为 /persist-home。";
+          description = "用户 home 的持久化根目录；主机可覆盖。";
         };
 
         home = {

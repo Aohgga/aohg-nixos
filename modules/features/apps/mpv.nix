@@ -36,7 +36,7 @@
     xdg.configFile."mpv-handler/config.toml".text = ''
       mpv = "${config.home.profileDirectory}/bin/mpv"
       ytdl = "${pkgs.yt-dlp}/bin/yt-dlp"
-      proxy = "http://127.0.0.1:7890"
+      proxy = "${osConfig.networking.proxy.default}"
     '';
   };
 }

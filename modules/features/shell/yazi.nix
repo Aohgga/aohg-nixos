@@ -10,7 +10,6 @@
         _7zz = pkgs._7zz-rar;
       });
 
-      # 只写与 yazi 官方默认值不同的部分，其余全部走内置默认。
       settings = {
         mgr = {
           sort_by = "natural";

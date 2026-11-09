@@ -28,7 +28,7 @@
 | flake-parts 与 home-manager 的 flake 集成 | `modules/flake-parts.nix` |
 | flake input 声明 | 模块里的 `flake-file.inputs`；基础 inputs 在 `modules/flake-file.nix` |
 | flake 的输出入口 | `outputs.nix`；`flake.nix` 由 flake-file 生成，不要手改 |
-| 持久化注册 | homeManager 应用用 `home.persistence`；nixos 应用用 `local.persistence`；base 在 `features/persistence.nix` |
+| 持久化注册 | homeManager 应用用 `home.persistence`；nixos 应用用 `local.persistence`；base 在 `features/system/persistence.nix` |
 | 纯数据（不是模块，比如 umbriel 配置） | `config/` |
 | agenix 密文 | `secrets/` |
 | agenix CLI 规则 | `agenix-rules.nix`（必须放在根目录） |
@@ -89,7 +89,7 @@ local.persistence = {
 `local.persistence.home.files` 默认就是 symlink），否则 bind mount 下 KConfig/QSaveFile
 的 rename 会返回 EBUSY。
 
-`features/persistence.nix` 持有 `baseFiles` / `baseDirectories` /
+`features/system/persistence.nix` 持有 `baseFiles` / `baseDirectories` /
 `baseSystemDirectories`：没有应用模块认领的路径放在那里。新增应用时不要往这些列表里
 加条目，应在应用自己的模块里注册。
 

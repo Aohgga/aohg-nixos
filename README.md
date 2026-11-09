@@ -21,14 +21,12 @@ modules/
 ├── flake-parts.nix      引入 flake-parts 的 flake.modules 输出和 home-manager 集成
 ├── profiles.nix         跨主机组合（nixos.base / nixos.desktop / homeManager.base）
 ├── features/            多台机器通用的模块
-│   ├── system/          系统层：启动、网络、代理、安全、nix、环境、用户、本地化、
-│   │                    服务、agenix、flatpak、虚拟化等
+│   ├── system/          系统层：启动、网络、代理、安全、nix、环境、用户、持久化、
+│   │                    本地化、服务、agenix、flatpak、虚拟化等
 │   ├── desktop/         桌面环境、登录管理器、输入法、主题、字体、denial、umbriel
 │   ├── apps/            应用：编辑器、文件管理器、播放器、音乐、终端工具等
 │   ├── shell/           fish、kitty、ttyper、yazi
-│   ├── hardware/        声卡、蓝牙、显卡、硬件与系统调优
-│   ├── home.nix         用户层基础（username、homeDirectory、xdg）
-│   └── persistence.nix  持久化选项、base 清单和汇总
+│   └── hardware/        声卡、蓝牙、显卡、硬件与系统调优
 └── hosts/               只属于某台机器的配置
     ├── machine.nix      扫描 hosts/* 自动生成 nixosConfigurations
     ├── Mech/

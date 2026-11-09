@@ -56,7 +56,6 @@ in
       fm.homeManager.file-manager
       fm.homeManager.fish
       fm.homeManager.helium
-      fm.homeManager.home
       fm.homeManager.input-method
       fm.homeManager.kitty
       fm.homeManager.mpv
@@ -66,6 +65,7 @@ in
       fm.homeManager.theme
       fm.homeManager.ttyper
       fm.homeManager.umbriel
+      fm.homeManager.user
       fm.homeManager.yazi
     ];
   };

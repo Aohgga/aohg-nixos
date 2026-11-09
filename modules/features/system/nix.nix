@@ -9,7 +9,7 @@
     #   agenix -e secrets/github-token.age
     age.secrets."github-token" = {
       file = ../../../secrets/github-token.age;
-      # root 读文件不受 owner 限制，这里让日常以 aohg 运行的 nix 也能读到。
+      # root 读文件不受 owner 限制，让日常以主用户运行的 nix 也能读到。
       owner = config.local.primaryUser.name;
       mode = "0400";
     };

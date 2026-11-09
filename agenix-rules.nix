@@ -4,7 +4,7 @@ let
   legion = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAICVTbaOdXj3Xwzo6uu7T0mGakjudr6vjlyZxZyKod7dd root@Legion";
 in
 {
-  "secrets/aohg-password.age".publicKeys = [ admin mech legion ];
   "secrets/github-token.age".publicKeys = [ admin mech legion ];
   "secrets/mihomo-config.age".publicKeys = [ admin mech legion ];
+  "secrets/user-password.age".publicKeys = [ admin mech legion ];
 }

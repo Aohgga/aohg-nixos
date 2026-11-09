@@ -24,8 +24,8 @@
       };
 
       config = {
-        age.secrets."aohg-password" = {
-          file = ../../../secrets/aohg-password.age;
+        age.secrets."user-password" = {
+          file = ../../../secrets/user-password.age;
         };
 
         users = {
@@ -34,12 +34,32 @@
             isNormalUser = true;
             uid = cfg.uid;
             extraGroups = cfg.extraGroups;
-            hashedPasswordFile = config.age.secrets."aohg-password".path;
+            hashedPasswordFile = config.age.secrets."user-password".path;
             useDefaultShell = true;
             autoSubUidGidRange = true;
           };
         };
         services.userborn.enable = true;
       };
+    };
+
+  flake.modules.homeManager.user =
+    { osConfig, ... }:
+    let
+      userName = osConfig.local.primaryUser.name;
+    in
+    {
+      home.username = userName;
+      home.homeDirectory = osConfig.users.users.${userName}.home;
+      home.stateVersion = osConfig.system.stateVersion;
+
+      home.sessionVariables = {
+        SYSTEMD_TINT_BACKGROUND = "0";
+      };
+
+      programs.man.generateCaches = false;
+
+      xdg.enable = true;
+      xdg.userDirs.enable = true;
     };
 }
