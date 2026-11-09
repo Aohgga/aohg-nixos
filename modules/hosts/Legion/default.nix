@@ -14,7 +14,6 @@
 
         self.modules.nixos.desktop
 
-        self.modules.nixos.jellyfin
         self.modules.nixos.localsend
         self.modules.nixos.steam
       ];
