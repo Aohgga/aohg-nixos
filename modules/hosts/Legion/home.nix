@@ -3,6 +3,7 @@
   flake.modules.homeManager.Legion = { config, ... }: {
     imports = [
       self.modules.homeManager.base
+      self.modules.homeManager.LegionFonts
       self.modules.homeManager.LegionUmbriel
       self.modules.homeManager.localsend
       self.modules.homeManager.zen-browser

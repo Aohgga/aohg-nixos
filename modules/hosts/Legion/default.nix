@@ -7,6 +7,7 @@
         self.modules.nixos.base
 
         self.modules.nixos.LegionBoot
+        self.modules.nixos.LegionFonts
         self.modules.nixos.LegionGraphics
         self.modules.nixos.LegionHardware
         self.modules.nixos.LegionImpermanence
