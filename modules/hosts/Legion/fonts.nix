@@ -1,52 +1,71 @@
 { lib, ... }:
 {
-  flake.modules.nixos.LegionFonts = {
-    fonts.fontconfig = {
-      antialias = false;
-      defaultFonts = lib.mkForce {
-        emoji = [ "Noto Color Emoji" ];
-        monospace = [
-          "UnifontExMono"
-          "Maple Mono NL NF CN"
+  flake.modules.nixos.LegionFonts =
+    { pkgs, ... }:
+    {
+      fonts.fontconfig = {
+        antialias = false;
+        confPackages = [
+          (pkgs.writeTextDir "etc/fonts/conf.d/99-legion-bitmap.conf" ''
+            <?xml version="1.0"?>
+            <!DOCTYPE fontconfig SYSTEM "urn:fontconfig:fonts.dtd">
+            <fontconfig>
+              <!-- 点阵只有 16px 一档：更大的字号会被放大、粗体会被合成，
+                   两者都比矢量更糊。把这两类请求换回 Noto 及其真粗体。 -->
+              <match target="pattern">
+                <test name="family" qual="any">
+                  <string>WenQuanYi WenQuanYi Bitmap Song</string>
+                </test>
+                <test name="pixelsize" compare="more">
+                  <double>16</double>
+                </test>
+                <edit name="family" mode="assign" binding="strong">
+                  <string>Noto Sans CJK SC</string>
+                </edit>
+                <edit name="antialias" mode="assign">
+                  <bool>true</bool>
+                </edit>
+              </match>
+              <match target="pattern">
+                <test name="family" qual="any">
+                  <string>WenQuanYi WenQuanYi Bitmap Song</string>
+                </test>
+                <test name="weight" compare="more_eq">
+                  <const>bold</const>
+                </test>
+                <edit name="family" mode="assign" binding="strong">
+                  <string>Noto Sans CJK SC</string>
+                </edit>
+                <edit name="antialias" mode="assign">
+                  <bool>true</bool>
+                </edit>
+              </match>
+            </fontconfig>
+          '')
         ];
-        sansSerif = [
-          "WenQuanYi WenQuanYi Bitmap Song"
-          "Noto Sans CJK SC"
-        ];
-        serif = [
-          "WenQuanYi WenQuanYi Bitmap Song"
-          "Noto Serif CJK SC"
-        ];
+        defaultFonts = lib.mkForce {
+          emoji = [ "Noto Color Emoji" ];
+          monospace = [ "Maple Mono NL NF CN" ];
+          sansSerif = [ "Noto Sans CJK SC" ];
+          serif = [ "Noto Serif CJK SC" ];
+        };
+        hinting = {
+          enable = lib.mkForce true;
+          style = "full";
+        };
+        subpixel.rgba = lib.mkForce "none";
       };
-      hinting = {
-        enable = lib.mkForce true;
-        style = "full";
-      };
-      # Steam 的 CEF 走 Skia，渲染不了 bitmap-only 字体；在 pattern 阶段
-      # 换成矢量字体，避免它拿到点阵后回退成缺字。
-      localConf = ''
-        <match target="pattern">
-          <test name="prgname" qual="any">
-            <string>steamwebhelper</string>
-          </test>
-          <edit name="family" mode="prepend" binding="strong">
-            <string>Noto Sans CJK SC</string>
-          </edit>
-        </match>
-      '';
-      subpixel.rgba = lib.mkForce "none";
     };
-  };
 
   flake.modules.homeManager.LegionFonts =
     { lib, ... }:
     {
       gtk.font = lib.mkForce {
         name = "WenQuanYi WenQuanYi Bitmap Song";
-        size = 11;
+        size = 12;
       };
       programs.kitty.font = lib.mkForce {
-        name = "UnifontExMono";
+        name = "Unifont";
         size = 12;
       };
     };
