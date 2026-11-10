@@ -1,10 +1,9 @@
 { lib, ... }:
 {
   flake.modules.nixos.MechFonts =
-    { pkgs, ... }:
+    { ... }:
     {
       fonts = {
-        packages = [ pkgs.inter ];
         fontconfig.defaultFonts = lib.mkForce {
           emoji = [ "Noto Color Emoji" ];
           monospace = [ "Maple Mono NL NF CN" ];

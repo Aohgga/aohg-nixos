@@ -4,7 +4,6 @@
     { pkgs, ... }:
     {
       fonts = {
-        packages = [ pkgs.inter ];
         fontconfig = {
           antialias = true;
           confPackages = [

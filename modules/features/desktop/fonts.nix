@@ -3,6 +3,7 @@
     fonts = {
       enableDefaultPackages = false;
       packages = with pkgs; [
+        inter
         maple-mono.NL-NF-CN-unhinted
         nerd-fonts.zed-mono
         noto-fonts
