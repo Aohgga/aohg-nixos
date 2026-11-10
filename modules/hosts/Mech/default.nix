@@ -8,6 +8,7 @@
 
         self.modules.nixos.MechBoot
         self.modules.nixos.MechFilesystem
+        self.modules.nixos.MechFonts
         self.modules.nixos.MechGraphics
         self.modules.nixos.MechHardware
         self.modules.nixos.MechImpermanence

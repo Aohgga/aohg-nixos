@@ -66,22 +66,13 @@
                     <string>Noto Sans CJK SC</string>
                   </edit>
                 </match>
-                <!-- 中文 locale 下 charset 比较会把苹方压到最前，强制定序：
-                     英文落 Inter，中文落点阵，苹方只做后备 -->
+                <!-- 非点阵字体只做后备：点阵压到族列表首位，中英文都先用它 -->
                 <match target="pattern">
                   <test name="family" qual="any">
                     <string>sans</string>
                   </test>
                   <edit name="family" mode="prepend_first" binding="strong">
                     <string>WenQuanYi WenQuanYi Bitmap Song</string>
-                  </edit>
-                </match>
-                <match target="pattern">
-                  <test name="family" qual="any">
-                    <string>sans</string>
-                  </test>
-                  <edit name="family" mode="prepend_first" binding="strong">
-                    <string>Inter</string>
                   </edit>
                 </match>
                 <!-- 点阵只有 16px 一档，更大的字号会被放大成模糊点阵 -->
@@ -114,8 +105,8 @@
             emoji = [ "Noto Color Emoji" ];
             monospace = [ "Maple Mono NL NF CN" ];
             sansSerif = [
-              "Inter"
               "WenQuanYi WenQuanYi Bitmap Song"
+              "Inter"
               "PingFang SC"
               "Noto Sans CJK SC"
             ];
@@ -138,7 +129,7 @@
     { lib, pkgs, ... }:
     {
       gtk.font = lib.mkForce {
-        name = "Inter";
+        name = "WenQuanYi WenQuanYi Bitmap Song";
         size = 12;
       };
       programs.kitty.font = lib.mkForce {
