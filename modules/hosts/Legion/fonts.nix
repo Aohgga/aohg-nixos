@@ -3,90 +3,134 @@
   flake.modules.nixos.LegionFonts =
     { pkgs, ... }:
     {
-      fonts.fontconfig = {
-        antialias = false;
-        confPackages = [
-          (pkgs.writeTextDir "etc/fonts/conf.d/99-legion-bitmap.conf" ''
-            <?xml version="1.0"?>
-            <!DOCTYPE fontconfig SYSTEM "urn:fontconfig:fonts.dtd">
-            <fontconfig>
-              <!-- Chromium/CEF 的 Skia 拒绝 bitmap-only 字体。这些进程只能看
-                   矢量字体，否则会渲染成缺字。 -->
-              <match target="pattern">
-                <test name="prgname" qual="any">
-                  <string>helium</string>
-                </test>
-                <edit name="family" mode="assign" binding="strong">
-                  <string>Noto Sans CJK SC</string>
-                </edit>
-              </match>
-              <match target="pattern">
-                <test name="prgname" qual="any">
-                  <string>steamwebhelper</string>
-                </test>
-                <edit name="family" mode="assign" binding="strong">
-                  <string>Noto Sans CJK SC</string>
-                </edit>
-              </match>
-              <!-- alias prefer 会被 charset 比较压过，这里直接压到族列表首位 -->
-              <match target="pattern">
-                <test name="family" qual="any">
-                  <string>sans-serif</string>
-                </test>
-                <edit name="family" mode="prepend" binding="strong">
-                  <string>WenQuanYi WenQuanYi Bitmap Song</string>
-                </edit>
-              </match>
-              <!-- 点阵只有 16px 一档，更大的字号会被放大成模糊点阵。
-                   GTK 用 pixelsize 请求，Qt 用 pt 的 size 请求，两条都要。 -->
-              <match target="pattern">
-                <test name="family" qual="any">
-                  <string>WenQuanYi WenQuanYi Bitmap Song</string>
-                </test>
-                <test name="pixelsize" compare="more">
-                  <double>19.5</double>
-                </test>
-                <edit name="family" mode="assign" binding="strong">
-                  <string>Noto Sans CJK SC</string>
-                </edit>
-                <edit name="antialias" mode="assign">
-                  <bool>true</bool>
-                </edit>
-              </match>
-              <match target="pattern">
-                <test name="family" qual="any">
-                  <string>WenQuanYi WenQuanYi Bitmap Song</string>
-                </test>
-                <test name="size" compare="more">
-                  <double>14.6</double>
-                </test>
-                <edit name="family" mode="assign" binding="strong">
-                  <string>Noto Sans CJK SC</string>
-                </edit>
-                <edit name="antialias" mode="assign">
-                  <bool>true</bool>
-                </edit>
-              </match>
-            </fontconfig>
-          '')
-        ];
-        defaultFonts = lib.mkForce {
-          emoji = [ "Noto Color Emoji" ];
-          monospace = [ "Maple Mono NL NF CN" ];
-          sansSerif = [
-            "WenQuanYi WenQuanYi Bitmap Song"
-            "Noto Sans CJK SC"
+      fonts = {
+        packages = [ pkgs.inter ];
+        fontconfig = {
+          antialias = true;
+          confPackages = [
+            (pkgs.writeTextDir "etc/fonts/conf.d/99-legion-bitmap.conf" ''
+              <?xml version="1.0"?>
+              <!DOCTYPE fontconfig SYSTEM "urn:fontconfig:fonts.dtd">
+              <fontconfig>
+                <!-- 点阵字体保持 1:1 无抗锯齿；其余字体用全局抗锯齿 -->
+                <match target="font">
+                  <test name="family" qual="any">
+                    <string>WenQuanYi WenQuanYi Bitmap Song</string>
+                  </test>
+                  <edit name="antialias" mode="assign">
+                    <bool>false</bool>
+                  </edit>
+                  <edit name="hinting" mode="assign">
+                    <bool>true</bool>
+                  </edit>
+                  <edit name="embeddedbitmap" mode="assign">
+                    <bool>true</bool>
+                  </edit>
+                </match>
+                <match target="font">
+                  <test name="family" qual="any">
+                    <string>UnifontExMono</string>
+                  </test>
+                  <edit name="antialias" mode="assign">
+                    <bool>false</bool>
+                  </edit>
+                  <edit name="hinting" mode="assign">
+                    <bool>true</bool>
+                  </edit>
+                </match>
+                <match target="font">
+                  <test name="family" qual="any">
+                    <string>Unifont</string>
+                  </test>
+                  <edit name="antialias" mode="assign">
+                    <bool>false</bool>
+                  </edit>
+                  <edit name="hinting" mode="assign">
+                    <bool>true</bool>
+                  </edit>
+                </match>
+                <!-- Chromium/CEF 的 Skia 拒绝 bitmap-only 字体 -->
+                <match target="pattern">
+                  <test name="prgname" qual="any">
+                    <string>helium</string>
+                  </test>
+                  <edit name="family" mode="assign_replace" binding="strong">
+                    <string>Noto Sans CJK SC</string>
+                  </edit>
+                </match>
+                <match target="pattern">
+                  <test name="prgname" qual="any">
+                    <string>steamwebhelper</string>
+                  </test>
+                  <edit name="family" mode="assign_replace" binding="strong">
+                    <string>Noto Sans CJK SC</string>
+                  </edit>
+                </match>
+                <!-- 中文 locale 下 charset 比较会把苹方压到最前，强制定序：
+                     英文落 Inter，中文落点阵，苹方只做后备 -->
+                <match target="pattern">
+                  <test name="family" qual="any">
+                    <string>sans</string>
+                  </test>
+                  <edit name="family" mode="prepend_first" binding="strong">
+                    <string>WenQuanYi WenQuanYi Bitmap Song</string>
+                  </edit>
+                </match>
+                <match target="pattern">
+                  <test name="family" qual="any">
+                    <string>sans</string>
+                  </test>
+                  <edit name="family" mode="prepend_first" binding="strong">
+                    <string>Inter</string>
+                  </edit>
+                </match>
+                <!-- 点阵只有 16px 一档，更大的字号会被放大成模糊点阵 -->
+                <match target="pattern">
+                  <test name="family" qual="any">
+                    <string>WenQuanYi WenQuanYi Bitmap Song</string>
+                  </test>
+                  <test name="pixelsize" compare="more">
+                    <double>19.5</double>
+                  </test>
+                  <edit name="family" mode="assign_replace" binding="strong">
+                    <string>Noto Sans CJK SC</string>
+                  </edit>
+                </match>
+                <match target="pattern">
+                  <test name="family" qual="any">
+                    <string>WenQuanYi WenQuanYi Bitmap Song</string>
+                  </test>
+                  <test name="size" compare="more">
+                    <double>14.6</double>
+                  </test>
+                  <edit name="family" mode="assign_replace" binding="strong">
+                    <string>Noto Sans CJK SC</string>
+                  </edit>
+                </match>
+              </fontconfig>
+            '')
           ];
-          serif = [
-            "WenQuanYi WenQuanYi Bitmap Song"
-            "Noto Serif CJK SC"
-          ];
+          defaultFonts = lib.mkForce {
+            emoji = [ "Noto Color Emoji" ];
+            monospace = [ "Maple Mono NL NF CN" ];
+            sansSerif = [
+              "Inter"
+              "WenQuanYi WenQuanYi Bitmap Song"
+              "PingFang SC"
+              "Noto Sans CJK SC"
+            ];
+            serif = [
+              "WenQuanYi WenQuanYi Bitmap Song"
+              "PingFang SC"
+              "Noto Serif CJK SC"
+            ];
+          };
+          hinting = {
+            enable = lib.mkForce true;
+            style = "full";
+          };
+          subpixel.rgba = lib.mkForce "none";
         };
-        hinting = {
-          enable = lib.mkForce true;
-          style = "full";
-        };
-        subpixel.rgba = lib.mkForce "none";
       };
     };
 
@@ -94,7 +138,7 @@
     { lib, pkgs, ... }:
     {
       gtk.font = lib.mkForce {
-        name = "WenQuanYi WenQuanYi Bitmap Song";
+        name = "Inter";
         size = 12;
       };
       programs.kitty.font = lib.mkForce {

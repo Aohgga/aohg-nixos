@@ -27,7 +27,15 @@
         };
       })
       {
+        appearance = {
+          corner_radius = 1;
+          title_bar = {
+            font = "WenQuanYi WenQuanYi Bitmap Song 12";
+            height = 34;
+          };
+        };
         general.autostart = [ ];
+        layout.mode = "scrolling";
       };
   };
 }
