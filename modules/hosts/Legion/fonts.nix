@@ -37,13 +37,28 @@
                   <string>WenQuanYi WenQuanYi Bitmap Song</string>
                 </edit>
               </match>
-              <!-- 点阵只有 16px 一档，更大的字号会被放大成模糊点阵 -->
+              <!-- 点阵只有 16px 一档，更大的字号会被放大成模糊点阵。
+                   GTK 用 pixelsize 请求，Qt 用 pt 的 size 请求，两条都要。 -->
               <match target="pattern">
                 <test name="family" qual="any">
                   <string>WenQuanYi WenQuanYi Bitmap Song</string>
                 </test>
                 <test name="pixelsize" compare="more">
                   <double>16</double>
+                </test>
+                <edit name="family" mode="assign" binding="strong">
+                  <string>Noto Sans CJK SC</string>
+                </edit>
+                <edit name="antialias" mode="assign">
+                  <bool>true</bool>
+                </edit>
+              </match>
+              <match target="pattern">
+                <test name="family" qual="any">
+                  <string>WenQuanYi WenQuanYi Bitmap Song</string>
+                </test>
+                <test name="size" compare="more">
+                  <double>12</double>
                 </test>
                 <edit name="family" mode="assign" binding="strong">
                   <string>Noto Sans CJK SC</string>
