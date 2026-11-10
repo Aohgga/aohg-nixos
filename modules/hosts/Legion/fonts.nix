@@ -44,7 +44,7 @@
                   <string>WenQuanYi WenQuanYi Bitmap Song</string>
                 </test>
                 <test name="pixelsize" compare="more">
-                  <double>16</double>
+                  <double>24</double>
                 </test>
                 <edit name="family" mode="assign" binding="strong">
                   <string>Noto Sans CJK SC</string>
@@ -58,7 +58,7 @@
                   <string>WenQuanYi WenQuanYi Bitmap Song</string>
                 </test>
                 <test name="size" compare="more">
-                  <double>12</double>
+                  <double>18</double>
                 </test>
                 <edit name="family" mode="assign" binding="strong">
                   <string>Noto Sans CJK SC</string>
