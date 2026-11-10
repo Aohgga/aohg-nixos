@@ -27,11 +27,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1794232117,
-        "narHash": "sha256-gW3JUfSqwYyEtJCDxC6WwZkZNbfLzfpGyowMWYgem+8=",
+        "lastModified": 1794296852,
+        "narHash": "sha256-drlbd783PH+BoZVjk6TH3LStK16OG+wmumEBGnhIL0M=",
         "owner": "Aohgga",
         "repo": "aohg-pkgs",
-        "rev": "c49839ddbb4d1ba16a620d853fcc03b2dc3b0ad0",
+        "rev": "a964263f17c7644e6f308d77ce91ed081f59ce8e",
         "type": "github"
       },
       "original": {

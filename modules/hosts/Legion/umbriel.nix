@@ -35,6 +35,10 @@
           };
         };
         general.autostart = [ ];
+        input.cursor = {
+          size = 24;
+          theme = "miku-cursor-linux";
+        };
         layout.mode = "scrolling";
       };
   };
