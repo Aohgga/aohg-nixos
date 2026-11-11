@@ -13,6 +13,7 @@
       btop
       fastfetch
       fetch
+      glow
       jq
       nvtopPackages.full
       qbittorrent-enhanced
