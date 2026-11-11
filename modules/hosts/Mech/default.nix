@@ -12,6 +12,7 @@
         self.modules.nixos.MechGraphics
         self.modules.nixos.MechHardware
         self.modules.nixos.MechImpermanence
+        self.modules.nixos.MechReimsVgpu
 
         self.modules.nixos.desktop
 

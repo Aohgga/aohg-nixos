@@ -4,6 +4,7 @@
     imports = [
       self.modules.homeManager.base
       self.modules.homeManager.helium
+      self.modules.homeManager.MechReimsVgpu
       self.modules.homeManager.MechUmbriel
     ];
   };
