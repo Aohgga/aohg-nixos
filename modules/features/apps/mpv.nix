@@ -18,16 +18,21 @@
         profile = "gpu-hq";
         save-position-on-quit = true;
         sub-auto = "fuzzy";
+        # umbriel 的 wp_color_manager_v1 对重复创建的 surface 会断开客户端，
+        # 默认 auto 会在 Wayland 上启用色彩管理，播放时被踢出。
+        target-colorspace-hint = "no";
         vo = "gpu-next";
         volume-max = 200;
       };
       enable = true;
-      scriptOpts.material-osc = {
-        accent_color = "\"#D0BCFF\"";
+      scriptOpts.uosc = {
+        languages = "slang,zh-hans";
+        scale = "1.3";
+        top_bar_controls = "left";
       };
       scripts = with pkgs; [
         bilibili-mpv
-        material-osc
+        mpvScripts.uosc
       ];
     };
     programs.yt-dlp.enable = true;
