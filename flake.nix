@@ -32,6 +32,10 @@
     nix-flatpak.url = "github:gmodena/nix-flatpak";
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
     noctalia.url = "github:noctalia-dev/noctalia/cachix";
+    noctalia-greeter = {
+      url = "github:noctalia-dev/noctalia-greeter";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
     umbriel.url = "github:noctalia-dev/umbriel/cachix";
     zen-browser = {
       url = "github:0xc000022070/zen-browser-flake";

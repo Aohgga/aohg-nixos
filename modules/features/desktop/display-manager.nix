@@ -1,10 +1,18 @@
+{ inputs, ... }:
 {
+  flake-file.inputs.noctalia-greeter = {
+    url = "github:noctalia-dev/noctalia-greeter";
+    inputs.nixpkgs.follows = "nixpkgs";
+  };
+
   flake.modules.nixos.display-manager = { config, lib, ... }: {
+    imports = [ inputs.noctalia-greeter.nixosModules.default ];
+
     services.displayManager.noctalia-greeter = {
       enable = true;
-      passwordlessSyncUsers = [ config.local.primaryUser.name ];
+      passwordless-sync-users = [ config.local.primaryUser.name ];
       settings = {
-        session.default = "Umbriel";
+        session.default = "umbriel";
         user.default = config.local.primaryUser.name;
       };
     };

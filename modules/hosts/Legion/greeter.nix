@@ -3,13 +3,13 @@
     { pkgs, ... }:
     {
       services.displayManager.noctalia-greeter = {
-        cursorTheme = {
-          package = pkgs.miku-cursors;
-          name = "miku-cursor-linux";
-        };
         settings = {
-          cursor.size = 24;
-          output.refresh_rate = "DP-1:60; eDP-1:60";
+          cursor = {
+            theme = "miku-cursor-linux";
+            size = 24;
+            path = pkgs.miku-cursors;
+          };
+          output.refresh_rate = "DP-1:59.997; eDP-1:60.164";
         };
       };
     };

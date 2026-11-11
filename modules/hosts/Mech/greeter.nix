@@ -3,13 +3,13 @@
     { pkgs, ... }:
     {
       services.displayManager.noctalia-greeter = {
-        cursorTheme = {
-          package = pkgs.bibata-cursors;
-          name = "Bibata-Modern-Ice";
-        };
         settings = {
-          cursor.size = 20;
-          output.refresh_rate = "DP-1:120; eDP-1:165";
+          cursor = {
+            theme = "Bibata-Modern-Ice";
+            size = 20;
+            path = pkgs.bibata-cursors;
+          };
+          output.refresh_rate = "DP-1:119.880; eDP-1:165.003";
         };
       };
     };
