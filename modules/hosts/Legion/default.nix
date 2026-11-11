@@ -9,6 +9,7 @@
         self.modules.nixos.LegionBoot
         self.modules.nixos.LegionFonts
         self.modules.nixos.LegionGraphics
+        self.modules.nixos.LegionGreeter
         self.modules.nixos.LegionHardware
         self.modules.nixos.LegionImpermanence
         self.modules.nixos.LegionJellyfin
