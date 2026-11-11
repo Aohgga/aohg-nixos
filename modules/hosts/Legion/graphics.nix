@@ -1,5 +1,9 @@
 {
   flake.modules.nixos.LegionGraphics = { config, pkgs, ... }: {
+    # services.xserver.enable = false 时 nixpkgs 不会把 nvidia 模块加进
+    # boot.kernelModules，nvidia-drm 只能等 udev 冷插拔，greetd 会抢在 GPU
+    # 就绪前启动自动登录。显式在 early boot 加载，保证设备已存在。
+    boot.kernelModules = [ "nvidia" "nvidia_modeset" "nvidia_drm" "nvidia_uvm" ];
     # nvidia-vaapi-driver 由 hardware.nvidia.videoAcceleration 默认提供
     hardware.graphics.extraPackages = [ pkgs.intel-media-driver ];
     hardware.nvidia = {
