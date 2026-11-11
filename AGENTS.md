@@ -12,9 +12,10 @@
 - 组合模块依靠 `flake.modules`：主机和聚合器用 `imports` 引用，不要直接 `import ./文件`。
 - `modules/flake-file.nix` 引入 `flake-file` 的 flake 模块并声明基础 inputs
   （flake-file、flake-parts、import-tree、nixpkgs）。
-- `modules/flake-parts.nix` 负责把 flake-parts 和 home-manager 接入 flake：引入
-  flake-parts 的 `flakeModules.modules`（提供 `flake.modules` 输出）和 home-manager
-  的 flake 模块；它本身不写系统配置。
+- `modules/flake-parts.nix` 引入 flake-parts 的 `flakeModules.modules`（提供
+  `flake.modules` 输出）；它本身不写系统配置。
+- home-manager 的 NixOS 模块由 `features/system/home-manager.nix` 以
+  `nixosModules.default` 引入，不使用它的 flake 模块。
 - `flake.modules` 来自 flake-parts 官方 extras（`flakeModules.modules`）；
   `nix flake check` 报 `unknown flake output 'modules'` 属于正常提示。
 
@@ -46,7 +47,7 @@ include/drop-in、或 config 与 state 分离）：
 - 有分层机制：Nix 写底层默认值，用户在应用里改顶层，两边不覆盖。noctalia 是范例：
   Nix 写 `~/.config/noctalia/config.toml` 作为默认，设置界面写
   `~/.local/state/noctalia/settings.toml` 作为覆盖。
-- 无分层机制、有图形设置界面（fcitx5、Steam、浏览器、qBittorrent、zed、denial 等）：
+- 无分层机制、有图形设置界面（fcitx5、Steam、浏览器、qBittorrent、zed 等）：
   不要用 Nix 锁住它的设置文件，整块让渡给运行时。
 - 无分层机制、无图形界面（mpv、kitty、fish、yazi、swayimg、umbriel、mihomo 等）：
   把设置写进 Nix，只写与上游默认值不同的部分；mihomo 的配置在
@@ -62,6 +63,8 @@ include/drop-in、或 config 与 state 分离）：
 - 应用配置搬进 Nix 后，把它注册的持久化条目从应用模块里删掉；应用仍然需要写入
   运行数据的目录要保留（比如 yazi 仍保留 `.config/yazi` 和 `.local/state/yazi`）。
   只读的 store 链接会让图形界面保存失败，如果 GUI 应用的配置是 store 链接，就说明有 bug。
+- 包来源按机器分：Mech 优先 flatpak 等运行时，Legion 空间小、避免 flatpak。
+  flatpak 版应用（如 localsend）在 NixOS 侧只保留端口/服务，用户级包交给 flatpak 管理。
 
 ## 持久化注册
 

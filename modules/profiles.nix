@@ -31,7 +31,6 @@ in
       fm.nixos.dsh
       fm.nixos.fstrim
       fm.nixos.journald
-      fm.nixos.wallpaper
 
       fm.nixos.appimage
 
@@ -41,7 +40,6 @@ in
 
   flake.modules.nixos.desktop = {
     imports = [
-      fm.nixos.denial
       fm.nixos.display-manager
       fm.nixos.input-method
       fm.nixos.theme
