@@ -15,6 +15,7 @@
                 <match target="font">
                   <test name="family" qual="any">
                     <string>WenQuanYi WenQuanYi Bitmap Song</string>
+                    <string>WenQuanYi Bitmap Song 12pt Mono</string>
                   </test>
                   <edit name="antialias" mode="assign">
                     <bool>false</bool>
@@ -102,7 +103,12 @@
           ];
           defaultFonts = lib.mkForce {
             emoji = [ "Noto Color Emoji" ];
-            monospace = [ "Maple Mono NL NF CN" ];
+            monospace = [
+              "Terminess Nerd Font"
+              "WenQuanYi Bitmap Song 12pt Mono"
+              "UnifontExMono"
+              "SimSun"
+            ];
             sansSerif = [
               "WenQuanYi WenQuanYi Bitmap Song"
               "Inter"
@@ -136,6 +142,5 @@
         package = pkgs.nerd-fonts.terminess-ttf;
         size = 12;
       };
-      programs.kitty.settings.symbol_map = "U+3000-U+9FFF,U+F900-U+FAFF,U+FF00-U+FFEF UnifontExMono";
     };
 }
