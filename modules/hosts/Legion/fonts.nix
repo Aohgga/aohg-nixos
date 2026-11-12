@@ -13,9 +13,8 @@
               <fontconfig>
                 <!-- 点阵字体保持 1:1 无抗锯齿；其余字体用全局抗锯齿 -->
                 <match target="font">
-                  <test name="family" qual="any">
-                    <string>WenQuanYi WenQuanYi Bitmap Song</string>
-                    <string>WenQuanYi Bitmap Song 12pt Mono</string>
+                  <test name="family" compare="contains">
+                    <string>WenQuanYi Bitmap Song</string>
                   </test>
                   <edit name="antialias" mode="assign">
                     <bool>false</bool>
@@ -75,10 +74,26 @@
                     <string>WenQuanYi WenQuanYi Bitmap Song</string>
                   </edit>
                 </match>
+                <!-- 只把 16px 及以上的字号吸附到 12pt（16px）点阵，不做放大；
+                     小字保持原样，同时指定 pixelsize 才能选中 12pt 的 OTB -->
+                <match target="pattern">
+                  <test name="family" compare="eq">
+                    <string>WenQuanYi WenQuanYi Bitmap Song</string>
+                  </test>
+                  <test name="size" compare="more_eq">
+                    <double>12</double>
+                  </test>
+                  <edit name="size" mode="assign">
+                    <double>12</double>
+                  </edit>
+                  <edit name="pixelsize" mode="assign">
+                    <double>16</double>
+                  </edit>
+                </match>
                 <!-- 点阵只有 16px 一档，更大的字号会被放大成模糊点阵 -->
                 <match target="pattern">
-                  <test name="family" qual="any">
-                    <string>WenQuanYi WenQuanYi Bitmap Song</string>
+                  <test name="family" compare="contains">
+                    <string>WenQuanYi Bitmap Song</string>
                   </test>
                   <test name="pixelsize" compare="more">
                     <double>19.5</double>
@@ -88,8 +103,8 @@
                   </edit>
                 </match>
                 <match target="pattern">
-                  <test name="family" qual="any">
-                    <string>WenQuanYi WenQuanYi Bitmap Song</string>
+                  <test name="family" compare="contains">
+                    <string>WenQuanYi Bitmap Song</string>
                   </test>
                   <test name="size" compare="more">
                     <double>14.6</double>
