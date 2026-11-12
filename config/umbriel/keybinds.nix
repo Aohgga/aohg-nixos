@@ -119,7 +119,7 @@
     "Mod+Shift+Comma" = "column-move-to-output-left";
     "Mod+Shift+Down" = "window-move-down";
     "Mod+Shift+E" = {
-      action = "spawn dolphin";
+      action = "spawn strata";
       repeat = false;
     };
     "Mod+Shift+End" = "column-move-to-last";

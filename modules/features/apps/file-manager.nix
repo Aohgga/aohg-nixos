@@ -1,27 +1,24 @@
+{ inputs, ... }:
 {
-  flake.modules.homeManager.file-manager = { osConfig, pkgs, ... }: {
-    home.persistence."${osConfig.local.persistence.homeRoot}" = {
-      directories = [
-        ".local/share/Trash"
-        ".local/share/ark"
-        ".local/share/dolphin"
-      ];
-      files = [
-        { file = ".config/arkrc"; method = "symlink"; }
-        { file = ".config/dolphinrc"; method = "symlink"; }
-        { file = ".config/kiorc"; method = "symlink"; }
-        { file = ".config/kservicemenurc"; method = "symlink"; }
-        { file = ".config/trashrc"; method = "symlink"; }
-        { file = ".local/share/user-places.xbel"; method = "symlink"; }
-        { file = ".local/state/dolphinstaterc"; method = "symlink"; }
-      ];
-    };
-    home.packages = with pkgs.kdePackages; [
-      ark
-      dolphin
-      dolphin-plugins
-      kio-extras
-      kio-fuse
-    ];
+  flake-file.inputs.strata = {
+    url = "github:lgse/strata";
+    inputs.nixpkgs.follows = "nixpkgs";
   };
+
+  flake.modules.nixos.file-manager =
+    { pkgs, ... }:
+    let
+      strata = inputs.strata.packages.${pkgs.stdenv.hostPlatform.system}.default;
+    in
+    {
+      environment.systemPackages = [ strata ];
+      local.persistence.home.directories = [
+        ".config/strata"
+        ".local/share/strata"
+        ".local/share/Trash"
+        ".local/state/strata"
+      ];
+      services.dbus.packages = [ strata.fileManagerService ];
+      xdg.portal.extraPortals = [ strata.fileChooserPortal ];
+    };
 }

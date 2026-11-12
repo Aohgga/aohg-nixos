@@ -33,7 +33,7 @@ in
       fm.nixos.journald
 
       fm.nixos.appimage
-      fm.nixos.strata
+      fm.nixos.file-manager
 
       fm.nixos.home-manager
     ];
@@ -52,7 +52,6 @@ in
     imports = [
       fm.homeManager.apps
       fm.homeManager.editor
-      fm.homeManager.file-manager
       fm.homeManager.fish
       fm.homeManager.input-method
       fm.homeManager.kitty
