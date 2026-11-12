@@ -10,7 +10,7 @@
     services.mihomo = {
       enable = true;
       configFile = config.age.secrets."mihomo-config".path;
-      tunMode = true;
+      tunMode = false;
     };
 
     # TUN 的回包源地址来自 fake-ip 段，strict rpfilter 会直接丢弃

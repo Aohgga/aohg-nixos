@@ -1,5 +1,5 @@
 {
-  flake.modules.nixos.nix = { config, pkgs, ... }: {
+  flake.modules.nixos.nix = { config, ... }: {
     # GitHub API token（PAT）。
     # 只有解析 branch/tag 时才会调用 api.github.com；匿名配额仅 60 次/小时，
     # 而且本机走代理共享出口 IP，很容易被打满。带 token 后是 5000 次/小时。
