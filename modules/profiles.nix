@@ -33,6 +33,7 @@ in
       fm.nixos.journald
 
       fm.nixos.appimage
+      fm.nixos.strata
 
       fm.nixos.home-manager
     ];

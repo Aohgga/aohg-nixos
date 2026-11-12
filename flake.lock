@@ -388,8 +388,29 @@
         "nixpkgs": "nixpkgs_3",
         "noctalia": "noctalia",
         "noctalia-greeter": "noctalia-greeter",
+        "strata": "strata",
         "umbriel": "umbriel",
         "zen-browser": "zen-browser"
+      }
+    },
+    "strata": {
+      "inputs": {
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1794448036,
+        "narHash": "sha256-I83tJC9M/WlbwMeJWT/VVsEsNPq0814mez4rw7ivUfs=",
+        "owner": "lgse",
+        "repo": "strata",
+        "rev": "55c20539ae2232aa7a94d660c882241b4ec99a34",
+        "type": "github"
+      },
+      "original": {
+        "owner": "lgse",
+        "repo": "strata",
+        "type": "github"
       }
     },
     "systems": {
