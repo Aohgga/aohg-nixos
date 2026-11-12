@@ -74,65 +74,14 @@
                     <string>WenQuanYi WenQuanYi Bitmap Song</string>
                   </edit>
                 </match>
-                <!-- 字号吸附到点阵原生档位（12/13/15/16px），不做缩放；
-                     同时指定 pixelsize，fontconfig 才会选中对应的 OTB 文件 -->
+                <!-- 只把 16px 及以上的字号吸附到 12pt（16px）点阵，不做放大；
+                     小字保持原样，同时指定 pixelsize 才能选中 12pt 的 OTB -->
                 <match target="pattern">
                   <test name="family" compare="eq">
                     <string>WenQuanYi WenQuanYi Bitmap Song</string>
                   </test>
-                  <test name="size" compare="less">
-                    <double>9.375</double>
-                  </test>
-                  <edit name="family" mode="assign_replace" binding="strong">
-                    <string>WenQuanYi Bitmap Song</string>
-                  </edit>
-                  <edit name="size" mode="assign">
-                    <double>9</double>
-                  </edit>
-                  <edit name="pixelsize" mode="assign">
+                  <test name="size" compare="more_eq">
                     <double>12</double>
-                  </edit>
-                </match>
-                <match target="pattern">
-                  <test name="family" compare="eq">
-                    <string>WenQuanYi WenQuanYi Bitmap Song</string>
-                  </test>
-                  <test name="size" compare="more_eq">
-                    <double>9.375</double>
-                  </test>
-                  <test name="size" compare="less">
-                    <double>10.5</double>
-                  </test>
-                  <edit name="size" mode="assign">
-                    <double>9.75</double>
-                  </edit>
-                  <edit name="pixelsize" mode="assign">
-                    <double>13</double>
-                  </edit>
-                </match>
-                <match target="pattern">
-                  <test name="family" compare="eq">
-                    <string>WenQuanYi WenQuanYi Bitmap Song</string>
-                  </test>
-                  <test name="size" compare="more_eq">
-                    <double>10.5</double>
-                  </test>
-                  <test name="size" compare="less">
-                    <double>11.625</double>
-                  </test>
-                  <edit name="size" mode="assign">
-                    <double>11.25</double>
-                  </edit>
-                  <edit name="pixelsize" mode="assign">
-                    <double>15</double>
-                  </edit>
-                </match>
-                <match target="pattern">
-                  <test name="family" compare="eq">
-                    <string>WenQuanYi WenQuanYi Bitmap Song</string>
-                  </test>
-                  <test name="size" compare="more_eq">
-                    <double>11.625</double>
                   </test>
                   <edit name="size" mode="assign">
                     <double>12</double>
