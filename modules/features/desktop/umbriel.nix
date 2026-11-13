@@ -53,6 +53,36 @@
     xdg.configFile."noctalia/config.toml".text = ''
       [theme]
       source = "wallpaper"
+      [theme.templates.user.umbriel_gtk4]
+      input_path  = "$XDG_CACHE_HOME/noctalia/umbriel-gtk4/gtk4-input.css"
+      output_path = "$XDG_CONFIG_HOME/gtk-4.0/umbriel.css"
+      pre_hook    = "bash \"$HOME/.config/noctalia/templates/umbriel-gtk4/input.sh\" > /dev/null"
+      post_hook   = "bash \"$HOME/.config/noctalia/templates/umbriel-gtk4/apply.sh\""
+
+      [theme.templates.user.umbriel_gtk3]
+      input_path  = "$XDG_CACHE_HOME/noctalia/umbriel-gtk4/gtk3-buttons-input.css"
+      output_path = "$XDG_CONFIG_HOME/gtk-3.0/umbriel-buttons.css"
+      pre_hook    = "bash \"$HOME/.config/noctalia/templates/umbriel-gtk4/input3.sh\" > /dev/null"
+      post_hook   = "bash \"$HOME/.config/noctalia/templates/umbriel-gtk4/apply-gtk3.sh\""
+
+      [theme.templates.user.umbriel_firefox_buttons]
+      input_path  = "$XDG_CACHE_HOME/noctalia/umbriel-gtk4/firefox-buttons-input.css"
+      output_path = "$XDG_CACHE_HOME/noctalia/umbriel-gtk4/firefox-buttons.css"
+      pre_hook    = "bash \"$HOME/.config/noctalia/templates/umbriel-gtk4/firefox-input.sh\" > /dev/null"
+      post_hook   = "bash \"$HOME/.config/noctalia/templates/umbriel-gtk4/firefox-apply.sh\""
+
+      [theme.templates.user.fcitx5_mellow_conf]
+      input_path  = "~/.config/noctalia/templates/fcitx5-mellow/theme.conf"
+      output_path = "$XDG_DATA_HOME/fcitx5/themes/noctalia-mellow/theme.conf"
+      post_hook   = "bash \"$HOME/.config/noctalia/templates/fcitx5-mellow/apply.sh\""
+
+      [theme.templates.user.fcitx5_mellow_panel]
+      input_path  = "~/.config/noctalia/templates/fcitx5-mellow/panel.svg"
+      output_path = "$XDG_DATA_HOME/fcitx5/themes/noctalia-mellow/panel.svg"
+
+      [theme.templates.user.fcitx5_mellow_highlight]
+      input_path  = "~/.config/noctalia/templates/fcitx5-mellow/highlight.svg"
+      output_path = "$XDG_DATA_HOME/fcitx5/themes/noctalia-mellow/highlight.svg"
     '';
 
     xdg.configFile."xdg-desktop-portal/umbriel-portals.conf".text = ''

@@ -5,7 +5,6 @@
       type = "fcitx5";
       fcitx5 = {
         addons = with pkgs; [
-          fcitx5-mellow-themes
           (fcitx5-rime.override {
             rimeDataPkgs = [ rime-ice ];
           })

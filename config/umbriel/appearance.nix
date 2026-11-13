@@ -38,18 +38,24 @@
       visible = true;
     };
     title_bar = {
-      button_background = true;
-      button_corner_radius = -1;
-      button_glyph = "never";
+      mode = "negotiated";
+      height = 32;
+      font = "苹方-简 中黑体 10";
+      title_align = "center";
       button_position = "left";
       buttons = [
         "minimize"
         "maximize"
         "close"
       ];
-      font = "苹方-简 中黑体 10";
-      height = 28;
-      mode = "negotiated";
+      button_size = -1;
+      button_gap = 8;
+      button_padding = -1;
+      button_corner_radius = -1;
+      button_glyph = "never";
+      button_glyph_size = -1;
+      button_glyph_stroke = -1;
+      button_background = true;
     };
   };
   colors = {
