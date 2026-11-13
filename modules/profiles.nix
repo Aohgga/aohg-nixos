@@ -52,6 +52,7 @@ in
     imports = [
       fm.homeManager.apps
       fm.homeManager.editor
+      fm.homeManager.file-manager
       fm.homeManager.fish
       fm.homeManager.input-method
       fm.homeManager.kitty
