@@ -33,7 +33,6 @@
       portalPackage = pkgs.xdg-desktop-portal-umbriel;
     };
     xdg.portal.extraPortals = with pkgs; [
-      kdePackages.xdg-desktop-portal-kde
       xdg-desktop-portal-gtk
     ];
 
@@ -61,9 +60,8 @@
 
       [theme.templates.user.umbriel_gtk3]
       input_path  = "$XDG_CACHE_HOME/noctalia/umbriel-gtk4/gtk3-buttons-input.css"
-      output_path = "$XDG_CONFIG_HOME/gtk-3.0/umbriel-buttons.css"
+      output_path = "$XDG_CONFIG_HOME/gtk-3.0/colors.css"
       pre_hook    = "bash \"$HOME/.config/noctalia/templates/umbriel-gtk4/input3.sh\" > /dev/null"
-      post_hook   = "bash \"$HOME/.config/noctalia/templates/umbriel-gtk4/apply-gtk3.sh\""
 
       [theme.templates.user.umbriel_firefox_buttons]
       input_path  = "$XDG_CACHE_HOME/noctalia/umbriel-gtk4/firefox-buttons-input.css"

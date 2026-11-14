@@ -1,13 +1,53 @@
+{ inputs, ... }:
 {
+  flake-file.inputs.qtengine = {
+    url = "github:kossLAN/qtengine";
+    inputs.nixpkgs.follows = "nixpkgs";
+  };
+
   flake.modules.nixos.theme = { pkgs, ... }: {
-    # 保留：部分 KDE 应用依赖 /share 下的翻译/服务文件才能正常显示中文
+    imports = [ inputs.qtengine.nixosModules.default ];
     environment.pathsToLink = [ "/share" ];
-    # greeter 用户读不到 ~/.local/share/icons 里的光标主题，
-    # 必须装到系统级 /run/current-system/sw/share/icons 才能在登录界面显示光标。
     environment.systemPackages = with pkgs; [
+      gsettings-desktop-schemas
+      glib
       bibata-cursors
-      kdePackages.breeze
+      kdePackages.kde-gtk-config
     ];
+
+    environment.sessionVariables.GTK3_MODULES =
+      "${pkgs.kdePackages.kde-gtk-config}/lib/gtk-3.0/modules/libcolorreload-gtk-module.so";
+
+    programs.qtengine = {
+      enable = true;
+      config = {
+        theme = {
+          colorScheme = "/home/aohg/.local/share/color-schemes/noctalia.colors";
+          iconTheme = "breeze-dark";
+          style = "darkly";
+          quickStyle = "org.kde.desktop";
+          font = {
+            family = "苹方-简";
+            size = 10;
+            weight = -1;
+          };
+          fontFixed = {
+            family = "Maple Mono NL NF CN";
+            size = 10;
+            weight = -1;
+          };
+        };
+        misc = {
+          singleClickActivate = false;
+          menusHaveIcons = true;
+          shortcutsForContextMenus = true;
+          dialogButtonBoxLayout = 2;
+          keyboardScheme = 3;
+          uiEffects = 1;
+          toolButtonStyle = 3;
+        };
+      };
+    };
 
     local.persistence = {
       home.directories = [
@@ -20,7 +60,6 @@
       ];
       home.files = [
         { file = ".config/darklyrc"; }
-        { file = ".config/kdeglobals"; }
       ];
       system.directories = [ "/var/lib/colord" ];
     };
@@ -53,41 +92,12 @@
       style = {
         package = pkgs.darkly;
       };
-      platformTheme = {
-        name = "kde";
-      };
-      kde.settings = {
-        kdeglobals = {
-          General = {
-            fixed = "Maple Mono NL NF CN,10";
-            font = "${config.gtk.font.name},${toString config.gtk.font.size}";
-            menuFont = "${config.gtk.font.name},${toString config.gtk.font.size}";
-            smallestReadableFont = "${config.gtk.font.name},${toString (config.gtk.font.size - 2)}";
-            toolBarFont = "${config.gtk.font.name},${toString config.gtk.font.size}";
-          };
-          Icons = {
-            Theme = "breeze-dark";
-          };
-          KDE = {
-            widgetStyle = "Darkly";
-          };
-          WM = {
-            activeFont = "${config.gtk.font.name},${toString config.gtk.font.size}";
-          };
-        };
-
-        kcminputrc.Mouse = {
-          cursorSize = config.gtk.cursorTheme.size;
-          cursorTheme = config.gtk.cursorTheme.name;
-        };
-      };
     };
     dconf.settings = {
       "org/gnome/desktop/wm/preferences" = {
         button-layout = "close,maximize,minimize,appmenu:";
       };
     };
-    # KDE 应用的中文来自这两个包的 share/locale，用户 profile 已在 XDG_DATA_DIRS 里
     home.packages = with pkgs; [
       xrdb
     ] ++ (with pkgs.kdePackages; [
