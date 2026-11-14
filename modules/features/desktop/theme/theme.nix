@@ -1,4 +1,4 @@
-{ ... }:
+{ inputs, ... }:
 {
   flake-file.inputs.qtengine = {
     url = "github:kossLAN/qtengine";
@@ -6,6 +6,7 @@
   };
 
   flake.modules.nixos.theme = { pkgs, ... }: {
+    imports = [ inputs.qtengine.nixosModules.default ];
     environment.pathsToLink = [ "/share" ];
     environment.systemPackages = with pkgs; [
       gsettings-desktop-schemas
@@ -16,6 +17,37 @@
 
     environment.sessionVariables.GTK3_MODULES =
       "${pkgs.kdePackages.kde-gtk-config}/lib/gtk-3.0/modules/libcolorreload-gtk-module.so";
+
+    programs.qtengine = {
+      enable = true;
+      config = {
+        theme = {
+          colorScheme = "/home/aohg/.local/share/color-schemes/noctalia.colors";
+          iconTheme = "breeze-dark";
+          style = "darkly";
+          quickStyle = "org.kde.desktop";
+          font = {
+            family = "苹方-简";
+            size = 10;
+            weight = -1;
+          };
+          fontFixed = {
+            family = "Maple Mono NL NF CN";
+            size = 10;
+            weight = -1;
+          };
+        };
+        misc = {
+          singleClickActivate = false;
+          menusHaveIcons = true;
+          shortcutsForContextMenus = true;
+          dialogButtonBoxLayout = 2;
+          keyboardScheme = 3;
+          uiEffects = 1;
+          toolButtonStyle = 3;
+        };
+      };
+    };
 
     local.persistence = {
       home.directories = [
@@ -28,7 +60,6 @@
       ];
       home.files = [
         { file = ".config/darklyrc"; }
-        { file = ".config/kdeglobals"; }
       ];
       system.directories = [ "/var/lib/colord" ];
     };
@@ -60,32 +91,6 @@
       enable = true;
       style = {
         package = pkgs.darkly;
-      };
-      platformTheme = { name = "kde"; };
-      kde.settings = {
-        kdeglobals = {
-          General = {
-            fixed = "Maple Mono NL NF CN,10";
-            font = "${config.gtk.font.name},${toString config.gtk.font.size}";
-            menuFont = "${config.gtk.font.name},${toString config.gtk.font.size}";
-            smallestReadableFont = "${config.gtk.font.name},${toString (config.gtk.font.size - 2)}";
-            toolBarFont = "${config.gtk.font.name},${toString config.gtk.font.size}";
-          };
-          Icons = {
-            Theme = "breeze-dark";
-          };
-          KDE = {
-            widgetStyle = "Darkly";
-          };
-          WM = {
-            activeFont = "${config.gtk.font.name},${toString config.gtk.font.size}";
-          };
-        };
-
-        kcminputrc.Mouse = {
-          cursorSize = config.gtk.cursorTheme.size;
-          cursorTheme = config.gtk.cursorTheme.name;
-        };
       };
     };
     dconf.settings = {
