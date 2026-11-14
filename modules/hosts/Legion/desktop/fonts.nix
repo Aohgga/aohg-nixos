@@ -143,6 +143,22 @@
           subpixel.rgba = lib.mkForce "none";
         };
       };
+
+      # Qt 走 qtengine，字体在它的 config 里单独指定。
+      # 全局用的是 苹方-简 / Maple Mono，Legion 上改成和 GTK、kitty 一致的点阵宋体
+      # 与 Terminess（Qt 的 UI 字体 + 等宽字体）。
+      programs.qtengine.config.theme = {
+        font = lib.mkForce {
+          family = "WenQuanYi WenQuanYi Bitmap Song";
+          size = 12;
+          weight = -1;
+        };
+        fontFixed = lib.mkForce {
+          family = "Terminess Nerd Font";
+          size = 12;
+          weight = -1;
+        };
+      };
     };
 
   flake.modules.homeManager.LegionFonts =
