@@ -56,6 +56,7 @@ in
 
       # desktop/input
       fm.nixos.input-method
+      fm.nixos.ydotool
 
       # desktop/theme
       fm.nixos.theme
