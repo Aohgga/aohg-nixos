@@ -6,6 +6,8 @@
       imports = [
         self.modules.nixos.base
 
+        self.modules.nixos.LegionAudio
+        self.modules.nixos.LegionBluetooth
         self.modules.nixos.LegionBoot
         self.modules.nixos.LegionFonts
         self.modules.nixos.LegionGraphics
@@ -16,7 +18,6 @@
 
         self.modules.nixos.desktop
 
-        self.modules.nixos.localsend
         self.modules.nixos.steam
       ];
       networking.hostName = "Legion";

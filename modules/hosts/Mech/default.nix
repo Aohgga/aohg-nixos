@@ -6,6 +6,8 @@
       imports = [
         self.modules.nixos.base
 
+        self.modules.nixos.MechAudio
+        self.modules.nixos.MechBluetooth
         self.modules.nixos.MechBoot
         self.modules.nixos.MechFilesystem
         self.modules.nixos.MechFonts
@@ -18,7 +20,6 @@
         self.modules.nixos.desktop
 
         self.modules.nixos.flatpak
-        self.modules.nixos.localsend
         self.modules.nixos.virtualisation
       ];
       networking.hostName = "Mech";
