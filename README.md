@@ -21,20 +21,39 @@ modules/
 ├── flake-parts.nix      引入 flake-parts 的 flake.modules 输出
 ├── profiles.nix         跨主机组合（nixos.base / nixos.desktop / homeManager.base）
 ├── features/            多台机器通用的模块
-│   ├── system/          系统层：启动、网络、代理、安全、nix、环境、用户、持久化、
-│   │                    本地化、服务、agenix、flatpak、虚拟化等
-│   ├── desktop/         桌面环境、登录管理器、输入法、主题、字体、umbriel
-│   ├── apps/            应用：编辑器、文件管理器、播放器、音乐、终端工具等
-│   ├── shell/           fish、kitty、ttyper、yazi
-│   └── hardware/        声卡、蓝牙、显卡、硬件与系统调优
+│   ├── apps/            应用，按领域细分
+│   │   ├── browser/     浏览器
+│   │   ├── cli/         命令行工具
+│   │   ├── editor/      编辑器
+│   │   ├── file/        文件管理器
+│   │   ├── game/        游戏平台
+│   │   ├── media/       播放器、音乐、看图
+│   │   ├── net/         下载与局域网传输
+│   │   └── term/        终端与终端工具
+│   ├── desktop/         桌面层
+│   │   ├── display/     登录管理器、合成器
+│   │   ├── input/       输入法
+│   │   └── theme/       主题、字体
+│   └── system/          系统层
+│       ├── boot/        启动
+│       ├── core/        nix、环境、用户、home-manager 接入
+│       ├── locale/      本地化
+│       ├── network/     网络与代理
+│       ├── security/    agenix、加固
+│       ├── services/    常驻服务（flatpak、虚拟化、dsh、调优）
+│       ├── storage/     持久化、日志、fstrim
+│       └── tools/       维护命令（nrs）
 └── hosts/               只属于某台机器的配置
     ├── machine.nix      扫描 hosts/* 自动生成 nixosConfigurations
-    ├── Mech/
-    └── Legion/
+    ├── Mech/            default.nix、home.nix、desktop/、hardware/、system/
+    └── Legion/          同上
 
 config/umbriel/          umbriel 的纯数据配置（不是模块，不会被 import-tree 收集）
 secrets/*.age            agenix 密文，接收者写在 agenix-rules.nix
 ```
+
+`features/` 按 `system → desktop → apps` 分层，左边是右边的基础；`hosts/<Host>/`
+镜像同一套目录名，放本机的覆盖和只属于这台机器的配置。
 
 常用命令：
 
@@ -55,10 +74,10 @@ nix fmt                      # 用 nixfmt 格式化；会重排整个仓库，�
 
 ```sh
 nixos-generate-config --root /mnt
-mkdir -p modules/hosts/<Name>
+mkdir -p modules/hosts/<Name>/hardware modules/hosts/<Name>/system
 ```
 
-把生成文件的内容粘进 `modules/hosts/<Name>/hardware-configuration.nix`，外面包一层
+把生成文件的内容粘进 `modules/hosts/<Name>/hardware/hardware-configuration.nix`，外面包一层
 `flake.modules.nixos.<Name>Hardware`——`modules/` 下的文件都会被 `import-tree` 当
 flake-parts 模块，裸 NixOS 模块会求值失败：
 
@@ -90,7 +109,7 @@ sudo nixos-rebuild list-generations     # 查看所有代际
 
 ### 改用户名
 
-用户名只在 `modules/features/system/user.nix` 的默认值里写一次，主机覆盖它。例如把
+用户名只在 `modules/features/system/core/user.nix` 的默认值里写一次，主机覆盖它。例如把
 `aohg` 改成 `alice`：
 
 ```nix

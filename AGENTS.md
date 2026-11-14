@@ -14,7 +14,7 @@
   （flake-file、flake-parts、import-tree、nixpkgs）。
 - `modules/flake-parts.nix` 引入 flake-parts 的 `flakeModules.modules`（提供
   `flake.modules` 输出）；它本身不写系统配置。
-- home-manager 的 NixOS 模块由 `features/system/home-manager.nix` 以
+- home-manager 的 NixOS 模块由 `features/system/core/home-manager.nix` 以
   `nixosModules.default` 引入，不使用它的 flake 模块。
 - `flake.modules` 来自 flake-parts 官方 extras（`flakeModules.modules`）；
   `nix flake check` 报 `unknown flake output 'modules'` 属于正常提示。
@@ -23,21 +23,22 @@
 
 | 内容 | 位置 |
 | --- | --- |
-| 与机器无关、多台机器都能用 | `modules/features/` |
-| 只对某台机器成立（硬件、GPU、分区、持久化、专属包/服务） | `modules/hosts/<Host>/` |
+| 与机器无关、多台机器都能用 | `modules/features/`（`apps` / `desktop` / `system` 三层，每层再按领域分类） |
+| 只对某台机器成立（硬件、GPU、分区、持久化、专属包/服务） | `modules/hosts/<Host>/`（镜像 features 的目录名） |
 | 多台机器共用的组合 | `modules/profiles.nix` |
 | flake-parts 与 home-manager 的 flake 集成 | `modules/flake-parts.nix` |
 | flake input 声明 | 模块里的 `flake-file.inputs`；基础 inputs 在 `modules/flake-file.nix` |
 | flake 的输出入口 | `outputs.nix`；`flake.nix` 由 flake-file 生成，不要手改 |
-| 持久化注册 | homeManager 应用用 `home.persistence`；nixos 应用用 `local.persistence`；base 在 `features/system/persistence.nix` |
+| 持久化注册 | homeManager 应用用 `home.persistence`；nixos 应用用 `local.persistence`；base 在 `features/system/storage/persistence.nix` |
 | 纯数据（不是模块，比如 umbriel 配置） | `config/` |
 | agenix 密文 | `secrets/` |
 | agenix CLI 规则 | `agenix-rules.nix`（必须放在根目录） |
 
-`modules/hosts/<Host>/hardware-configuration.nix` 放 `nixos-generate-config` 生成的内容，
-外面包一层 `flake.modules.nixos.<Host>Hardware`（`import-tree` 要求 `modules/` 下的文件都是
-flake-parts 模块，裸 NixOS 模块缺少 `modulesPath` 会求值失败）；手写的硬件配置放在同目录的
-`<aspect>.nix`（比如 `boot.nix`、`graphics.nix`）。
+`modules/hosts/<Host>/hardware/hardware-configuration.nix` 放 `nixos-generate-config`
+生成的内容，外面包一层 `flake.modules.nixos.<Host>Hardware`（`import-tree` 要求
+`modules/` 下的文件都是 flake-parts 模块，裸 NixOS 模块缺少 `modulesPath` 会求值失败）；
+手写的硬件配置放在同目录（`audio.nix`、`bluetooth.nix`、`graphics.nix`、`reims-vgpu.nix`），
+启动相关放在 `<Host>/system/boot.nix`。
 
 ## 配置边界
 
@@ -94,7 +95,7 @@ local.persistence = {
 `local.persistence.home.files` 默认就是 symlink），否则 bind mount 下 KConfig/QSaveFile
 的 rename 会返回 EBUSY。
 
-`features/system/persistence.nix` 持有 `baseFiles` / `baseDirectories` /
+`features/system/storage/persistence.nix` 持有 `baseFiles` / `baseDirectories` /
 `baseSystemDirectories`：没有应用模块认领的路径放在那里。新增应用时不要往这些列表里
 加条目，应在应用自己的模块里注册。
 
@@ -102,20 +103,24 @@ local.persistence = {
 
 - 目录使用小写 kebab-case；只有 `modules/hosts/<Host>/` 使用 PascalCase，并且必须等于
   `networking.hostName`。
-- 文件名使用小写 kebab-case、单数；**文件名就是模块名**：
-  - `features/system/networking.nix` → `flake.modules.nixos.networking`
-  - `features/shell/fish.nix` → `flake.modules.homeManager.fish`
-  - `hosts/Mech/filesystem.nix` → `flake.modules.nixos.MechFilesystem`
+- 文件名使用小写 kebab-case、单数；**文件路径不决定模块名**，模块名来自文件内容里的
+  `flake.modules.<class>.<name>`：
+  - `features/system/network/networking.nix` → `flake.modules.nixos.networking`
+  - `features/apps/term/fish.nix` → `flake.modules.homeManager.fish`
+  - `hosts/Mech/system/filesystem.nix` → `flake.modules.nixos.MechFilesystem`
   - `hosts/Mech/default.nix` → `flake.modules.nixos.Mech`（入口）
+- `features/` 分三层，每层再有二级分类：`apps/<领域>/`、`desktop/<类别>/`、
+  `system/<类别>/`。`hosts/<Host>/` 镜像同一套目录名（`apps/`、`desktop/`、
+  `hardware/`、`system/`），另外在 host 根放 `default.nix`（NixOS 入口）和
+  `home.nix`（homeManager 入口）。
 - 单个模块不要使用 `xxx/default.nix`；只有目录本身是入口时才使用 `default.nix`。
-- 分类目录只给确实有多个模块的领域使用：`system/`、`desktop/`、`apps/`、`shell/`、
-  `hardware/`。
+- 分类目录里只有一个文件时，说明这个分类还没有成立，合并到同级目录。
 
 ## 模块注册与组合
 
 - 本仓库的自定义选项统一放在 `local.*` 下（`local.primaryUser`、`local.persistence`），
   前缀表示“本仓库的策略”，不要用作者名或用户名，避免和登录名混淆。
-- 增加公共特性：在 `modules/features/<category>/<name>.nix` 中定义
+- 增加公共特性：在 `modules/features/<层>/<类>/<name>.nix` 中定义
   `flake.modules.nixos.<name>` 或 `flake.modules.homeManager.<name>`；要全局启用，就在
   `modules/profiles.nix` 的对应层加一行。
 - 增加新 input：在模块里声明 `flake-file.inputs.<name>`，然后运行
@@ -123,7 +128,7 @@ local.persistence = {
 - 增加新主机：创建 `modules/hosts/<Name>/default.nix`，定义 `flake.modules.nixos.<Name>`；
   `machine.nix` 会自动发现（目录名 = 模块名，并且必须有 `default.nix`）。
 - 主机专属的用户配置：`flake.modules.homeManager.<Host>`。
-- 用户名只在 `features/system/user.nix` 的 `local.primaryUser.name` 默认值里写一次；主机需要不同的
+- 用户名只在 `features/system/core/user.nix` 的 `local.primaryUser.name` 默认值里写一次；主机需要不同的
   用户名就覆盖 `local.primaryUser.name`，`home.username`、home 路径、service 账户和持久化都从它派生。
   改名时 `local.primaryUser.uid` 必须保持不变，否则已有文件的属主会错位。
 - 一个文件定义多个模块时，按 class 排序：**NixOS 在前、homeManager 在后**，同类按名字
@@ -157,8 +162,8 @@ local.persistence = {
 `enable` 永远放在第一位。没有 `enable` 的（比如 `hardware.nvidia`）按“实现 → 核心
 开关 → 子功能 → 边角”排序。
 
-聚合器（`profiles.nix`、`hosts/*/default.nix`）的 `imports` 按层级分组，组与组之间空
-一行，不要加标题注释。
+聚合器（`profiles.nix`、`hosts/*/default.nix`）的 `imports` 按源码目录分类分组，组与组
+之间空一行，组首写一行 `# 层/类` 形式的分类注释。
 
 ### 2. 应用自己的配置——按字母
 
@@ -189,8 +194,9 @@ local.persistence = {
     要标明“自定义选项”，让人知道它不是 NixOS/Home Manager 自带的。
   - 处理逻辑不直观或步骤复杂：说明为什么这样做，避免下次看不懂。
 - 普通代码里，只有解释不明显的约束、已知的坑、外部耦合时才写，一般 1–2 行。
-- 不要写：文件头、分组/分区标题（比如 `# 系统基础`）、编号步骤、复述代码、格式约定、
-  设计取舍的长篇论证。约定写在本文件，决策写在提交信息里。
+- 不要写：文件头、模块内部的分组/分区标题（比如 `# 系统基础`）、编号步骤、复述代码、
+  格式约定、设计取舍的长篇论证。约定写在本文件，决策写在提交信息里。聚合器的
+  `imports` 是例外，见“排序规则”。
 - 反例：`# 设置用户名`、`# 系统级持久化`、`# 按字母序排列`。
   正例：`# 用 !include 而不是 nix.settings.access-tokens：...`。
 
@@ -275,10 +281,13 @@ nix build .#nixosConfigurations.Legion.config.system.build.toplevel
   结构改动也算越界，请先询问；结构一旦改动，commit 的 diff 会变成整块重写，很难
   看出真正改了什么。
 - 忘记执行 `git add`：`error: Path '...' is not tracked by Git`。
+- 移动模块文件会让文件内的相对路径失效：`../../../secrets/*.age` 和
+  `import ../../../config/umbriel` 都按目录层级写，移动后要同步加或减 `../`。
+  （模块名由文件内容决定，路径变化本身不影响引用。）
 - 在 `profiles.nix` 重排 imports 时漏掉模块 → 包闭包会缺少内容（曾经发生过，丢了
   audio/bluetooth/tuning）。
 - `nixfmt` 会把整个仓库重排，没有得到允许不要全量运行；`nix fmt` 由人决定。
 - `config/umbriel/` 是纯数据，不会被 import-tree 收集，修改它不会产生新模块。
-- `umbriel-portals.conf` 放在 `modules/features/desktop/umbriel.nix`，使用
+- `umbriel-portals.conf` 放在 `modules/features/desktop/display/umbriel.nix`，使用
   `xdg.configFile` 手写；不要使用 `xdg.portal.config`，它会多装一套 portal 栈并改写
   环境变量，却只生成同一个文件。
