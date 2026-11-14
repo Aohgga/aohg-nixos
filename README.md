@@ -52,8 +52,25 @@ config/umbriel/          umbriel 的纯数据配置（不是模块，不会被 i
 secrets/*.age            agenix 密文，接收者写在 agenix-rules.nix
 ```
 
-`features/` 按 `system → desktop → apps` 分层，左边是右边的基础；`hosts/<Host>/`
-镜像同一套目录名，放本机的覆盖和只属于这台机器的配置。
+## 组织方式
+
+模块按**功能域**组织，不按 NixOS / Home Manager 分层切分——一个功能需要的 nixos
+模块、homeManager 模块、包、持久化条目都写在同一个 `.nix` 里。这种组织方式叫
+package-by-feature，也叫 vertical slicing；对应的反面是按技术层分包（layer-based），
+也就是 `modules/nixos/`、`modules/home-manager/` 那种分法。
+
+| 位置 | 角色 |
+| --- | --- |
+| `features/<层>/<类>/` | 功能域分类，三层从底到顶 `system` → `desktop` → `apps` |
+| `hosts/<Host>/` | 部署目标分类（deployment-based），镜像 features 的目录名，放本机覆盖 |
+| `profiles.nix` | 组合根（composition root），把模块拼成 `base` / `desktop` |
+
+依赖方向是单向的：右边的层可以读左边层定义的选项，反过来不行。唯一例外是
+`local.persistence`——它是所有层都能登记的注册表。`hosts/<Host>/hardware/` 位于最底层，
+只描述这台机器是什么（硬件扫描结果、GPU、声卡、蓝牙），不承载通用策略。
+
+文件放在哪个目录**不影响模块名**：模块名来自文件内容里的
+`flake.modules.<class>.<name>`，移动文件不需要改任何 `imports`。
 
 常用命令：
 
