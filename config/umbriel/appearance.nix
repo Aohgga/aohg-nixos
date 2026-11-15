@@ -48,7 +48,7 @@
         "maximize"
         "close"
       ];
-      button_size = -1;
+      button_size = 15;
       button_gap = 8;
       button_padding = -1;
       button_corner_radius = -1;

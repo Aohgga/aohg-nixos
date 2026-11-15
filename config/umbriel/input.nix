@@ -16,7 +16,7 @@
       trigger_zone = 30;
     };
     focus = {
-      follows_mouse = false;
+      follows_mouse = "off";
       follows_mouse_max_scroll = 0.5;
     };
     keyboard = {

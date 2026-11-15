@@ -31,7 +31,7 @@
       memoryPercent = 50;
     };
     services.kmscon = {
-      enable = true;
+      enable = false;
       config = {
         font-name = "Maple Mono NL NF CN";
         font-size = 22;
