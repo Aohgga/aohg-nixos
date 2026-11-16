@@ -60,8 +60,8 @@
   };
   colors = {
     border = {
-      focused = "#44464fff";
-      unfocused = "#1a1b2099";
+      focused = "#3a3a3aff";
+      unfocused = "#3a3a3aff";
     };
     overview = {
       background_tint = "#10101400";
