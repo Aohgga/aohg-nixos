@@ -53,21 +53,34 @@
       [theme]
       source = "wallpaper"
       [theme.templates.user.umbriel_gtk4]
-      input_path  = "$XDG_CACHE_HOME/noctalia/umbriel-gtk4/gtk4-input.css"
+      input_path  = "$XDG_CACHE_HOME/noctalia/umbriel-gtk/gtk4-input.css"
       output_path = "$XDG_CONFIG_HOME/gtk-4.0/umbriel.css"
-      pre_hook    = "bash \"$HOME/.config/noctalia/templates/umbriel-gtk4/input.sh\" > /dev/null"
-      post_hook   = "bash \"$HOME/.config/noctalia/templates/umbriel-gtk4/apply.sh\""
+      pre_hook    = "bash \"$HOME/.config/noctalia/templates/umbriel-gtk/gtk4-input.sh\" > /dev/null"
+      post_hook   = "bash \"$HOME/.config/noctalia/templates/umbriel-gtk/gtk4-apply.sh\""
+
+      [theme.templates.user.umbriel_gtk4_extras]
+      input_path  = "$XDG_CACHE_HOME/noctalia/umbriel-gtk/gtk4-extras-input.css"
+      output_path = "$XDG_CONFIG_HOME/gtk-4.0/umbriel-extras.css"
+      pre_hook    = "bash \"$HOME/.config/noctalia/templates/umbriel-gtk/gtk4-input.sh\" > /dev/null"
+      post_hook   = "bash \"$HOME/.config/noctalia/templates/umbriel-gtk/gtk4-apply.sh\""
 
       [theme.templates.user.umbriel_gtk3]
-      input_path  = "$XDG_CACHE_HOME/noctalia/umbriel-gtk4/gtk3-buttons-input.css"
+      input_path  = "$XDG_CACHE_HOME/noctalia/umbriel-gtk/gtk3-buttons-input.css"
       output_path = "$XDG_CONFIG_HOME/gtk-3.0/colors.css"
-      pre_hook    = "bash \"$HOME/.config/noctalia/templates/umbriel-gtk4/input3.sh\" > /dev/null"
+      pre_hook    = "bash \"$HOME/.config/noctalia/templates/umbriel-gtk/gtk3-input.sh\" > /dev/null"
+      post_hook   = "bash \"$HOME/.config/noctalia/templates/umbriel-gtk/gtk3-apply.sh\""
+
+      [theme.templates.user.umbriel_gtk3_extras]
+      input_path  = "$XDG_CACHE_HOME/noctalia/umbriel-gtk/gtk3-extras-input.css"
+      output_path = "$XDG_CONFIG_HOME/gtk-3.0/colors-extras.css"
+      pre_hook    = "bash \"$HOME/.config/noctalia/templates/umbriel-gtk/gtk3-input.sh\" > /dev/null"
+      post_hook   = "bash \"$HOME/.config/noctalia/templates/umbriel-gtk/gtk3-apply.sh\""
 
       [theme.templates.user.umbriel_firefox_buttons]
-      input_path  = "$XDG_CACHE_HOME/noctalia/umbriel-gtk4/firefox-buttons-input.css"
-      output_path = "$XDG_CACHE_HOME/noctalia/umbriel-gtk4/firefox-buttons.css"
-      pre_hook    = "bash \"$HOME/.config/noctalia/templates/umbriel-gtk4/firefox-input.sh\" > /dev/null"
-      post_hook   = "bash \"$HOME/.config/noctalia/templates/umbriel-gtk4/firefox-apply.sh\""
+      input_path  = "$XDG_CACHE_HOME/noctalia/umbriel-gtk/firefox-buttons-input.css"
+      output_path = "$XDG_CACHE_HOME/noctalia/umbriel-gtk/firefox-buttons.css"
+      pre_hook    = "bash \"$HOME/.config/noctalia/templates/umbriel-gtk/firefox-input.sh\" > /dev/null"
+      post_hook   = "bash \"$HOME/.config/noctalia/templates/umbriel-gtk/firefox-apply.sh\""
 
       [theme.templates.user.fcitx5_mellow_conf]
       input_path  = "~/.config/noctalia/templates/fcitx5-mellow/theme.conf"
