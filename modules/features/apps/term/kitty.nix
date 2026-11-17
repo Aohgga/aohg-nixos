@@ -10,6 +10,7 @@
       };
       settings = {
         background_blur = "1";
+        background_opacity = "0.6";
         include = "themes/noctalia.conf";
         initial_window_height = "768";
         initial_window_width = "1024";

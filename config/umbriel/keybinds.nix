@@ -76,6 +76,10 @@
     };
     "Mod+Minus" = "window-modify-primary-extent -0.1";
     "Mod+MouseMiddle" = "layout-scroll-drag";
+    "Mod+G" = {
+      action = "spawn noctalia msg panel-toggle alexander/game-launcher:browser";
+      repeat = false;
+    };
     "Mod+N" = {
       action = "spawn noctalia msg panel-toggle noctalia/notes:panel";
       repeat = false;

@@ -36,6 +36,13 @@
       xdg-desktop-portal-gtk
     ];
 
+    environment.systemPackages = with pkgs; [
+      gcc
+      python3
+      playerctl
+      coreutils
+    ];
+
     local.persistence.home.directories = [
       ".cache/noctalia"
       ".config/noctalia"

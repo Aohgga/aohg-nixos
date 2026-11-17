@@ -34,6 +34,12 @@
             height = 34;
           };
         };
+        colors = {
+          border = {
+            focused = "#3a3a3aff";
+            unfocused = "#3a3a3a80";
+          };
+        };
         general.autostart = [ ];
         input.cursor = {
           size = 24;
