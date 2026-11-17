@@ -100,10 +100,10 @@
       input_path  = "~/.config/noctalia/templates/fcitx5-mellow/highlight.svg"
       output_path = "$XDG_DATA_HOME/fcitx5/themes/noctalia-mellow/highlight.svg"
 
-      [theme.templates.user.papirus_thin]
-      input_path  = "~/.config/noctalia/templates/papirus-thin/colors"
-      output_path = "~/.config/noctalia/templates/papirus-thin/colors-final"
-      post_hook   = "bash \"$HOME/.config/noctalia/templates/papirus-thin/apply.sh\""
+      [theme.templates.user.papirus_nixos]
+      input_path  = "~/.config/noctalia/templates/papirus-nixos/colors"
+      output_path = "~/.config/noctalia/templates/papirus-nixos/colors-final"
+      post_hook   = "bash \"$HOME/.config/noctalia/templates/papirus-nixos/apply.sh\""
     '';
   };
 }
