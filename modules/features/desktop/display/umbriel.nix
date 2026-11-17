@@ -101,9 +101,9 @@
       output_path = "$XDG_DATA_HOME/fcitx5/themes/noctalia-mellow/highlight.svg"
 
       [theme.templates.user.papirus_thin]
-      input_path  = "$HOME/.config/noctalia/templates/papirus-thin/colors"
-      output_path = "$HOME/.config/noctalia/templates/papirus-thin/colors-final"
-      post_hook   = "bash '$HOME/.config/noctalia/templates/papirus-thin/apply.sh'"
+      input_path  = "~/.config/noctalia/templates/papirus-thin/colors"
+      output_path = "~/.config/noctalia/templates/papirus-thin/colors-final"
+      post_hook   = "bash \"$HOME/.config/noctalia/templates/papirus-thin/apply.sh\""
     '';
   };
 }
