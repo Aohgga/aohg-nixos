@@ -99,6 +99,11 @@
       [theme.templates.user.fcitx5_mellow_highlight]
       input_path  = "~/.config/noctalia/templates/fcitx5-mellow/highlight.svg"
       output_path = "$XDG_DATA_HOME/fcitx5/themes/noctalia-mellow/highlight.svg"
+
+      [theme.templates.user.papirus_thin]
+      input_path  = "$HOME/.config/noctalia/templates/papirus-thin/colors"
+      output_path = "$HOME/.config/noctalia/templates/papirus-thin/colors-final"
+      post_hook   = "bash '$HOME/.config/noctalia/templates/papirus-thin/apply.sh'"
     '';
   };
 }
