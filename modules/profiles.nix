@@ -43,7 +43,8 @@ in
       fm.nixos.fonts
 
       # apps
-      fm.nixos.file-manager
+      fm.nixos.luciole
+      fm.nixos.strata
       fm.nixos.localsend
     ];
   };
@@ -84,7 +85,7 @@ in
       fm.homeManager.editor
 
       # apps/file
-      fm.homeManager.file-manager
+      fm.homeManager.strata
 
       # apps/game
       fm.homeManager.prismlauncher

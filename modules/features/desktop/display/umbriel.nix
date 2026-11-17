@@ -22,7 +22,6 @@
       ];
     };
 
-    services.gvfs.enable = true;
     programs.dconf.enable = true;
     programs.noctalia = {
       enable = true;
@@ -30,7 +29,6 @@
     };
     programs.umbriel = {
       enable = true;
-      portalPackage = pkgs.xdg-desktop-portal-umbriel;
     };
     xdg.portal.extraPortals = with pkgs; [
       xdg-desktop-portal-gtk
@@ -101,12 +99,6 @@
       [theme.templates.user.fcitx5_mellow_highlight]
       input_path  = "~/.config/noctalia/templates/fcitx5-mellow/highlight.svg"
       output_path = "$XDG_DATA_HOME/fcitx5/themes/noctalia-mellow/highlight.svg"
-    '';
-
-    xdg.configFile."xdg-desktop-portal/umbriel-portals.conf".text = ''
-      [preferred]
-      default = umbriel;gtk
-      org.freedesktop.impl.portal.FileChooser = strata
     '';
   };
 }
