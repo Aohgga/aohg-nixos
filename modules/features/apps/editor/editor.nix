@@ -14,6 +14,8 @@
       git
       nil
       nixd
+      nixfmt
+      statix
     ];
     programs.neovim = {
       enable = true;
