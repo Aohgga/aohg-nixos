@@ -22,14 +22,16 @@
       ];
     };
 
-    programs.dconf.enable = true;
-    programs.noctalia = {
-      enable = true;
-      systemd.enable = true;
+    programs = {
+      noctalia = {
+        enable = true;
+        systemd.enable = true;
+      };
+      umbriel = {
+        enable = true;
+      };
     };
-    programs.umbriel = {
-      enable = true;
-    };
+
     xdg.portal.extraPortals = with pkgs; [
       xdg-desktop-portal-gtk
     ];

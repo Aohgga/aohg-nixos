@@ -23,8 +23,6 @@
         sub-auto=fuzzy
         osd-bar=no
         osd-font=苹方-简
-        save-position-on-quit=yes
-        target-colorspace-hint=no
       '';
     in {
       "mpv/mpv.conf".text = mpvConf;

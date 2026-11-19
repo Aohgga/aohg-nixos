@@ -71,18 +71,6 @@
     {
       default_floating = true;
       match = {
-        app_id = "qemu-system-x86_64";
-      };
-    }
-    {
-      default_floating = true;
-      match = {
-        app_id = "VBoxSDL";
-      };
-    }
-    {
-      default_floating = true;
-      match = {
         app_id = "float_term";
       };
     }
@@ -148,12 +136,6 @@
       };
       match = {
         title = "媒体查看器";
-      };
-    }
-    {
-      default_floating = true;
-      match = {
-        app_id = "mpv";
       };
     }
     {
