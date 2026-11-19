@@ -14,7 +14,6 @@
       glow
       jq
       nvtopPackages.full
-      quickemu
       resources
       tree
       wev

@@ -3,110 +3,117 @@ let
   fm = config.flake.modules;
 in
 {
-  flake.modules.nixos.base = {
-    imports = [
-      # system/storage
-      fm.nixos.persistence
-      fm.nixos.fstrim
-      fm.nixos.journald
+  flake = {
+    modules.nixos = {
+      base = {
+        imports = [
+          # system/storage
+          fm.nixos.persistence
+          fm.nixos.fstrim
+          fm.nixos.journald
 
-      # system/boot
-      fm.nixos.boot
+          # system/boot
+          fm.nixos.boot
 
-      # system/services
-      fm.nixos.hardware-tuning
-      fm.nixos.dsh
-      fm.nixos.appimage
+          # system/services
+          fm.nixos.hardware-tuning
+          fm.nixos.dsh
+          fm.nixos.appimage
 
-      # system/network
-      fm.nixos.networking
-      fm.nixos.proxy
+          # system/network
+          fm.nixos.networking
+          fm.nixos.proxy
 
-      # system/security
-      fm.nixos.agenix
-      fm.nixos.security
+          # system/security
+          fm.nixos.agenix
+          fm.nixos.security
 
-      # system/core
-      fm.nixos.user
-      fm.nixos.environment
-      fm.nixos.nix
-      fm.nixos.overlays
-      fm.nixos.home-manager
+          # system/core
+          fm.nixos.user
+          fm.nixos.environment
+          fm.nixos.nix
+          fm.nixos.overlays
+          fm.nixos.home-manager
 
-      # system/tools
-      fm.nixos.nrs
+          # system/tools
+          fm.nixos.nrs
 
-      # system/locale
-      fm.nixos.i18n
+          # system/locale
+          fm.nixos.i18n
 
-      # desktop/theme
-      fm.nixos.fonts
+          # desktop/theme
+          fm.nixos.fonts
 
-      # apps
-      fm.nixos.luciole
-      #fm.nixos.strata
-      fm.nixos.localsend
-    ];
-  };
+          # apps
+          fm.nixos.luciole
+          #fm.nixos.strata
+          fm.nixos.localsend
 
-  flake.modules.nixos.desktop = {
-    imports = [
-      # desktop/display
-      fm.nixos.display-manager
-      fm.nixos.umbriel
+          # apps/cli
+          fm.nixos.vm-curator
+        ];
+      };
 
-      # desktop/input
-      fm.nixos.input-method
-      fm.nixos.ydotool
+      desktop = {
+        imports = [
+          # desktop/display
+          fm.nixos.display-manager
+          fm.nixos.umbriel
 
-      # desktop/theme
-      fm.nixos.theme
-    ];
-  };
+          # desktop/input
+          fm.nixos.input-method
+          fm.nixos.ydotool
 
-  flake.modules.homeManager.base = {
-    imports = [
-      # apps/term
-      fm.homeManager.fish
-      fm.homeManager.kitty
-      fm.homeManager.ttyper
-      fm.homeManager.yazi
+          # desktop/theme
+          fm.nixos.theme
+        ];
+      };
+    };
 
-      # apps/media
-      fm.homeManager.mpv
-      fm.homeManager.musicfox
-      fm.homeManager.splayer-next
-      fm.homeManager.swayimg
+    modules.homeManager.base = {
+      imports = [
+        # apps/term
+        fm.homeManager.fish
+        fm.homeManager.kitty
+        fm.homeManager.ttyper
+        fm.homeManager.yazi
 
-      # apps/cli
-      fm.homeManager.cli
+        # apps/media
+        fm.homeManager.mpv
+        fm.homeManager.musicfox
+        fm.homeManager.splayer-next
+        fm.homeManager.swayimg
 
-      # apps/editor
-      fm.homeManager.editor
+        # apps/cli
+        fm.homeManager.cli
 
-      # apps/file
-      #fm.homeManager.strata
+        # apps/editor
+        fm.homeManager.editor
 
-      # apps/game
-      fm.homeManager.prismlauncher
+        # apps/file
+        #fm.homeManager.strata
 
-      # apps/net
-      fm.homeManager.qbittorrent
+        # apps/game
+        fm.homeManager.prismlauncher
 
-      # desktop/display
-      fm.homeManager.umbriel
+        # apps/net
+        fm.homeManager.qbittorrent
 
-      # desktop/input
-      fm.homeManager.input-method
+        # desktop/display
+        fm.homeManager.umbriel
 
-      # desktop/theme
-      fm.homeManager.theme
+        # desktop/input
+        fm.homeManager.input-method
 
-      # system/core
-      fm.homeManager.user
+        # desktop/theme
+        fm.homeManager.theme
 
-      # system/tools
-      fm.homeManager.nrs
-    ];
+        # system/core
+        fm.homeManager.user
+
+        # system/tools
+        fm.homeManager.nrs
+      ];
+    };
   };
 }
