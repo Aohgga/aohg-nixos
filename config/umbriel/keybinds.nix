@@ -123,7 +123,7 @@
     "Mod+Shift+Comma" = "column-move-to-output-left";
     "Mod+Shift+Down" = "window-move-down";
     "Mod+Shift+E" = {
-      action = "spawn strata";
+      action = "spawn luciole";
       repeat = false;
     };
     "Mod+Shift+End" = "column-move-to-last";

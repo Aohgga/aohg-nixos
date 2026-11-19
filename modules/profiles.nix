@@ -44,7 +44,7 @@ in
 
       # apps
       fm.nixos.luciole
-      fm.nixos.strata
+      #fm.nixos.strata
       fm.nixos.localsend
     ];
   };
@@ -85,7 +85,7 @@ in
       fm.homeManager.editor
 
       # apps/file
-      fm.homeManager.strata
+      #fm.homeManager.strata
 
       # apps/game
       fm.homeManager.prismlauncher
