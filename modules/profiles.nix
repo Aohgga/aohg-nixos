@@ -57,6 +57,7 @@ in
       desktop = {
         imports = [
           # desktop/display
+          fm.nixos.denial
           fm.nixos.display-manager
           fm.nixos.umbriel
 
