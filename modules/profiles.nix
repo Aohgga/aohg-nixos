@@ -79,6 +79,7 @@ in
         fm.homeManager.yazi
 
         # apps/media
+        fm.homeManager.bookokrat
         fm.homeManager.mpv
         fm.homeManager.musicfox
         fm.homeManager.splayer-next
