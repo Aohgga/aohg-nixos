@@ -19,6 +19,10 @@
         self.modules.nixos.desktop
 
         self.modules.nixos.steam
+
+        # 键盘控制指针：触控板难用时用
+        self.modules.nixos.wl-kbptr
+        self.modules.nixos.ydotool
       ];
       networking.hostName = "Legion";
       system.stateVersion = "26.05";
