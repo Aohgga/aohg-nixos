@@ -1,0 +1,85 @@
+--- a/src/config.c
++++ b/src/config.c
+@@ -360,7 +360,8 @@
+         general,
+         G_FIELD(home_row_keys, "", parse_home_row_keys, free_home_row_keys),
+         G_FIELD(modes, "tile,bisect", parse_str, free_str),
+-        G_FIELD(cancellation_status_code, "0", parse_uint8, noop)
++        G_FIELD(cancellation_status_code, "0", parse_uint8, noop),
++        G_FIELD(label_offset, "0", parse_double, noop)
+     ),
+     SECTION(
+         mode_tile, MT_FIELD(label_color, "#fffd", parse_color, noop),
+--- a/src/config.h
++++ b/src/config.h
+@@ -9,6 +9,7 @@
+     char  **home_row_keys;
+     char   *modes;
+     uint8_t cancellation_status_code;
++    double  label_offset;
+ };
+ 
+ struct relative_font_size {
+--- a/src/mode_bisect.c
++++ b/src/mode_bisect.c
+@@ -72,7 +72,7 @@
+ 
+     ms->label_font_face = cairo_toy_font_face_create(
+         state->config.mode_bisect.label_font_family, CAIRO_FONT_SLANT_NORMAL,
+-        CAIRO_FONT_WEIGHT_NORMAL
++        CAIRO_FONT_WEIGHT_BOLD
+     );
+ 
+     bisect_mode_move_pointer(state, ms);
+@@ -166,7 +166,8 @@
+                 cairo_text_extents(cairo, label, &te);
+                 cairo_move_to(
+                     cairo, x + (int)(w / 2) - (int)(te.width / 2),
+-                    y + (h + te.height) / 2
++                    y + (h + te.height) / 2 -
++                        (int)state->config.general.label_offset
+                 );
+                 cairo_show_text(cairo, label);
+             }
+--- a/src/mode_floating.c
++++ b/src/mode_floating.c
+@@ -107,7 +107,7 @@
+ 
+     ms->label_font_face = cairo_toy_font_face_create(
+         state->config.mode_floating.label_font_family, CAIRO_FONT_SLANT_NORMAL,
+-        CAIRO_FONT_WEIGHT_NORMAL
++        CAIRO_FONT_WEIGHT_BOLD
+     );
+ 
+     return ms;
+@@ -222,7 +222,8 @@
+                 cairo,
+                 a.x +
+                     (a.w - te_selected.x_advance - te_unselected.x_advance) / 2,
+-                a.y + (int)((a.h + te_all.height) / 2)
++                a.y + (int)((a.h + te_all.height) / 2) -
++                    (int)state->config.general.label_offset
+             );
+             cairo_set_operator(cairo, CAIRO_OPERATOR_OVER);
+             cairo_set_source_u32(cairo, config->label_select_color);
+--- a/src/mode_tile.c
++++ b/src/mode_tile.c
+@@ -52,7 +52,7 @@
+ 
+     ms->label_font_face = cairo_toy_font_face_create(
+         state->config.mode_tile.label_font_family, CAIRO_FONT_SLANT_NORMAL,
+-        CAIRO_FONT_WEIGHT_NORMAL
++        CAIRO_FONT_WEIGHT_BOLD
+     );
+ 
+     return ms;
+@@ -195,7 +195,8 @@
+                     cairo,
+                     x + (w - te_selected.x_advance - te_unselected.x_advance) /
+                             2,
+-                    y + (int)((h + te_all.height) / 2)
++                    y + (int)((h + te_all.height) / 2) -
++                        (int)state->config.general.label_offset
+                 );
+                 cairo_set_source_u32(cairo, config->label_select_color);
+                 cairo_show_text(cairo, label_selected_str);

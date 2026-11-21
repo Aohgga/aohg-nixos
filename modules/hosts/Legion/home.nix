@@ -5,6 +5,7 @@
       self.modules.homeManager.base
       self.modules.homeManager.LegionFonts
       self.modules.homeManager.LegionUmbriel
+      self.modules.homeManager.wl-kbptr
       self.modules.homeManager.zen-browser
     ];
 
