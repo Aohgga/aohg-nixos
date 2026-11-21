@@ -12,8 +12,10 @@
       ];
     };
 
+    nixpkgs.overlays = [ inputs.denial.overlays.default ];
+
     programs.denial = {
-      enable = true;
+      enable = false;
       polkitAgent.enable = true;
       plugins.enable = true;
       ddc.enable = true;

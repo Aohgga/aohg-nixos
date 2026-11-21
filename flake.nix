@@ -31,7 +31,7 @@
     };
     import-tree.url = "github:denful/import-tree";
     luciole = {
-      url = "github:noctalia-dev/luciole";
+      url = "github:noctalia-dev/luciole/cachix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
     nix-flatpak.url = "github:gmodena/nix-flatpak";

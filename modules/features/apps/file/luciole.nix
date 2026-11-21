@@ -1,7 +1,7 @@
 { inputs, ... }:
 {
   flake-file.inputs.luciole = {
-    url = "github:noctalia-dev/luciole";
+    url = "github:noctalia-dev/luciole/cachix";
     inputs.nixpkgs.follows = "nixpkgs";
   };
 
