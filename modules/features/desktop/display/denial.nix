@@ -15,7 +15,7 @@
     nixpkgs.overlays = [ inputs.denial.overlays.default ];
 
     programs.denial = {
-      enable = false;
+      enable = true;
       polkitAgent.enable = true;
       plugins.enable = true;
       ddc.enable = true;
