@@ -32,10 +32,6 @@
       };
     };
 
-    xdg.portal.extraPortals = with pkgs; [
-      xdg-desktop-portal-gtk
-    ];
-
     environment.systemPackages = with pkgs; [
       gcc
       python3
