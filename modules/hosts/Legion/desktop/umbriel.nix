@@ -1,7 +1,28 @@
 { lib, ... }:
 {
-  flake.modules.homeManager.LegionUmbriel = {
-    programs.umbriel.settings = lib.recursiveUpdate
+  flake.modules.homeManager.LegionUmbriel = { pkgs, ... }:
+    let
+      # 常驻的小步长鼠标注入器：按住方向键时以 ~350 次/秒注入 1px 位移，
+      # 比每步 fork 一个 ydotool 顺滑得多，空闲时 poll 阻塞不占 CPU。
+      mouselook = pkgs.stdenv.mkDerivation {
+        pname = "mouselook";
+        version = "1";
+        src = ./mouselook.c;
+        dontUnpack = true;
+        dontBuild = true;
+        installPhase = ''
+          runHook preInstall
+          mkdir -p $out/bin
+          $CC -O2 -Wall $src -o $out/bin/mouselook
+          runHook postInstall
+        '';
+        meta.mainProgram = "mouselook";
+      };
+    in
+    {
+      home.packages = [ mouselook ];
+
+      programs.umbriel.settings = lib.recursiveUpdate
       ((import ../../../../config/umbriel) {
         "eDP-1" = {
           focus_at_startup = true;
@@ -54,39 +75,74 @@
           };
 
           # 小键盘当鼠标：用 ydotool 注入指针事件（仅 NumLock 开启时的 keysym）。
-          # 1/2/3/4/6/7/8/9 八个方向（横竖 10px，斜向 7px），
-          # 按住 Shift 速度翻倍（横竖 20px，斜向 14px）。
-          # 5 左键、0 右键，-/+ 滚轮，Shift+-/+ 左右滚动。
+          # 1/2/3/4/6/7/8/9 八个方向：按住启动 mouselook 注入（约 350 次/秒、每次 1px，
+          # 斜向自动归一化速度），松开停止；游戏里再开 Smooth Camera 更顺。
+          # 5 左键、0 右键，/ 中键（滚轮键），-/* 滚轮，Shift+-/* 左右滚动。
           # 注意：umbriel 的 Shift 修饰键不分左右，Shift_L / Shift_R 都算 Shift。
-          KP_7 = "spawn ydotool mousemove -x -7 -y -7";
-          KP_8 = "spawn ydotool mousemove -x 0 -y -10";
-          KP_9 = "spawn ydotool mousemove -x 7 -y -7";
-          KP_4 = "spawn ydotool mousemove -x -10 -y 0";
-          KP_6 = "spawn ydotool mousemove -x 10 -y 0";
-          KP_1 = "spawn ydotool mousemove -x -7 -y 7";
-          KP_2 = "spawn ydotool mousemove -x 0 -y 10";
-          KP_3 = "spawn ydotool mousemove -x 7 -y 7";
-          "Shift+KP_7" = "spawn ydotool mousemove -x -14 -y -14";
-          "Shift+KP_8" = "spawn ydotool mousemove -x 0 -y -20";
-          "Shift+KP_9" = "spawn ydotool mousemove -x 14 -y -14";
-          "Shift+KP_4" = "spawn ydotool mousemove -x -20 -y 0";
-          "Shift+KP_6" = "spawn ydotool mousemove -x 20 -y 0";
-          "Shift+KP_1" = "spawn ydotool mousemove -x -14 -y 14";
-          "Shift+KP_2" = "spawn ydotool mousemove -x 0 -y 20";
-          "Shift+KP_3" = "spawn ydotool mousemove -x 14 -y 14";
+          KP_7 = {
+            action = "spawn mouselook start nw -1 -1";
+            release = "spawn mouselook stop nw";
+            repeat = false;
+          };
+          KP_8 = {
+            action = "spawn mouselook start up 0 -1";
+            release = "spawn mouselook stop up";
+            repeat = false;
+          };
+          KP_9 = {
+            action = "spawn mouselook start ne 1 -1";
+            release = "spawn mouselook stop ne";
+            repeat = false;
+          };
+          KP_4 = {
+            action = "spawn mouselook start w -1 0";
+            release = "spawn mouselook stop w";
+            repeat = false;
+          };
+          KP_6 = {
+            action = "spawn mouselook start e 1 0";
+            release = "spawn mouselook stop e";
+            repeat = false;
+          };
+          KP_1 = {
+            action = "spawn mouselook start sw -1 1";
+            release = "spawn mouselook stop sw";
+            repeat = false;
+          };
+          KP_2 = {
+            action = "spawn mouselook start s 0 1";
+            release = "spawn mouselook stop s";
+            repeat = false;
+          };
+          KP_3 = {
+            action = "spawn mouselook start se 1 1";
+            release = "spawn mouselook stop se";
+            repeat = false;
+          };
+          # 5/0 改成按住语义：按下 = 鼠标键按下，松开 = 鼠标键松开（配合上面的
+          # 方向键移动，可以按住 5 拖动选中文字）。0x40/0x80 是左键按下/松开，
+          # 0x41/0x81 是右键按下/松开。
           KP_5 = {
-            action = "spawn ydotool click 0xC0";
+            action = "spawn ydotool click 0x40";
+            release = "spawn ydotool click 0x80";
             repeat = false;
           };
           KP_0 = {
-            action = "spawn ydotool click 0xC1";
+            action = "spawn ydotool click 0x41";
+            release = "spawn ydotool click 0x81";
             repeat = false;
           };
-          # 滚轮：+ 向下、- 向上
-          KP_Add = "spawn ydotool mousemove -w -x 0 -y -1";
-          KP_Subtract = "spawn ydotool mousemove -w -x 0 -y 1";
-          "Shift+KP_Add" = "spawn ydotool mousemove -w -x 1 -y 0";
-          "Shift+KP_Subtract" = "spawn ydotool mousemove -w -x -1 -y 0";
+          # 滚轮：- 向下、* 向上（原来 + 向下、- 向上，整体上移一格）
+          KP_Subtract = "spawn ydotool mousemove -w -x 0 -y -1";
+          KP_Multiply = "spawn ydotool mousemove -w -x 0 -y 1";
+          "Shift+KP_Subtract" = "spawn ydotool mousemove -w -x 1 -y 0";
+          "Shift+KP_Multiply" = "spawn ydotool mousemove -w -x -1 -y 0";
+          # / = 中键（滚轮键）按住/松开
+          KP_Divide = {
+            action = "spawn ydotool click 0x42";
+            release = "spawn ydotool click 0x82";
+            repeat = false;
+          };
         };
       };
   };
