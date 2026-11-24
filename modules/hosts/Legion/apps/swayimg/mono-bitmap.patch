@@ -1,0 +1,63 @@
+diff --git a/src/font.cpp b/src/font.cpp
+index 332091e..2e8fcab 100644
+--- a/src/font.cpp
++++ b/src/font.cpp
+@@ -233,11 +233,23 @@ Pixmap rasterize_glyph(FT_GlyphSlot glyph)
+     pm.create(color ? Pixmap::ARGB : Pixmap::GS, width, height);
+ 
+     // copy bitmap to the target pixmap
++    // the clipped area may be offset inside the glyph bitmap
++    const size_t src_x = static_cast<size_t>(rc_pm.x - rc_glyph.x);
++    const size_t src_y = static_cast<size_t>(rc_pm.y - rc_glyph.y);
+     const size_t copy_width = rc_pm.width * (color ? sizeof(argb_t) : 1);
+     for (size_t y = 0; y < rc_pm.height; ++y) {
+-        const uint8_t* src = &bitmap.buffer[y * bitmap.pitch];
++        const uint8_t* src = &bitmap.buffer[(src_y + y) * bitmap.pitch];
+         uint8_t* dst = static_cast<uint8_t*>(pm.ptr(rc_pm.x, rc_pm.y + y));
+-        std::memcpy(dst, src, copy_width);
++        if (bitmap.pixel_mode == FT_PIXEL_MODE_MONO) {
++            // monochrome bitmap: 1 bit per pixel, most significant bit first
++            for (size_t x = 0; x < rc_pm.width; ++x) {
++                const size_t bx = src_x + x;
++                dst[x] = (src[bx / 8] & (0x80 >> (bx % 8))) ? 0xff : 0x00;
++            }
++        } else {
++            std::memcpy(dst, src + src_x * (color ? sizeof(argb_t) : 1),
++                        copy_width);
++        }
+     }
+ 
+     return pm;
+@@ -334,7 +346,8 @@ void Font::set_size(const size_t size)
+ 
+     if (ft_face) {
+         glyphs.clear();
+-        FT_Set_Pixel_Sizes(ft_face, 0, size * scale);
++        // fixed-size bitmap fonts may not support the requested size
++        size_ok = FT_Set_Pixel_Sizes(ft_face, 0, size * scale) == FT_Err_Ok;
+     }
+ }
+ 
+@@ -346,8 +359,8 @@ void Font::set_scale(const double scale)
+ 
+ const Pixmap* Font::get_glyph(const wchar_t ch)
+ {
+-    if (!ft_face) {
+-        return nullptr; // font not yet loaded
++    if (!ft_face || !size_ok) {
++        return nullptr; // font not loaded or doesn't support the size
+     }
+ 
+     // search in cache
+diff --git a/src/font.hpp b/src/font.hpp
+index ef2480a..6c60e9d 100644
+--- a/src/font.hpp
++++ b/src/font.hpp
+@@ -98,6 +98,7 @@ protected:
+     double scale { 1.0 };        ///< Font scale
+ 
+     std::unordered_map<wchar_t, Pixmap> glyphs; ///< Rendered glyph images
++    bool size_ok { true }; ///< Font supports the current size
+ };
+ 
+ /** Set of fonts. */
