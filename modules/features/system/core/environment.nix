@@ -3,6 +3,7 @@
     environment.sessionVariables = {
       EDITOR = "nvim";
       GTK_CSD = "0";
+      GTK_USE_PORTAL = "1";
       MOZ_ENABLE_WAYLAND = "1";
     };
     programs.nix-ld.enable = true;

@@ -41,6 +41,8 @@
           singleClickActivate = false;
           menusHaveIcons = true;
           shortcutsForContextMenus = true;
+          # 文件对话框交给系统的 xdg-desktop-portal 实现。
+          dialogTheme = "xdgdesktopportal";
           dialogButtonBoxLayout = 2;
           keyboardScheme = 3;
           uiEffects = 1;
