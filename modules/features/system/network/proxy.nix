@@ -2,7 +2,7 @@
   flake.modules.nixos.proxy = { config, ... }: {
     networking.proxy = {
       default = "http://127.0.0.1:7890";
-      noProxy = "127.0.0.1,localhost,::1";
+      noProxy = "127.0.0.1,localhost,::1,192.168.0.0/16";
     };
     age.secrets."mihomo-config" = {
       file = ../../../../secrets/mihomo-config.age;
