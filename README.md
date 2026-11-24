@@ -45,7 +45,7 @@ modules/
 │       └── tools/       维护命令（nrs）
 └── hosts/               只属于某台机器的配置
     ├── machine.nix      扫描 hosts/* 自动生成 nixosConfigurations
-    ├── Mech/            default.nix、home.nix、desktop/、hardware/、system/
+    ├── Mech/            default.nix、home.nix、apps/、desktop/、hardware/、system/
     └── Legion/          同上
 
 config/umbriel/          umbriel 的纯数据配置（不是模块，不会被 import-tree 收集）

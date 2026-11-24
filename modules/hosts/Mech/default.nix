@@ -15,6 +15,7 @@
         self.modules.nixos.MechGreeter
         self.modules.nixos.MechHardware
         self.modules.nixos.MechImpermanence
+        self.modules.nixos.MechLact
         self.modules.nixos.MechReimsVgpu
 
         self.modules.nixos.desktop

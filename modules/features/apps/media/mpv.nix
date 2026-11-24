@@ -1,7 +1,6 @@
 {
   flake.modules.homeManager.mpv = { config, lib, osConfig, pkgs, ... }: {
     home.persistence."${osConfig.local.persistence.homeRoot}".directories = [
-      ".config/jellyfin-mpv-shim"
       ".config/mpv"
       ".config/mpv-handler"
       ".local/state/mpv"
@@ -10,11 +9,9 @@
       (mpv.override { scripts = [ bilibili-mpv mpvScripts.uosc ]; })
       mpv-handler
       yt-dlp
-      jellyfin-mpv-shim
     ];
-    xdg.configFile = let
-      # mpv 和 jellyfin-mpv-shim 共用同一份播放配置
-      mpvConf = ''
+    xdg.configFile = {
+      "mpv/mpv.conf".text = ''
         vo=gpu-next
         hwdec=vulkan
         gpu-api=vulkan
@@ -25,8 +22,6 @@
         osd-font=苹方-简
         save-position-on-quit=yes
       '';
-    in {
-      "mpv/mpv.conf".text = mpvConf;
       "mpv/script-opts/uosc.conf".text = ''
         languages=slang,zh-hans
         scale=1.3
@@ -37,7 +32,6 @@
         ytdl = "${pkgs.yt-dlp}/bin/yt-dlp"
         proxy = "${osConfig.networking.proxy.default}"
       '';
-      "jellyfin-mpv-shim/mpv.conf".text = mpvConf;
     };
 
     # 文件管理器（luciole/yazi 经 xdg-open）会读 mpv.desktop 的

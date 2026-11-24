@@ -139,13 +139,6 @@
       };
     }
     {
-      corner_radius = 0;
-      default_floating = false;
-      match = {
-        app_id = "com\\.github\\.iwalton3\\.jellyfin-mpv-shim";
-      };
-    }
-    {
       default_floating = true;
       match = {
         app_id = "org\\.kde\\.dolphin";
