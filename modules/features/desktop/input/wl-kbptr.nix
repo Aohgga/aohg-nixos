@@ -7,9 +7,6 @@
         patches = (old.patches or [ ]) ++ [ ./wl-kbptr/label-tweaks.patch ];
       }))
     ];
-
-    # 配置由 noctalia 模板渲染，目录持久化让渲染结果跨重启保留。
-    local.persistence.home.directories = [ ".config/wl-kbptr" ];
   };
 
   flake.modules.homeManager.wl-kbptr = { lib, ... }: {

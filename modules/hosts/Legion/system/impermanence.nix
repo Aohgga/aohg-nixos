@@ -60,7 +60,6 @@
 
       users.${config.local.primaryUser.name}.directories = [
         ".aspnet"
-        ".config/Subtitle Edit"
         ".config/zen"
       ];
     };

@@ -1,6 +1,5 @@
 {
-  flake.modules.homeManager.ttyper = { osConfig, ... }: {
-    home.persistence."${osConfig.local.persistence.homeRoot}".directories = [ ".config/ttyper" ];
+  flake.modules.homeManager.ttyper = { ... }: {
     programs.ttyper = {
       enable = true;
       settings = {

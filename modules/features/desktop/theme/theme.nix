@@ -52,13 +52,11 @@
     };
 
     local.persistence = {
+      # gtk-3.0/gtk-4.0 与 color-schemes 里的配色由 noctalia 登录后重渲染，不持久化。
       home.directories = [
         ".cache/fontconfig"
         ".config/dconf"
         ".config/fontconfig"
-        ".config/gtk-3.0"
-        ".config/gtk-4.0"
-        ".local/share/color-schemes"
       ];
       home.files = [
         { file = ".config/darklyrc"; }

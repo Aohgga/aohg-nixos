@@ -12,19 +12,10 @@ let
 
   baseDirectories = [
     ".config/aohg-nixos"
-    ".config/autostart"
     ".config/ELYTerminal"
     ".config/environment.d"
-    ".config/Ladybird"
-    ".config/libaccounts-glib"
-    ".config/menus"
-    ".local/share/app.getlux.com.sakuracat.app"
     ".local/share/applications"
-    ".local/share/gpu-screen-recorder"
-    ".local/share/Ladybird"
-    ".local/share/pki"
     "Desktop"
-    "Projects"
   ];
 in
 {

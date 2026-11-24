@@ -13,7 +13,5 @@
     environment.systemPackages = [
       inputs.agenix.packages.${pkgs.stdenv.hostPlatform.system}.default
     ];
-
-    local.persistence.home.directories = [ ".config/age" ];
   };
 }

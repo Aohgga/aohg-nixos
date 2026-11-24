@@ -81,7 +81,6 @@ in
         fm.homeManager.bookokrat
         fm.homeManager.mpv
         fm.homeManager.musicfox
-        fm.homeManager.splayer-next
         fm.homeManager.swayimg
 
         # apps/cli

@@ -8,10 +8,7 @@
     programs.seahorse.enable = true;
 
     local.persistence = {
-      home.directories = [
-        ".local/share/keyrings"
-        ".local/share/kwalletd"
-      ];
+      home.directories = [ ".local/share/keyrings" ];
       system.directories = [ "/var/lib/AccountsService" ];
     };
   };

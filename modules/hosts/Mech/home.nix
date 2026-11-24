@@ -7,6 +7,7 @@
       self.modules.homeManager.MechJellyfinMpvShim
       self.modules.homeManager.MechReimsVgpu
       self.modules.homeManager.MechUmbriel
+      self.modules.homeManager.splayer-next
     ];
   };
 }

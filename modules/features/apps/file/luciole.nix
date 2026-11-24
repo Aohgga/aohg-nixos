@@ -34,7 +34,6 @@
 
     local.persistence.home.directories = [
       ".config/luciole"
-      ".local/share/luciole"
       ".local/state/luciole"
     ];
   };
