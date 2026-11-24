@@ -90,6 +90,7 @@
       environment.persistence."/persistent".hideMounts = true;
 
       environment.persistence."/persist-home" = {
+        allowTrash = true;
         hideMounts = true;
 
         users.${config.local.primaryUser.name}.directories = [
