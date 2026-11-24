@@ -100,9 +100,13 @@ in
 
         # 目标文件不存在时应用写入会静默丢失；开机先按清单补出空文件，
         # 新加的条目不用手动 touch。
-        systemd.tmpfiles.rules =
-          map (f: "f ${cfg.homeRoot}${userHome}/${f.file} 0600 ${userName} users -")
-            (cfg.home.files ++ baseFiles);
+        #
+        # yazi 等不走 GIO 的应用会在文件所在挂载点顶层创建 .Trash-<uid>；
+        # 持久化子卷根属于 nobody，需要预建并交给用户。
+        systemd.tmpfiles.rules = [
+          "d ${cfg.homeRoot}/.Trash-${toString config.users.users.${userName}.uid} 0700 ${userName} users -"
+        ] ++ map (f: "f ${cfg.homeRoot}${userHome}/${f.file} 0600 ${userName} users -")
+          (cfg.home.files ++ baseFiles);
       };
     };
 }
