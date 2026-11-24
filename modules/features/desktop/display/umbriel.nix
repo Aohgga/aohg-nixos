@@ -43,7 +43,6 @@
       ".cache/noctalia"
       ".config/noctalia"
       ".config/umbriel"
-      ".config/xdg-desktop-portal"
       ".local/state/noctalia"
     ];
   };
