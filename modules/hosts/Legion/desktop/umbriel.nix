@@ -18,6 +18,102 @@
         '';
         meta.mainProgram = "mouselook";
       };
+
+      # umbriel 的 keybind 是「修饰键精确匹配」的：按住 Shift/Ctrl 时 KP_8 不会
+      # 命中裸 KP_8。游戏里这些键常和 Shift（潜行）/Ctrl（疾跑）一起按，所以给
+      # 常用修饰键组合各生成一份绑定，让修饰键对小键盘鼠标完全透明。
+      numpadMods = [
+        ""
+        "Shift+"
+        "Ctrl+"
+        "Alt+"
+        "Shift+Ctrl+"
+        "Shift+Alt+"
+        "Ctrl+Alt+"
+        "Shift+Ctrl+Alt+"
+      ];
+
+      numpadKeys = {
+        # 方向键：按住启动 mouselook 注入（600 px/s、每次 1px，斜向自动归一化）
+        KP_7 = {
+          action = "spawn mouselook start nw -1 -1 600";
+          release = "spawn mouselook stop nw";
+          repeat = false;
+        };
+        KP_8 = {
+          action = "spawn mouselook start up 0 -1 600";
+          release = "spawn mouselook stop up";
+          repeat = false;
+        };
+        KP_9 = {
+          action = "spawn mouselook start ne 1 -1 600";
+          release = "spawn mouselook stop ne";
+          repeat = false;
+        };
+        KP_4 = {
+          action = "spawn mouselook start w -1 0 600";
+          release = "spawn mouselook stop w";
+          repeat = false;
+        };
+        KP_6 = {
+          action = "spawn mouselook start e 1 0 600";
+          release = "spawn mouselook stop e";
+          repeat = false;
+        };
+        KP_1 = {
+          action = "spawn mouselook start sw -1 1 600";
+          release = "spawn mouselook stop sw";
+          repeat = false;
+        };
+        KP_2 = {
+          action = "spawn mouselook start s 0 1 600";
+          release = "spawn mouselook stop s";
+          repeat = false;
+        };
+        KP_3 = {
+          action = "spawn mouselook start se 1 1 600";
+          release = "spawn mouselook stop se";
+          repeat = false;
+        };
+        # 5 左键、0 右键、/ 中键：按住按下、松开释放
+        KP_5 = {
+          action = "spawn ydotool click 0x40";
+          release = "spawn ydotool click 0x80";
+          repeat = false;
+        };
+        KP_0 = {
+          action = "spawn ydotool click 0x41";
+          release = "spawn ydotool click 0x81";
+          repeat = false;
+        };
+        KP_Divide = {
+          action = "spawn ydotool click 0x42";
+          release = "spawn ydotool click 0x82";
+          repeat = false;
+        };
+        # 按住 +：视角速度降到 1/10（600 → 60）
+        KP_Add = {
+          action = "spawn mouselook scale 0.1";
+          release = "spawn mouselook scale 1";
+          repeat = false;
+        };
+        # 滚轮：- 向下、* 向上
+        KP_Subtract = {
+          action = "spawn ydotool mousemove -w -x 0 -y -1";
+        };
+        KP_Multiply = {
+          action = "spawn ydotool mousemove -w -x 0 -y 1";
+        };
+      };
+
+      numpadBinds = builtins.listToAttrs (
+        lib.concatMap
+          (prefix: lib.mapAttrsToList (key: value: {
+            name = prefix + key;
+            value = value;
+          }) numpadKeys)
+          numpadMods
+      );
     in
     {
       home.packages = [ mouselook ];
@@ -74,83 +170,7 @@
             repeat = false;
           };
 
-          # 小键盘当鼠标：用 ydotool 注入指针事件（仅 NumLock 开启时的 keysym）。
-          # 1/2/3/4/6/7/8/9 八个方向：按住启动 mouselook 注入（600 px/s、每次 1px，
-          # 斜向自动归一化速度），松开停止；按住 + 时倍率降到 0.1（60 px/s）。
-          # 游戏里再开 Smooth Camera 更顺。
-          # 5 左键、0 右键，/ 中键（滚轮键），-/* 滚轮，Shift+-/* 左右滚动。
-          # 注意：umbriel 的 Shift 修饰键不分左右，Shift_L / Shift_R 都算 Shift。
-          KP_7 = {
-            action = "spawn mouselook start nw -1 -1 600";
-            release = "spawn mouselook stop nw";
-            repeat = false;
-          };
-          KP_8 = {
-            action = "spawn mouselook start up 0 -1 600";
-            release = "spawn mouselook stop up";
-            repeat = false;
-          };
-          KP_9 = {
-            action = "spawn mouselook start ne 1 -1 600";
-            release = "spawn mouselook stop ne";
-            repeat = false;
-          };
-          KP_4 = {
-            action = "spawn mouselook start w -1 0 600";
-            release = "spawn mouselook stop w";
-            repeat = false;
-          };
-          KP_6 = {
-            action = "spawn mouselook start e 1 0 600";
-            release = "spawn mouselook stop e";
-            repeat = false;
-          };
-          KP_1 = {
-            action = "spawn mouselook start sw -1 1 600";
-            release = "spawn mouselook stop sw";
-            repeat = false;
-          };
-          KP_2 = {
-            action = "spawn mouselook start s 0 1 600";
-            release = "spawn mouselook stop s";
-            repeat = false;
-          };
-          KP_3 = {
-            action = "spawn mouselook start se 1 1 600";
-            release = "spawn mouselook stop se";
-            repeat = false;
-          };
-          # 5/0 改成按住语义：按下 = 鼠标键按下，松开 = 鼠标键松开（配合上面的
-          # 方向键移动，可以按住 5 拖动选中文字）。0x40/0x80 是左键按下/松开，
-          # 0x41/0x81 是右键按下/松开。
-          KP_5 = {
-            action = "spawn ydotool click 0x40";
-            release = "spawn ydotool click 0x80";
-            repeat = false;
-          };
-          KP_0 = {
-            action = "spawn ydotool click 0x41";
-            release = "spawn ydotool click 0x81";
-            repeat = false;
-          };
-          # 滚轮：- 向下、* 向上（原来 + 向下、- 向上，整体上移一格）
-          KP_Subtract = "spawn ydotool mousemove -w -x 0 -y -1";
-          KP_Multiply = "spawn ydotool mousemove -w -x 0 -y 1";
-          "Shift+KP_Subtract" = "spawn ydotool mousemove -w -x 1 -y 0";
-          "Shift+KP_Multiply" = "spawn ydotool mousemove -w -x -1 -y 0";
-          # / = 中键（滚轮键）按住/松开
-          KP_Divide = {
-            action = "spawn ydotool click 0x42";
-            release = "spawn ydotool click 0x82";
-            repeat = false;
-          };
-          # 按住 +：视角速度降到 1/10（600 → 60），便于精调；松开恢复正常
-          KP_Add = {
-            action = "spawn mouselook scale 0.1";
-            release = "spawn mouselook scale 1";
-            repeat = false;
-          };
-        };
+        } // numpadBinds;
       };
   };
 }
