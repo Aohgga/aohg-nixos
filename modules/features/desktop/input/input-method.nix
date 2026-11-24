@@ -14,13 +14,10 @@
     };
     services.libinput.enable = true;
 
-    local.persistence = {
-      home.directories = [
-        ".config/fcitx5"
-        ".local/share/fcitx5"
-      ];
-      home.files = [ { file = ".config/kxkbrc"; } ];
-    };
+    local.persistence.home.directories = [
+      ".config/fcitx5"
+      ".local/share/fcitx5"
+    ];
   };
 
   flake.modules.homeManager.input-method = { lib, ... }: {

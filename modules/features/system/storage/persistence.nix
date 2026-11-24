@@ -4,7 +4,6 @@ let
   # 不要加到这个列表。
   baseFiles = [
     { file = ".bash_history"; method = "symlink"; }
-    { file = ".config/kglobalshortcutsrc"; method = "symlink"; }
     { file = ".config/mimeapps.list"; method = "symlink"; }
     { file = ".local/share/recently-used.xbel"; method = "symlink"; }
   ];
