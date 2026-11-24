@@ -48,13 +48,13 @@
     ];
   };
 
-  flake.modules.homeManager.umbriel = {
+  flake.modules.homeManager.umbriel = { lib, ... }: {
     imports = [ inputs.umbriel.homeModules.default ];
     programs.umbriel.enable = true;
 
-    xdg.configFile."noctalia/config.toml".text = ''
-      [theme]
-      source = "wallpaper"
+    # umbriel 的窗口按钮样式模板（输入文件里的脚本读 umbriel 的 config.toml），
+    # 追加到 theme.nix 写的 noctalia 配置末尾，和 wl-kbptr/swayimg 同一套做法。
+    xdg.configFile."noctalia/config.toml".text = lib.mkAfter ''
       [theme.templates.user.umbriel_gtk4]
       input_path  = "$XDG_CACHE_HOME/noctalia/umbriel-gtk/gtk4-input.css"
       output_path = "$XDG_CONFIG_HOME/gtk-4.0/umbriel.css"
@@ -87,24 +87,6 @@
       output_path = "$XDG_CACHE_HOME/noctalia/umbriel-gtk/firefox-buttons.css"
       pre_hook    = "bash \"$HOME/.config/noctalia/templates/umbriel-gtk/firefox-input.sh\" > /dev/null"
       post_hook   = "bash \"$HOME/.config/noctalia/templates/umbriel-gtk/firefox-apply.sh\""
-
-      [theme.templates.user.fcitx5_mellow_conf]
-      input_path  = "~/.config/noctalia/templates/fcitx5-mellow/theme.conf"
-      output_path = "$XDG_DATA_HOME/fcitx5/themes/noctalia-mellow/theme.conf"
-      post_hook   = "bash \"$HOME/.config/noctalia/templates/fcitx5-mellow/apply.sh\""
-
-      [theme.templates.user.fcitx5_mellow_panel]
-      input_path  = "~/.config/noctalia/templates/fcitx5-mellow/panel.svg"
-      output_path = "$XDG_DATA_HOME/fcitx5/themes/noctalia-mellow/panel.svg"
-
-      [theme.templates.user.fcitx5_mellow_highlight]
-      input_path  = "~/.config/noctalia/templates/fcitx5-mellow/highlight.svg"
-      output_path = "$XDG_DATA_HOME/fcitx5/themes/noctalia-mellow/highlight.svg"
-
-      [theme.templates.user.papirus_nixos]
-      input_path  = "~/.config/noctalia/templates/papirus-nixos/colors"
-      output_path = "~/.config/noctalia/templates/papirus-nixos/colors-final"
-      post_hook   = "bash \"$HOME/.config/noctalia/templates/papirus-nixos/apply.sh\""
     '';
   };
 }

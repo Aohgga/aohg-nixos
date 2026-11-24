@@ -68,6 +68,20 @@
   };
 
   flake.modules.homeManager.theme = { config, pkgs, ... }: {
+    # noctalia 的全局主题层：调色板来源 + 与具体部件无关的配色模板。
+    # 各应用/输入法的模板（umbriel、fcitx5、wl-kbptr、swayimg…）用 lib.mkAfter
+    # 追加到这个文件末尾，所以这里必须只有一份基础文本。
+    xdg.configFile."noctalia/config.toml".text = ''
+      [theme]
+      source = "wallpaper"
+
+      # Papirus 文件夹配色
+      [theme.templates.user.papirus_nixos]
+      input_path  = "~/.config/noctalia/templates/papirus-nixos/colors"
+      output_path = "~/.config/noctalia/templates/papirus-nixos/colors-final"
+      post_hook   = "bash \"$HOME/.config/noctalia/templates/papirus-nixos/apply.sh\""
+    '';
+
     gtk = {
       enable = true;
       theme = {
