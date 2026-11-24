@@ -113,6 +113,17 @@
                     <string>Noto Sans CJK SC</string>
                   </edit>
                 </match>
+                <!-- libass（mpv/uosc/ModernZ）在 Inter 缺中文时回退到苹方；不能回退到
+                     点阵 OTB 版宋体，libass 渲染不了纯点阵字体，中文会变成豆腐块。这条
+                     放在最后，避免被上面的 Noto 降级规则改掉族列表。 -->
+                <match target="pattern">
+                  <test name="family" qual="any">
+                    <string>Inter</string>
+                  </test>
+                  <edit name="family" mode="append" binding="weak">
+                    <string>PingFang SC</string>
+                  </edit>
+                </match>
               </fontconfig>
             '')
           ];
