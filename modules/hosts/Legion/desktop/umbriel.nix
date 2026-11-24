@@ -2,7 +2,7 @@
 {
   flake.modules.homeManager.LegionUmbriel = { pkgs, ... }:
     let
-      # 常驻的小步长鼠标注入器：按住方向键时以 ~350 次/秒注入 1px 位移，
+      # 常驻的小步长鼠标注入器：按住方向键时以 600 次/秒注入 1px 位移，
       # 比每步 fork 一个 ydotool 顺滑得多，空闲时 poll 阻塞不占 CPU。
       mouselook = pkgs.stdenv.mkDerivation {
         pname = "mouselook";
@@ -75,47 +75,48 @@
           };
 
           # 小键盘当鼠标：用 ydotool 注入指针事件（仅 NumLock 开启时的 keysym）。
-          # 1/2/3/4/6/7/8/9 八个方向：按住启动 mouselook 注入（约 350 次/秒、每次 1px，
-          # 斜向自动归一化速度），松开停止；游戏里再开 Smooth Camera 更顺。
+          # 1/2/3/4/6/7/8/9 八个方向：按住启动 mouselook 注入（600 px/s、每次 1px，
+          # 斜向自动归一化速度），松开停止；按住 + 时倍率降到 0.1（60 px/s）。
+          # 游戏里再开 Smooth Camera 更顺。
           # 5 左键、0 右键，/ 中键（滚轮键），-/* 滚轮，Shift+-/* 左右滚动。
           # 注意：umbriel 的 Shift 修饰键不分左右，Shift_L / Shift_R 都算 Shift。
           KP_7 = {
-            action = "spawn mouselook start nw -1 -1";
+            action = "spawn mouselook start nw -1 -1 600";
             release = "spawn mouselook stop nw";
             repeat = false;
           };
           KP_8 = {
-            action = "spawn mouselook start up 0 -1";
+            action = "spawn mouselook start up 0 -1 600";
             release = "spawn mouselook stop up";
             repeat = false;
           };
           KP_9 = {
-            action = "spawn mouselook start ne 1 -1";
+            action = "spawn mouselook start ne 1 -1 600";
             release = "spawn mouselook stop ne";
             repeat = false;
           };
           KP_4 = {
-            action = "spawn mouselook start w -1 0";
+            action = "spawn mouselook start w -1 0 600";
             release = "spawn mouselook stop w";
             repeat = false;
           };
           KP_6 = {
-            action = "spawn mouselook start e 1 0";
+            action = "spawn mouselook start e 1 0 600";
             release = "spawn mouselook stop e";
             repeat = false;
           };
           KP_1 = {
-            action = "spawn mouselook start sw -1 1";
+            action = "spawn mouselook start sw -1 1 600";
             release = "spawn mouselook stop sw";
             repeat = false;
           };
           KP_2 = {
-            action = "spawn mouselook start s 0 1";
+            action = "spawn mouselook start s 0 1 600";
             release = "spawn mouselook stop s";
             repeat = false;
           };
           KP_3 = {
-            action = "spawn mouselook start se 1 1";
+            action = "spawn mouselook start se 1 1 600";
             release = "spawn mouselook stop se";
             repeat = false;
           };
@@ -141,6 +142,12 @@
           KP_Divide = {
             action = "spawn ydotool click 0x42";
             release = "spawn ydotool click 0x82";
+            repeat = false;
+          };
+          # 按住 +：视角速度降到 1/10（600 → 60），便于精调；松开恢复正常
+          KP_Add = {
+            action = "spawn mouselook scale 0.1";
+            release = "spawn mouselook scale 1";
             repeat = false;
           };
         };

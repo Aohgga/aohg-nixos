@@ -10,7 +10,8 @@
 // 用法：
 //   mouselook start <name> <ux> <uy> [speed]   按住（ux/uy 为方向单位向量）
 //   mouselook stop  <name>                     松开
-//   mouselook stop-all                         全部停止
+//   mouselook scale <factor>                   速度倍率（0.1 = 十倍慢速）
+//   mouselook stop-all                         全部停止并恢复倍率
 //
 // 第一次 start 会自动拉起 daemon。每个方向最长 30 秒，防止松开事件丢失。
 
@@ -45,6 +46,7 @@ struct dir {
 
 static struct dir dirs[MAX_DIRS];
 static int ndirs;
+static double speed_scale = 1.0;
 static int yfd = -1;
 static int cfd = -1;
 static char ctrl_path[104];
@@ -202,8 +204,14 @@ static void handle_cmd(char *msg)
         if (sscanf(msg + 5, "%31s", name) == 1) {
             remove_dir(name);
         }
+    } else if (strncmp(msg, "scale ", 6) == 0) {
+        double v;
+        if (sscanf(msg + 6, "%lf", &v) == 1 && v > 0 && v <= 100) {
+            speed_scale = v;
+        }
     } else if (strcmp(msg, "stop-all") == 0) {
         ndirs = 0;
+        speed_scale = 1.0;
     } else if (strcmp(msg, "quit") == 0) {
         unlink(ctrl_path);
         _exit(0);
@@ -288,7 +296,7 @@ static int daemon_main(void)
         }
 
         if (active) {
-            const double k = speed * dt;
+            const double k = speed * speed_scale * dt;
             accx += vx * k;
             accy += vy * k;
             const int ix = (int)accx;
@@ -326,6 +334,7 @@ static void usage(void)
     fprintf(stderr,
             "usage: mouselook start <name> <ux> <uy> [speed]\n"
             "       mouselook stop <name>\n"
+            "       mouselook scale <factor>\n"
             "       mouselook stop-all\n");
     exit(2);
 }
@@ -343,6 +352,12 @@ int main(int argc, char **argv)
     if (argc == 2 && (strcmp(argv[1], "quit") == 0 || strcmp(argv[1], "stop-all") == 0)) {
         const char *cmd = strcmp(argv[1], "quit") == 0 ? "quit" : "stop-all";
         return send_cmd(cmd) == 0 ? 0 : 1;
+    }
+
+    if (argc == 3 && strcmp(argv[1], "scale") == 0) {
+        ensure_daemon();
+        snprintf(msg, sizeof msg, "scale %s", argv[2]);
+        return send_cmd(msg) == 0 ? 0 : 1;
     }
 
     if (argc == 3 && strcmp(argv[1], "stop") == 0) {

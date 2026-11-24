@@ -195,11 +195,11 @@
       repeat = false;
     };
     "Mod+Slash" = "cheatsheet-toggle";
-    "Mod+Print" = {
+    "Print" = {
       action = "spawn noctalia msg screenshot-region";
       repeat = false;
     };
-    "Mod+Shift+Print" = {
+    "Shift+Print" = {
       action = "spawn noctalia msg screenshot-fullscreen";
       repeat = false;
     };
