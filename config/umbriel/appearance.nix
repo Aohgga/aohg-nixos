@@ -11,7 +11,7 @@
       saturation = 1.1;
     };
     border_width = 1;
-    corner_radius = 13;
+    corner_radius = import ./radius.nix;
     drag_opacity = 1;
     opaque_fullscreen = true;
     outer_border_width = 0;

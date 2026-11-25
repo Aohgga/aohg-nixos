@@ -1,0 +1,14 @@
+/* Noctalia 用户模板：GTK3 圆角覆盖。
+ * 渲染到 ~/.config/gtk-3.0/colors-extras.css。
+ * 这里只改圆角，不设置任何颜色 —— 配色由 noctalia.css 的 @define-color 和 GTK 主题负责。
+ * 窗口按钮样式见 gtk3-buttons.css。 */
+
+button,
+row,
+list row,
+menu,
+.menu,
+menuitem,
+headerbar button {
+  border-radius: __UMBRIEL_CORNER_RADIUS__px;
+}

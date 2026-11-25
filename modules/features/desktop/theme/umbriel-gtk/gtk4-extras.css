@@ -1,0 +1,29 @@
+/* Noctalia 用户模板：GTK4 圆角覆盖。
+ * 渲染到 ~/.config/gtk-4.0/umbriel-extras.css。
+ * 这里只改圆角，不设置任何颜色 —— 配色由 noctalia.css 的 @define-color 和 GTK 主题负责。
+ * 窗口按钮样式见 gtk4-buttons.css。 */
+
+list.navigation-sidebar row,
+listview row,
+list row.row {
+  box-shadow: none;
+  border-radius: __UMBRIEL_CORNER_RADIUS__px;
+}
+
+listview row widget.activatable.card,
+list row widget.activatable.card,
+listview row .card,
+list row .card,
+menuitem,
+popover menuitem,
+popover modelbutton,
+popover.menu > arrow,
+popover.menu > contents,
+.popover.menu > contents,
+box list,
+button:not(.close):not(.maximize):not(.minimize),
+headerbar button:not(.close):not(.maximize):not(.minimize):not(.text-button),
+toggle-group,
+toggle-group > toggle {
+  border-radius: __UMBRIEL_CORNER_RADIUS__px;
+}

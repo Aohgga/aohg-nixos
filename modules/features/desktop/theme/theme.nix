@@ -1,4 +1,8 @@
 { inputs, ... }:
+let
+  # umbriel 的窗口圆角和 Darkly 的 CornerRadius 共用一个值，不再两边手动同步。
+  cornerRadius = import ../../../../config/umbriel/radius.nix;
+in
 {
   flake-file.inputs.qtengine = {
     url = "github:kossLAN/qtengine";
@@ -9,8 +13,6 @@
     imports = [ inputs.qtengine.nixosModules.default ];
     environment.pathsToLink = [ "/share" ];
     environment.systemPackages = with pkgs; [
-      gsettings-desktop-schemas
-      glib
       bibata-cursors
       kdePackages.kde-gtk-config
     ];
@@ -58,9 +60,6 @@
         ".config/dconf"
         ".config/fontconfig"
       ];
-      home.files = [
-        { file = ".config/darklyrc"; }
-      ];
       system.directories = [ "/var/lib/colord" ];
     };
   };
@@ -78,7 +77,82 @@
       input_path  = "~/.config/noctalia/templates/papirus-nixos/colors"
       output_path = "~/.config/noctalia/templates/papirus-nixos/colors-final"
       post_hook   = "bash \"$HOME/.config/noctalia/templates/papirus-nixos/apply.sh\""
+
+      # umbriel 的窗口按钮样式模板。input 由 pre_hook 从 umbriel 的 config.toml
+      # 生成到缓存目录，再由 noctalia 渲染并应用到 gtk-3.0 / gtk-4.0。
+      [theme.templates.user.umbriel_gtk4]
+      input_path  = "$XDG_CACHE_HOME/noctalia/umbriel-gtk/gtk4-input.css"
+      output_path = "$XDG_CONFIG_HOME/gtk-4.0/umbriel.css"
+      pre_hook    = "bash \"$HOME/.config/noctalia/templates/umbriel-gtk/gtk4-input.sh\" > /dev/null"
+      post_hook   = "bash \"$HOME/.config/noctalia/templates/umbriel-gtk/gtk4-apply.sh\""
+
+      [theme.templates.user.umbriel_gtk4_extras]
+      input_path  = "$XDG_CACHE_HOME/noctalia/umbriel-gtk/gtk4-extras-input.css"
+      output_path = "$XDG_CONFIG_HOME/gtk-4.0/umbriel-extras.css"
+      pre_hook    = "bash \"$HOME/.config/noctalia/templates/umbriel-gtk/gtk4-input.sh\" > /dev/null"
+      post_hook   = "bash \"$HOME/.config/noctalia/templates/umbriel-gtk/gtk4-apply.sh\""
+
+      [theme.templates.user.umbriel_gtk3]
+      input_path  = "$XDG_CACHE_HOME/noctalia/umbriel-gtk/gtk3-buttons-input.css"
+      output_path = "$XDG_CONFIG_HOME/gtk-3.0/colors.css"
+      # colors.css 触发 libcolorreload 重载，要排在 extras 之后渲染
+      index       = 2
+      pre_hook    = "bash \"$HOME/.config/noctalia/templates/umbriel-gtk/gtk3-input.sh\" > /dev/null"
+      post_hook   = "bash \"$HOME/.config/noctalia/templates/umbriel-gtk/gtk3-apply.sh\""
+
+      [theme.templates.user.umbriel_gtk3_extras]
+      input_path  = "$XDG_CACHE_HOME/noctalia/umbriel-gtk/gtk3-extras-input.css"
+      output_path = "$XDG_CONFIG_HOME/gtk-3.0/colors-extras.css"
+      index       = 1
+      pre_hook    = "bash \"$HOME/.config/noctalia/templates/umbriel-gtk/gtk3-input.sh\" > /dev/null"
+      post_hook   = "bash \"$HOME/.config/noctalia/templates/umbriel-gtk/gtk3-apply.sh\""
+
+      [theme.templates.user.umbriel_firefox_buttons]
+      input_path  = "$XDG_CACHE_HOME/noctalia/umbriel-gtk/firefox-buttons-input.css"
+      output_path = "$XDG_CACHE_HOME/noctalia/umbriel-gtk/firefox-buttons.css"
+      pre_hook    = "bash \"$HOME/.config/noctalia/templates/umbriel-gtk/firefox-input.sh\" > /dev/null"
+      post_hook   = "bash \"$HOME/.config/noctalia/templates/umbriel-gtk/firefox-apply.sh\""
     '';
+
+    # papirus 和 umbriel-gtk 的模板输入用本模块目录下的文件。这些文件含大量
+    # ${...} 和会被 Nix 多行字符串缩进破坏的内容，统一用 .source 部署。
+    xdg.configFile = {
+      "noctalia/templates/papirus-nixos/colors" = {
+        source = ./papirus-nixos/colors;
+        force = true;
+      };
+      "noctalia/templates/papirus-nixos/apply.sh" = {
+        source = ./papirus-nixos/apply.sh;
+        force = true;
+      };
+
+      "noctalia/templates/umbriel-gtk/gtk3-input.sh" = { source = ./umbriel-gtk/gtk3-input.sh; force = true; };
+      "noctalia/templates/umbriel-gtk/gtk3-apply.sh" = { source = ./umbriel-gtk/gtk3-apply.sh; force = true; };
+      "noctalia/templates/umbriel-gtk/gtk3-buttons.css" = { source = ./umbriel-gtk/gtk3-buttons.css; force = true; };
+      "noctalia/templates/umbriel-gtk/gtk3-extras.css" = { source = ./umbriel-gtk/gtk3-extras.css; force = true; };
+      "noctalia/templates/umbriel-gtk/gtk4-input.sh" = { source = ./umbriel-gtk/gtk4-input.sh; force = true; };
+      "noctalia/templates/umbriel-gtk/gtk4-apply.sh" = { source = ./umbriel-gtk/gtk4-apply.sh; force = true; };
+      "noctalia/templates/umbriel-gtk/gtk4-buttons.css" = { source = ./umbriel-gtk/gtk4-buttons.css; force = true; };
+      "noctalia/templates/umbriel-gtk/gtk4-extras.css" = { source = ./umbriel-gtk/gtk4-extras.css; force = true; };
+      "noctalia/templates/umbriel-gtk/firefox-input.sh" = { source = ./umbriel-gtk/firefox-input.sh; force = true; };
+      "noctalia/templates/umbriel-gtk/firefox-apply.sh" = { source = ./umbriel-gtk/firefox-apply.sh; force = true; };
+      "noctalia/templates/umbriel-gtk/firefox-buttons.css" = { source = ./umbriel-gtk/firefox-buttons.css; force = true; };
+
+      # Darkly（qtengine 的 Qt 风格引擎）的圆角跟随 umbriel，不再手写同步。
+      "darklyrc" = {
+        text = ''
+          [Common]
+          ButtonHeight=1
+          CornerRadius=${toString cornerRadius}
+
+          [Style]
+          NoOutline=true
+          OpaqueInactiveWindows=true
+          RoundedRubberBandFrame=false
+        '';
+        force = true;
+      };
+    };
 
     gtk = {
       enable = true;
@@ -126,7 +200,6 @@
         Inherits=${config.gtk.cursorTheme.name}
       '';
       "icons/${config.gtk.cursorTheme.name}".source = "${config.gtk.cursorTheme.package}/share/icons/${config.gtk.cursorTheme.name}";
-      #"icons/${config.gtk.iconTheme.name}".source = "${config.gtk.iconTheme.package}/share/icons/${config.gtk.iconTheme.name}";
       "themes/${config.gtk.theme.name}".source = "${config.gtk.theme.package}/share/themes/${config.gtk.theme.name}";
     };
   };
