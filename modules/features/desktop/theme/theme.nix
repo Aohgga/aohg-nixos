@@ -1,8 +1,4 @@
 { inputs, ... }:
-let
-  # umbriel 的窗口圆角和 Darkly 的 CornerRadius 共用一个值，不再两边手动同步。
-  cornerRadius = import ../../../../config/umbriel/radius.nix;
-in
 {
   flake-file.inputs.qtengine = {
     url = "github:kossLAN/qtengine";
@@ -64,7 +60,7 @@ in
     };
   };
 
-  flake.modules.homeManager.theme = { config, pkgs, ... }: {
+  flake.modules.homeManager.theme = { config, lib, pkgs, ... }: {
     # noctalia 的全局主题层：调色板来源 + 与具体部件无关的配色模板。
     # 各应用/输入法的模板（umbriel、fcitx5、wl-kbptr、swayimg…）用 lib.mkAfter
     # 追加到这个文件末尾，所以这里必须只有一份基础文本。
@@ -138,12 +134,13 @@ in
       "noctalia/templates/umbriel-gtk/firefox-apply.sh" = { source = ./umbriel-gtk/firefox-apply.sh; force = true; };
       "noctalia/templates/umbriel-gtk/firefox-buttons.css" = { source = ./umbriel-gtk/firefox-buttons.css; force = true; };
 
-      # Darkly（qtengine 的 Qt 风格引擎）的圆角跟随 umbriel，不再手写同步。
+      # Darkly（qtengine 的 Qt 风格引擎）的圆角跟随 umbriel 的实际配置：
+      # Legion 在 host 层把 corner_radius 覆盖成 1，Mech 用共享的 13。
       "darklyrc" = {
         text = ''
           [Common]
           ButtonHeight=1
-          CornerRadius=${toString cornerRadius}
+          CornerRadius=${toString (lib.attrByPath [ "programs" "umbriel" "settings" "appearance" "corner_radius" ] 13 config)}
 
           [Style]
           NoOutline=true
