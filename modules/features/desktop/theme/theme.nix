@@ -69,10 +69,10 @@
       source = "wallpaper"
 
       # Papirus 文件夹配色
-      [theme.templates.user.papirus_nixos]
-      input_path  = "~/.config/noctalia/templates/papirus-nixos/colors"
-      output_path = "~/.config/noctalia/templates/papirus-nixos/colors-final"
-      post_hook   = "bash \"$HOME/.config/noctalia/templates/papirus-nixos/apply.sh\""
+      [theme.templates.user.papirus]
+      input_path  = "~/.config/noctalia/templates/papirus/colors"
+      output_path = "~/.config/noctalia/templates/papirus/colors-final"
+      post_hook   = "bash \"$HOME/.config/noctalia/templates/papirus/apply.sh\""
 
       # umbriel 的窗口按钮样式模板。input 由 pre_hook 从 umbriel 的 config.toml
       # 生成到缓存目录，再由 noctalia 渲染并应用到 gtk-3.0 / gtk-4.0。
@@ -113,12 +113,12 @@
     # papirus 和 umbriel-gtk 的模板输入用本模块目录下的文件。这些文件含大量
     # ${...} 和会被 Nix 多行字符串缩进破坏的内容，统一用 .source 部署。
     xdg.configFile = {
-      "noctalia/templates/papirus-nixos/colors" = {
-        source = ./papirus-nixos/colors;
+      "noctalia/templates/papirus/colors" = {
+        source = ./papirus/colors;
         force = true;
       };
-      "noctalia/templates/papirus-nixos/apply.sh" = {
-        source = ./papirus-nixos/apply.sh;
+      "noctalia/templates/papirus/apply.sh" = {
+        source = ./papirus/apply.sh;
         force = true;
       };
 
