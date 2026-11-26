@@ -45,6 +45,7 @@ in
           fm.nixos.fonts
 
           # apps
+          fm.nixos.gpu-screen-recorder
           fm.nixos.luciole
           #fm.nixos.strata
           fm.nixos.localsend

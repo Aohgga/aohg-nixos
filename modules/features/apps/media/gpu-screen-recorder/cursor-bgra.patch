@@ -1,0 +1,19 @@
+--- a/src/pipewire_video.c
++++ b/src/pipewire_video.c
+@@ -149,6 +149,16 @@
+             self->cursor.data = new_bitmap_data;
+             /* TODO: Convert bgr and other image formats to rgb here */
+             memcpy(self->cursor.data, bitmap_data, bitmap_size);
++            /* Cursor pixels are uploaded as GL_RGBA, but portals may send the bitmap
++               as BGRA/BGRx (xdg-desktop-portal-umbriel does). Swap red and blue so
++               the recorded cursor keeps its colors. */
++            if(bitmap->format == SPA_VIDEO_FORMAT_BGRA || bitmap->format == SPA_VIDEO_FORMAT_BGRx) {
++                for(size_t i = 0; i < bitmap_size; i += 4) {
++                    const uint8_t tmp = self->cursor.data[i];
++                    self->cursor.data[i] = self->cursor.data[i + 2];
++                    self->cursor.data[i + 2] = tmp;
++                }
++            }
+ 
+             self->cursor.hotspot_x = cursor->hotspot.x;
+             self->cursor.hotspot_y = cursor->hotspot.y;
