@@ -78,6 +78,7 @@ in
         fm.homeManager.yazi
 
         # apps/media
+        fm.homeManager.bilibili-tui
         fm.homeManager.bookokrat
         fm.homeManager.mpv
         fm.homeManager.musicfox
