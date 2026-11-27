@@ -5,7 +5,6 @@
       rtkit.enable = true;
     };
     services.gnome.gnome-keyring.enable = true;
-    programs.seahorse.enable = true;
 
     local.persistence = {
       home.directories = [ ".local/share/keyrings" ];
