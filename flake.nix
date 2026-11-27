@@ -14,6 +14,10 @@
     };
     app-manager.url = "github:kem-a/AppManager";
     deepseek-harness.url = "github:moraxyc/deepseek-harness.nix";
+    ely-office = {
+      url = "github:ELY-Open-Source/ElyOffice";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
     flake-file.url = "github:denful/flake-file";
     flake-parts.url = "github:hercules-ci/flake-parts";
     helium-flake = {

@@ -96,6 +96,9 @@ in
         # apps/net
         fm.homeManager.qbittorrent
 
+        # apps/office
+        fm.homeManager.ely-office
+
         # desktop/display
         fm.homeManager.umbriel
 
