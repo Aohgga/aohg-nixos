@@ -29,16 +29,16 @@
         };
 
         environment.shells = [ pkgs.fish ];
+        programs.fish.enable = true;
 
         users = {
           mutableUsers = false;
-          defaultUserShell = pkgs.fish;
           users.${cfg.name} = {
             isNormalUser = true;
             uid = cfg.uid;
             extraGroups = cfg.extraGroups;
             hashedPasswordFile = config.age.secrets."user-password".path;
-            useDefaultShell = true;
+            shell = pkgs.fish;
             autoSubUidGidRange = true;
           };
         };
