@@ -114,7 +114,9 @@ local.persistence = {
   `hardware/`、`system/`），另外在 host 根放 `default.nix`（NixOS 入口）和
   `home.nix`（homeManager 入口）。
 - 单个模块不要使用 `xxx/default.nix`；只有目录本身是入口时才使用 `default.nix`。
-- 分类目录里只有一个文件时，说明这个分类还没有成立，合并到同级目录。
+- 分类目录只有一个文件时，不必急着合并：领域含义明确的分类（如 `apps/editor`、
+  `apps/file`、`system/boot`、`system/locale`、`system/tools`）可以保留，方便以后
+  继续往里加；只是暂时没有归属的杂项才合并到同级目录。
 
 ## 模块注册与组合
 

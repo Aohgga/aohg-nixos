@@ -5,7 +5,7 @@
     inputs.nixpkgs.follows = "nixpkgs";
   };
 
-  flake.modules.nixos.theme = { pkgs, ... }: {
+  flake.modules.nixos.theme = { config, pkgs, ... }: {
     imports = [ inputs.qtengine.nixosModules.default ];
     environment.pathsToLink = [ "/share" ];
     environment.systemPackages = with pkgs; [
@@ -20,7 +20,7 @@
       enable = true;
       config = {
         theme = {
-          colorScheme = "/home/aohg/.local/share/color-schemes/noctalia.colors";
+          colorScheme = "${config.users.users.${config.local.primaryUser.name}.home}/.local/share/color-schemes/noctalia.colors";
           iconTheme = "breeze-dark";
           style = "darkly";
           quickStyle = "org.kde.desktop";

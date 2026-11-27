@@ -1,6 +1,6 @@
 {
   flake.modules.nixos.user =
-    { config, lib, ... }:
+    { config, lib, pkgs, ... }:
     let
       cfg = config.local.primaryUser;
     in
@@ -28,8 +28,11 @@
           file = ../../../../secrets/user-password.age;
         };
 
+        environment.shells = [ pkgs.fish ];
+
         users = {
           mutableUsers = false;
+          defaultUserShell = pkgs.fish;
           users.${cfg.name} = {
             isNormalUser = true;
             uid = cfg.uid;

@@ -47,7 +47,6 @@ in
           # apps
           fm.nixos.gpu-screen-recorder
           fm.nixos.luciole
-          #fm.nixos.strata
           fm.nixos.localsend
 
           # apps/cli

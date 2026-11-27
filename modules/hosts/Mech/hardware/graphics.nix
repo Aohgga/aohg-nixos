@@ -9,6 +9,7 @@
         package = config.boot.kernelPackages.nvidiaPackages.latest;
         open = true;
         modesetting.enable = true;
+        videoAcceleration = true;
         nvidiaSettings = false;
         powerManagement = {
           enable = false;

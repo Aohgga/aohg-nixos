@@ -1,7 +1,6 @@
 {
   flake.modules.nixos.LegionGraphics = { config, pkgs, ... }: {
     hardware = {
-      # nvidia-vaapi-driver 由 hardware.nvidia.videoAcceleration 默认提供
       graphics = {
         enable = true;
         extraPackages = [

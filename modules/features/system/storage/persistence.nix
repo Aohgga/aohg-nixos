@@ -12,7 +12,6 @@ let
 
   baseDirectories = [
     ".config/aohg-nixos"
-    ".config/ELYTerminal"
     ".config/environment.d"
     ".local/share/applications"
     "Desktop"

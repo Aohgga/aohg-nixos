@@ -30,15 +30,5 @@
       algorithm = "lz4";
       memoryPercent = 50;
     };
-    services.kmscon = {
-      enable = false;
-      config = {
-        font-name = "Maple Mono NL NF CN";
-        font-size = 22;
-        hwaccel = false;
-        libseat = true;
-        multi-monitor = "largest";
-      };
-    };
   };
 }
