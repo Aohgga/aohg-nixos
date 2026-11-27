@@ -15,6 +15,9 @@ let
     ".config/environment.d"
     ".local/share/applications"
     "Desktop"
+    "Projects"
+    "Public"
+    "Templates"
   ];
 in
 {
