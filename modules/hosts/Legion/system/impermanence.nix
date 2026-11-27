@@ -14,7 +14,6 @@
         options = [
           "mode=0755"
           "size=25%"
-          "x-gvfs-hide"
         ];
       };
 
@@ -25,7 +24,6 @@
         options = [
           "mode=0755"
           "size=25%"
-          "x-gvfs-hide"
         ];
       };
 
@@ -45,16 +43,15 @@
         ];
       };
 
-      # /data 是 Legion 的数据盘，显示到 GVfs；/boot 隐藏
+      # /data 是 Legion 的数据盘，显示到 GVfs
       "/data".options = [ "x-gvfs-show" ];
-      "/boot".options = [ "x-gvfs-hide" ];
 
       # nix store 还在原分区的 /nix 目录里，bind 到 /nix
       "/nix" = {
         device = "/persistent/nix";
         fsType = "none";
         neededForBoot = true;
-        options = [ "bind" "x-gvfs-hide" ];
+        options = [ "bind" ];
         depends = [ "/persistent" ];
       };
     };
