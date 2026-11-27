@@ -74,8 +74,22 @@
                     <string>WenQuanYi WenQuanYi Bitmap Song</string>
                   </edit>
                 </match>
-                <!-- 只把 16px 及以上的字号吸附到 12pt（16px）点阵，不做放大；
-                     小字保持原样，同时指定 pixelsize 才能选中 12pt 的 OTB -->
+                <!-- 大于 22.5pt（96 DPI 下的 30px）才换轮廓：拉丁用 Inter，中文用苹方 -->
+                <match target="pattern">
+                  <test name="family" compare="contains">
+                    <string>WenQuanYi WenQuanYi</string>
+                  </test>
+                  <test name="size" compare="more">
+                    <double>22.5</double>
+                  </test>
+                  <edit name="family" mode="assign_replace" binding="strong">
+                    <string>Inter</string>
+                  </edit>
+                  <edit name="family" mode="append_last" binding="strong">
+                    <string>PingFang SC</string>
+                  </edit>
+                </match>
+                <!-- 12pt 仍吸附到 16px 点阵，避免在非 96 DPI 下缩放位图 -->
                 <match target="pattern">
                   <test name="family" compare="eq">
                     <string>WenQuanYi WenQuanYi Bitmap Song</string>
@@ -90,27 +104,37 @@
                     <double>16</double>
                   </edit>
                 </match>
-                <!-- 点阵只有 16px 一档，更大的字号会被放大成模糊点阵 -->
+                <!-- 16–30px 之间不放大位图，直接钉在 16px 点阵上 -->
                 <match target="pattern">
                   <test name="family" compare="contains">
-                    <string>WenQuanYi Bitmap Song</string>
+                    <string>WenQuanYi WenQuanYi</string>
                   </test>
                   <test name="pixelsize" compare="more">
-                    <double>19.5</double>
+                    <double>16</double>
                   </test>
-                  <edit name="family" mode="assign_replace" binding="strong">
-                    <string>Noto Sans CJK SC</string>
+                  <test name="pixelsize" compare="less_eq">
+                    <double>30</double>
+                  </test>
+                  <edit name="size" mode="assign">
+                    <double>12</double>
+                  </edit>
+                  <edit name="pixelsize" mode="assign">
+                    <double>16</double>
                   </edit>
                 </match>
+                <!-- 按像素请求时同样处理：超过 30px 走 Inter + 苹方 -->
                 <match target="pattern">
                   <test name="family" compare="contains">
-                    <string>WenQuanYi Bitmap Song</string>
+                    <string>WenQuanYi WenQuanYi</string>
                   </test>
-                  <test name="size" compare="more">
-                    <double>14.6</double>
+                  <test name="pixelsize" compare="more">
+                    <double>30</double>
                   </test>
                   <edit name="family" mode="assign_replace" binding="strong">
-                    <string>Noto Sans CJK SC</string>
+                    <string>Inter</string>
+                  </edit>
+                  <edit name="family" mode="append_last" binding="strong">
+                    <string>PingFang SC</string>
                   </edit>
                 </match>
                 <!-- libass（mpv/uosc/ModernZ）在 Inter 缺中文时回退到苹方；不能回退到
